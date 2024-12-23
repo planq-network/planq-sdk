@@ -1,4 +1,4 @@
-pragma solidity ^0.5.13;
+pragma solidity ^0.8.0;
 
 import "../interfaces/IGovernance.sol";
 
@@ -6,20 +6,24 @@ import "../interfaces/IGovernance.sol";
  * @title A mock Governance for testing.
  */
 contract MockGovernance is IGovernance {
-  mapping(address => bool) public isVoting;
-  mapping(address => uint256) public totalVotes;
+    mapping(address => bool) public isVoting;
+    mapping(address => uint256) public totalVotes;
 
-  function() external payable {} // solhint-disable no-empty-blocks
+    function() external payable {} // solhint-disable no-empty-blocks
 
-  function setVoting(address voter) external {
-    isVoting[voter] = true;
-  }
+    function setVoting(address voter) external {
+        isVoting[voter] = true;
+    }
 
-  function setTotalVotes(address voter, uint256 votes) external {
-    totalVotes[voter] = votes;
-  }
+    function setTotalVotes(address voter, uint256 votes) external {
+        totalVotes[voter] = votes;
+    }
 
-  function getAmountOfPlanqUsedForVoting(address account) external view returns (uint256) {
-    return totalVotes[account];
-  }
+    function getAmountOfPlanqUsedForVoting(address account)
+        external
+        view
+        returns (uint256)
+    {
+        return totalVotes[account];
+    }
 }

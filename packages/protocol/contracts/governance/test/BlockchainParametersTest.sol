@@ -1,6 +1,9 @@
-pragma solidity ^0.5.13;
+pragma solidity ^0.8.0;
 
 import "../BlockchainParameters.sol";
 import "./MockUsingPrecompiles.sol";
 
-contract BlockchainParametersTest is BlockchainParameters(true), MockUsingPrecompiles {}
+contract BlockchainParametersTest is
+    BlockchainParameters(true),
+    MockUsingPrecompiles
+{}

@@ -1,4 +1,4 @@
-pragma solidity ^0.5.13;
+pragma solidity ^0.8.0;
 
 /**
  * @title This interface describes the non- ERC20 shared interface for all Planq Tokens, and

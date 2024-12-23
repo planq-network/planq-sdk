@@ -1,4 +1,4 @@
-pragma solidity ^0.5.13;
+pragma solidity ^0.8.0;
 
 import "../common/Create2.sol";
 import "../common/interfaces/IPlanqVersionedContract.sol";
@@ -6,23 +6,27 @@ import "../common/UsingRegistry.sol";
 import "./IdentityProxy.sol";
 
 contract IdentityProxyHub is UsingRegistry, IPlanqVersionedContract {
-  bytes32 public constant identityProxyCodeHash = keccak256(
-    // solhint-disable-next-line indent
-    abi.encodePacked(type(IdentityProxy).creationCode)
-  );
+    bytes32 public constant identityProxyCodeHash = keccak256(
+        // solhint-disable-next-line indent
+        abi.encodePacked(type(IdentityProxy).creationCode)
+    );
 
-  /**
+    /**
    * @notice Returns the storage, major, minor, and patch version of the contract.
    * @return Storage version of the contract.
    * @return Major version of the contract.
    * @return Minor version of the contract.
    * @return Patch version of the contract.
    */
-  function getVersionNumber() external pure returns (uint256, uint256, uint256, uint256) {
-    return (1, 0, 0, 1);
-  }
+    function getVersionNumber()
+        external
+        pure
+        returns (uint256, uint256, uint256, uint256)
+    {
+        return (1, 0, 0, 1);
+    }
 
-  /**
+    /**
    * @notice Returns the IdentityProxy address corresponding to the identifier.
    * @param identifier The identifier whose proxy address is computed.
    * @return The identifier's IdentityProxy address.
@@ -30,31 +34,45 @@ contract IdentityProxyHub is UsingRegistry, IPlanqVersionedContract {
    * corresponding IdentityProxy has been deployed. IdentityProxies are deployed
    * using CREATE2 and this computes a CREATE2 address.
    */
-  function getIdentityProxy(bytes32 identifier) public view returns (IdentityProxy) {
-    return IdentityProxy(Create2.computeAddress(address(this), identifier, identityProxyCodeHash));
-  }
+    function getIdentityProxy(bytes32 identifier)
+        public
+        view
+        returns (IdentityProxy)
+    {
+        return
+            IdentityProxy(
+                Create2.computeAddress(
+                    address(this),
+                    identifier,
+                    identityProxyCodeHash
+                )
+            );
+    }
 
-  /**
+    /**
    * @notice Returns the IdentityProxy address corresponding to the identifier,
    * deploying an IdentityProxy if one hasn't already been deployed for this
    * identifier.
    * @param identifier The identifier whose proxy address is returned.
    * @return The identifier's IdentityProxy address.
    */
-  function getOrDeployIdentityProxy(bytes32 identifier) public returns (IdentityProxy) {
-    IdentityProxy identityProxy = getIdentityProxy(identifier);
-    uint256 codeSize;
-    assembly {
-      codeSize := extcodesize(identityProxy)
-    }
-    if (codeSize == 0) {
-      deployIdentityProxy(identifier);
+    function getOrDeployIdentityProxy(bytes32 identifier)
+        public
+        returns (IdentityProxy)
+    {
+        IdentityProxy identityProxy = getIdentityProxy(identifier);
+        uint256 codeSize;
+        assembly {
+            codeSize := extcodesize(identityProxy)
+        }
+        if (codeSize == 0) {
+            deployIdentityProxy(identifier);
+        }
+
+        return identityProxy;
     }
 
-    return identityProxy;
-  }
-
-  /**
+    /**
    * @notice Returns true if the given address is the likely owner of the given
    * identifier.
    * @param addr The address to check.
@@ -66,39 +84,51 @@ contract IdentityProxyHub is UsingRegistry, IPlanqVersionedContract {
    *   2. Completed strictly more than half of requested attestations.
    *   3. Has at least as many completed attestations as any other account.
    */
-  function passesIdentityHeuristic(address addr, bytes32 identifier) public view returns (bool) {
-    IAttestations attestations = getAttestations();
-    (uint32 completed, uint32 requested) = attestations.getAttestationStats(identifier, addr);
-
-    // 1. Check that the account has at least 3 completed attestations on the given identifier.
-    bool hasEnoughCompletions = completed >= 3;
-
-    // 2. Check that the account Completed strictly more than half of requested attestations.
-    bool completedOverHalfRequests = false;
-    if (completed > 0) {
-      completedOverHalfRequests = requested / completed < 2;
-    }
-
-    // 3. Check that the account has at least as many completed attestations as any other account.
-    bool hasMostCompletions = true;
-    address[] memory addresses = attestations.lookupAccountsForIdentifier(identifier);
-    for (uint256 i = 0; i < addresses.length; i++) {
-      address otherAddr = addresses[i];
-      if (otherAddr != addr) {
-        (uint32 otherCompleted, uint32 _requested) = attestations.getAttestationStats(
-          identifier,
-          otherAddr
+    function passesIdentityHeuristic(address addr, bytes32 identifier)
+        public
+        view
+        returns (bool)
+    {
+        IAttestations attestations = getAttestations();
+        (uint32 completed, uint32 requested) = attestations.getAttestationStats(
+            identifier,
+            addr
         );
-        hasMostCompletions = hasMostCompletions && otherCompleted <= completed;
-      }
+
+        // 1. Check that the account has at least 3 completed attestations on the given identifier.
+        bool hasEnoughCompletions = completed >= 3;
+
+        // 2. Check that the account Completed strictly more than half of requested attestations.
+        bool completedOverHalfRequests = false;
+        if (completed > 0) {
+            completedOverHalfRequests = requested / completed < 2;
+        }
+
+        // 3. Check that the account has at least as many completed attestations as any other account.
+        bool hasMostCompletions = true;
+        address[] memory addresses = attestations.lookupAccountsForIdentifier(
+            identifier
+        );
+        for (uint256 i = 0; i < addresses.length; i++) {
+            address otherAddr = addresses[i];
+            if (otherAddr != addr) {
+                (uint32 otherCompleted, uint32 _requested) = attestations
+                    .getAttestationStats(identifier, otherAddr);
+                hasMostCompletions =
+                    hasMostCompletions &&
+                    otherCompleted <= completed;
+            }
+        }
+
+        // Return true if the account passed all three checks above.
+        // Note: We do not return early on failures as we are optimizing for the passing case.
+        return
+            hasEnoughCompletions &&
+            completedOverHalfRequests &&
+            hasMostCompletions;
     }
 
-    // Return true if the account passed all three checks above.
-    // Note: We do not return early on failures as we are optimizing for the passing case.
-    return hasEnoughCompletions && completedOverHalfRequests && hasMostCompletions;
-  }
-
-  /**
+    /**
    * @notice Performs an arbitrary call through the identifier's IdentityProxy,
    * assuming msg.sender passes the identity heuristic.
    * @param identifier The identifier whose IdentityProxy to call through.
@@ -106,17 +136,30 @@ contract IdentityProxyHub is UsingRegistry, IPlanqVersionedContract {
    * @param data The calldata the IdentityProxy should send with the call.
    * @return The return value of the external call.
    */
-  function makeCall(bytes32 identifier, address destination, bytes calldata data)
-    external
-    payable
-    returns (bytes memory)
-  {
-    require(passesIdentityHeuristic(msg.sender, identifier), "does not pass identity heuristic");
-    return getOrDeployIdentityProxy(identifier).makeCall.value(msg.value)(destination, data);
-  }
+    function makeCall(
+        bytes32 identifier,
+        address destination,
+        bytes calldata data
+    ) external payable returns (bytes memory) {
+        require(
+            passesIdentityHeuristic(msg.sender, identifier),
+            "does not pass identity heuristic"
+        );
+        return
+            getOrDeployIdentityProxy(identifier).makeCall.value(msg.value)(
+                destination,
+                data
+            );
+    }
 
-  function deployIdentityProxy(bytes32 identifier) internal returns (IdentityProxy) {
-    // solhint-disable-next-line indent
-    return IdentityProxy(Create2.deploy(identifier, type(IdentityProxy).creationCode));
-  }
+    function deployIdentityProxy(bytes32 identifier)
+        internal
+        returns (IdentityProxy)
+    {
+        // solhint-disable-next-line indent
+        return
+            IdentityProxy(
+                Create2.deploy(identifier, type(IdentityProxy).creationCode)
+            );
+    }
 }

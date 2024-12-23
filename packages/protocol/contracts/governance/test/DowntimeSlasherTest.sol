@@ -1,4 +1,4 @@
-pragma solidity ^0.5.13;
+pragma solidity ^0.8.0;
 
 import "../DowntimeSlasher.sol";
 import "./MockUsingPrecompiles.sol";

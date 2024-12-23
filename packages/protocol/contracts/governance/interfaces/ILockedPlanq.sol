@@ -1,4 +1,4 @@
-pragma solidity ^0.5.13;
+pragma solidity ^0.8.0;
 
 interface ILockedPlanq {
     function incrementNonvotingAccountBalance(address, uint256) external;

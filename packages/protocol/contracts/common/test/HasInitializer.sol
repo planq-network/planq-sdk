@@ -1,11 +1,11 @@
-pragma solidity ^0.5.13;
+pragma solidity ^0.8.0;
 
 import "../Initializable.sol";
 
 contract HasInitializer is Initializable(true) {
-  uint256 public x;
+    uint256 public x;
 
-  function initialize(uint256 _x) external initializer {
-    x = _x;
-  }
+    function initialize(uint256 _x) external initializer {
+        x = _x;
+    }
 }
