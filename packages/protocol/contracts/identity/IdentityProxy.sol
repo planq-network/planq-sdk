@@ -1,20 +1,20 @@
-pragma solidity ^0.8.0;
+pragma solidity ^0.5.13;
 
 import "../common/ExternalCall.sol";
 
 contract IdentityProxy {
-    address public deployer;
+  address public deployer;
 
-    constructor() public {
-        deployer = msg.sender;
-    }
+  constructor() public {
+    deployer = msg.sender;
+  }
 
-    modifier onlyDeployer() {
-        require(msg.sender == deployer, "Only callable by original deployer");
-        _;
-    }
+  modifier onlyDeployer() {
+    require(msg.sender == deployer, "Only callable by original deployer");
+    _;
+  }
 
-    /**
+  /**
    * @notice Performs an arbitrary call.
    * @param destination The address to call.
    * @param data The calldata to send with the call.
@@ -22,12 +22,12 @@ contract IdentityProxy {
    * the IdentityProxyHub after it checks the identity heuristic.
    * @return The return value of the external call.
    */
-    function makeCall(address destination, bytes calldata data)
-        external
-        payable
-        onlyDeployer
-        returns (bytes memory)
-    {
-        return ExternalCall.execute(destination, msg.value, data);
-    }
+  function makeCall(address destination, bytes calldata data)
+    external
+    payable
+    onlyDeployer
+    returns (bytes memory)
+  {
+    return ExternalCall.execute(destination, msg.value, data);
+  }
 }

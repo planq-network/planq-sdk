@@ -1,4 +1,4 @@
-pragma solidity ^0.8.0;
+pragma solidity ^0.5.13;
 
 contract MethodsAddedContract {
   uint256 i = 3;

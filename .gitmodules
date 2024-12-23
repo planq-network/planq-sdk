@@ -13,6 +13,3 @@
 [submodule "lib/memview.sol"]
 	path = packages/protocol/lib/memview.sol
 	url = https://github.com/summa-tx/memview.sol
-[submodule "packages/protocol/lib/memview.sol"]
-	path = packages/protocol/lib/memview.sol
-	url = https://github.com/summa-tx/memview.sol
