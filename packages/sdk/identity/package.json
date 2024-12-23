@@ -44,8 +44,7 @@
     "@planq-network/wallet-local": "4.1.0",
     "@types/elliptic": "^6.4.12",
     "fetch-mock": "9.10.4",
-    "ganache": "7.8.0",
-    "old-identity-sdk": "npm:@planq-network/identity@1.5.2"
+    "ganache": "7.8.0"
   },
   "engines": {
     "node": ">=12.9.0"
