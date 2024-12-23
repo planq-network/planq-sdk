@@ -1,11 +1,20 @@
-import { ensureLeading0x, toChecksumAddress } from '@planq-network/utils/lib/address'
-import { EIP712TypedData, generateTypedDataHash } from '@planq-network/utils/lib/sign-typed-data-utils'
-import { parseSignatureWithoutPrefix, Signature } from '@planq-network/utils/lib/signatureUtils'
-import { bufferToHex } from '@ethereumjs/util'
-import debugFactory from 'debug'
-import Web3 from 'web3'
-import { AbiCoder } from './abi-types'
-import { assertIsPlanqProvider, PlanqProvider } from './planq-provider'
+import {
+  ensureLeading0x,
+  toChecksumAddress,
+} from "@planq-network/utils/lib/address";
+import {
+  EIP712TypedData,
+  generateTypedDataHash,
+} from "@planq-network/utils/lib/sign-typed-data-utils";
+import {
+  parseSignatureWithoutPrefix,
+  Signature,
+} from "@planq-network/utils/lib/signatureUtils";
+import {bufferToHex} from "@ethereumjs/util";
+import debugFactory from "debug";
+import Web3 from "web3";
+import {AbiCoder} from "./abi-types";
+import {assertIsPlanqProvider, PlanqProvider} from "./planq-provider";
 import {
   Address,
   Block,
@@ -17,8 +26,8 @@ import {
   PlanqTxReceipt,
   Provider,
   Syncing,
-} from './types'
-import { decodeStringParameter } from './utils/abi-utils'
+} from "./types";
+import {decodeStringParameter} from "./utils/abi-utils";
 import {
   hexToNumber,
   inputAddressFormatter,
@@ -30,21 +39,20 @@ import {
   outputBlockHeaderFormatter,
   outputPlanqTxFormatter,
   outputPlanqTxReceiptFormatter,
-} from './utils/formatter'
-import { hasProperty } from './utils/provider-utils'
-import { getRandomId, HttpRpcCaller, RpcCaller } from './utils/rpc-caller'
-import { TxParamsNormalizer } from './utils/tx-params-normalizer'
-import { toTxResult, TransactionResult } from './utils/tx-result'
-import { ReadOnlyWallet } from './wallet'
+} from "./utils/formatter";
+import {hasProperty} from "./utils/provider-utils";
+import {getRandomId, HttpRpcCaller, RpcCaller} from "./utils/rpc-caller";
+import {TxParamsNormalizer} from "./utils/tx-params-normalizer";
+import {toTxResult, TransactionResult} from "./utils/tx-result";
+import {ReadOnlyWallet} from "./wallet";
 
-const debugGasEstimation = debugFactory('connection:gas-estimation')
+const debugGasEstimation = debugFactory("connection:gas-estimation");
 
-type BN = ReturnType<Web3['utils']['toBN']>
+type BN = ReturnType<Web3["utils"]["toBN"]>;
 export interface ConnectionOptions {
-  gasInflationFactor: number
-  gasPrice: string
-  feeCurrency?: Address
-  from?: Address
+  gasInflationFactor: number;
+  gasPrice: string;
+  from?: Address;
 }
 
 /**
@@ -54,148 +62,145 @@ export interface ConnectionOptions {
  * @optional handleRevert sets handleRevert on the web3.eth instance passed in
  */
 export class Connection {
-  private config: ConnectionOptions
-  readonly paramsPopulator: TxParamsNormalizer
-  rpcCaller!: RpcCaller
+  private config: ConnectionOptions;
+  readonly paramsPopulator: TxParamsNormalizer;
+  rpcCaller!: RpcCaller;
 
-  /** @deprecated no longer needed since gasPrice is available on node rpc */
-  private currencyGasPrice: Map<Address, string> = new Map<Address, string>()
-
-  constructor(readonly web3: Web3, public wallet?: ReadOnlyWallet, handleRevert = true) {
-    web3.eth.handleRevert = handleRevert
+  constructor(
+    readonly web3: Web3,
+    public wallet?: ReadOnlyWallet,
+    handleRevert = true
+  ) {
+    web3.eth.handleRevert = handleRevert;
 
     this.config = {
       gasInflationFactor: 1.3,
       // gasPrice:0 means the node will compute gasPrice on its own
-      gasPrice: '0',
-    }
+      gasPrice: "0",
+    };
 
-    const existingProvider: Provider = web3.currentProvider as Provider
-    this.setProvider(existingProvider)
+    const existingProvider: Provider = web3.currentProvider as Provider;
+    this.setProvider(existingProvider);
     // TODO: Add this line with the wallets separation completed
     // this.wallet = _wallet ?? new LocalWallet()
-    this.config.from = web3.eth.defaultAccount ?? undefined
-    this.paramsPopulator = new TxParamsNormalizer(this)
+    this.config.from = web3.eth.defaultAccount ?? undefined;
+    this.paramsPopulator = new TxParamsNormalizer(this);
   }
 
   setProvider(provider: Provider) {
     if (!provider) {
-      throw new Error('Must have a valid Provider')
+      throw new Error("Must have a valid Provider");
     }
     try {
       if (!(provider instanceof PlanqProvider)) {
-        this.rpcCaller = new HttpRpcCaller(provider)
-        provider = new PlanqProvider(provider, this)
+        this.rpcCaller = new HttpRpcCaller(provider);
+        provider = new PlanqProvider(provider, this);
       }
-      this.web3.setProvider(provider as any)
-      return true
+      this.web3.setProvider(provider as any);
+      return true;
     } catch {
-      return false
+      return false;
     }
   }
 
   keccak256 = (value: string | BN): string => {
-    return this.web3.utils.keccak256(value)
-  }
+    return this.web3.utils.keccak256(value);
+  };
 
   hexToAscii = (hex: string) => {
-    return this.web3.utils.hexToAscii(hex)
-  }
+    return this.web3.utils.hexToAscii(hex);
+  };
 
   /**
    * Set default account for generated transactions (eg. tx.from )
    */
   set defaultAccount(address: Address | undefined) {
-    this.config.from = address
-    this.web3.eth.defaultAccount = address ? address : null
+    this.config.from = address;
+    this.web3.eth.defaultAccount = address ? address : null;
   }
 
   /**
    * Default account for generated transactions (eg. tx.from)
    */
   get defaultAccount(): Address | undefined {
-    return this.config.from
+    return this.config.from;
   }
 
   set defaultGasInflationFactor(factor: number) {
-    this.config.gasInflationFactor = factor
+    this.config.gasInflationFactor = factor;
   }
 
   get defaultGasInflationFactor() {
-    return this.config.gasInflationFactor
+    return this.config.gasInflationFactor;
   }
 
   set defaultGasPrice(price: number) {
-    this.config.gasPrice = price.toString(10)
+    this.config.gasPrice = price.toString(10);
   }
 
   get defaultGasPrice() {
-    return parseInt(this.config.gasPrice, 10)
-  }
-
-  /**
-   * Set the ERC20 address for the token to use to pay for transaction fees.
-   * The ERC20 must be whitelisted for gas.
-   *
-   * Set to `null` to use PLQ
-   *
-   * @param address ERC20 address
-   */
-  set defaultFeeCurrency(address: Address | undefined) {
-    this.config.feeCurrency = address
-  }
-
-  get defaultFeeCurrency() {
-    return this.config.feeCurrency
+    return parseInt(this.config.gasPrice, 10);
   }
 
   isLocalAccount(address?: Address): boolean {
-    return this.wallet != null && this.wallet.hasAccount(address)
+    return this.wallet != null && this.wallet.hasAccount(address);
   }
 
   addAccount(privateKey: string) {
     if (this.wallet) {
-      if (hasProperty<{ addAccount: (privateKey: string) => void }>(this.wallet, 'addAccount')) {
-        this.wallet.addAccount(privateKey)
+      if (
+        hasProperty<{addAccount: (privateKey: string) => void}>(
+          this.wallet,
+          "addAccount"
+        )
+      ) {
+        this.wallet.addAccount(privateKey);
       } else {
-        throw new Error("The wallet used, can't add accounts")
+        throw new Error("The wallet used, can't add accounts");
       }
     } else {
-      throw new Error('No wallet set')
+      throw new Error("No wallet set");
     }
   }
 
   removeAccount(address: string) {
     if (this.wallet) {
-      if (hasProperty<{ removeAccount: (address: string) => void }>(this.wallet, 'removeAccount')) {
-        this.wallet.removeAccount(address)
+      if (
+        hasProperty<{removeAccount: (address: string) => void}>(
+          this.wallet,
+          "removeAccount"
+        )
+      ) {
+        this.wallet.removeAccount(address);
       } else {
-        throw new Error("The wallet used, can't remove accounts")
+        throw new Error("The wallet used, can't remove accounts");
       }
     } else {
-      throw new Error('No wallet set')
+      throw new Error("No wallet set");
     }
   }
 
   async getNodeAccounts(): Promise<string[]> {
-    const nodeAccountsResp = await this.rpcCaller.call('eth_accounts', [])
-    return this.toChecksumAddresses(nodeAccountsResp.result ?? [])
+    const nodeAccountsResp = await this.rpcCaller.call("eth_accounts", []);
+    return this.toChecksumAddresses(nodeAccountsResp.result ?? []);
   }
 
   getLocalAccounts(): string[] {
-    return this.wallet ? this.toChecksumAddresses(this.wallet.getAccounts()) : []
+    return this.wallet
+      ? this.toChecksumAddresses(this.wallet.getAccounts())
+      : [];
   }
 
   async getAccounts(): Promise<string[]> {
-    return (await this.getNodeAccounts()).concat(this.getLocalAccounts())
+    return (await this.getNodeAccounts()).concat(this.getLocalAccounts());
   }
 
   private toChecksumAddresses(addresses: string[]) {
-    return addresses.map((value) => toChecksumAddress(value))
+    return addresses.map((value) => toChecksumAddress(value));
   }
 
   isListening(): Promise<boolean> {
-    return this.web3.eth.net.isListening()
+    return this.web3.eth.net.isListening();
   }
 
   isSyncing(): Promise<boolean> {
@@ -204,14 +209,14 @@ export class Connection {
         .isSyncing()
         .then((response: boolean | Syncing) => {
           // isSyncing returns a syncProgress object when it's still syncing
-          if (typeof response === 'boolean') {
-            resolve(response)
+          if (typeof response === "boolean") {
+            resolve(response);
           } else {
-            resolve(true)
+            resolve(true);
           }
         })
-        .catch(reject)
-    })
+        .catch(reject);
+    });
   }
 
   /**
@@ -223,12 +228,12 @@ export class Connection {
    *  - returns a `TransactionResult` instead of `PromiEvent`
    */
   sendTransaction = async (tx: PlanqTx): Promise<TransactionResult> => {
-    tx = this.fillTxDefaults(tx)
-    tx = this.fillGasPrice(tx)
+    tx = this.fillTxDefaults(tx);
+    tx = this.fillGasPrice(tx);
 
-    let gas = tx.gas
+    let gas = tx.gas;
     if (gas == null) {
-      gas = await this.estimateGasWithInflationFactor(tx)
+      gas = await this.estimateGasWithInflationFactor(tx);
     }
 
     return toTxResult(
@@ -236,25 +241,25 @@ export class Connection {
         ...tx,
         gas,
       })
-    )
-  }
+    );
+  };
 
   sendTransactionObject = async (
     txObj: PlanqTxObject<any>,
-    tx?: Omit<PlanqTx, 'data'>
+    tx?: Omit<PlanqTx, "data">
   ): Promise<TransactionResult> => {
-    tx = this.fillTxDefaults(tx)
-    tx = this.fillGasPrice(tx)
+    tx = this.fillTxDefaults(tx);
+    tx = this.fillGasPrice(tx);
 
-    let gas = tx.gas
+    let gas = tx.gas;
     if (gas == null) {
-      const gasEstimator = (_tx: PlanqTx) => txObj.estimateGas({ ..._tx })
+      const gasEstimator = (_tx: PlanqTx) => txObj.estimateGas({..._tx});
       const getCallTx = (_tx: PlanqTx) => {
         // @ts-ignore missing _parent property from TransactionObject type.
-        return { ..._tx, data: txObj.encodeABI(), to: txObj._parent._address }
-      }
-      const caller = (_tx: PlanqTx) => this.web3.eth.call(getCallTx(_tx))
-      gas = await this.estimateGasWithInflationFactor(tx, gasEstimator, caller)
+        return {..._tx, data: txObj.encodeABI(), to: txObj._parent._address};
+      };
+      const caller = (_tx: PlanqTx) => this.web3.eth.call(getCallTx(_tx));
+      gas = await this.estimateGasWithInflationFactor(tx, gasEstimator, caller);
     }
 
     return toTxResult(
@@ -262,8 +267,8 @@ export class Connection {
         ...tx,
         gas,
       })
-    )
-  }
+    );
+  };
 
   /*
    * @param signer - The address of account signing this data
@@ -278,17 +283,19 @@ export class Connection {
     version?: 1 | 3 | 4 | 5
   ): Promise<Signature> => {
     // stringify data for v3 & v4 based on https://github.com/MetaMask/metamask-extension/blob/c72199a1a6e4151c40c22f79d0f3b6ed7a2d59a7/app/scripts/lib/typed-message-manager.js#L185
-    const shouldStringify = version === 3 || version === 4
+    const shouldStringify = version === 3 || version === 4;
 
     // Uses the Provider and not the RpcCaller, because this method should be intercepted
     // by the PlanqProvider if there is a local wallet that could sign it. The RpcCaller
     // would just forward it to the node
     const signature = await new Promise<string>((resolve, reject) => {
-      const method = version ? `eth_signTypedData_v${version}` : 'eth_signTypedData'
-      ;(this.web3.currentProvider as Provider).send(
+      const method = version
+        ? `eth_signTypedData_v${version}`
+        : "eth_signTypedData";
+      (this.web3.currentProvider as Provider).send(
         {
           id: getRandomId(),
-          jsonrpc: '2.0',
+          jsonrpc: "2.0",
           method,
           params: [
             inputAddressFormatter(signer),
@@ -297,64 +304,69 @@ export class Connection {
         },
         (error, resp) => {
           if (error) {
-            reject(error)
+            reject(error);
           } else if (resp) {
-            resolve(resp.result as string)
+            resolve(resp.result as string);
           } else {
-            reject(new Error('empty-response'))
+            reject(new Error("empty-response"));
           }
         }
-      )
-    })
+      );
+    });
 
-    const messageHash = bufferToHex(generateTypedDataHash(typedData))
-    return parseSignatureWithoutPrefix(messageHash, signature, signer)
-  }
+    const messageHash = bufferToHex(generateTypedDataHash(typedData));
+    return parseSignatureWithoutPrefix(messageHash, signature, signer);
+  };
 
-  sign = async (dataToSign: string, address: Address | number): Promise<string> => {
+  sign = async (
+    dataToSign: string,
+    address: Address | number
+  ): Promise<string> => {
     // Uses the Provider and not the RpcCaller, because this method should be intercepted
     // by the PlanqProvider if there is a local wallet that could sign it. The RpcCaller
     // would just forward it to the node
     const signature = await new Promise<string>((resolve, reject) => {
-      ;(this.web3.currentProvider as Provider).send(
+      (this.web3.currentProvider as Provider).send(
         {
           id: getRandomId(),
-          jsonrpc: '2.0',
-          method: 'eth_sign',
-          params: [inputAddressFormatter(address.toString()), inputSignFormatter(dataToSign)],
+          jsonrpc: "2.0",
+          method: "eth_sign",
+          params: [
+            inputAddressFormatter(address.toString()),
+            inputSignFormatter(dataToSign),
+          ],
         },
         (error, resp) => {
           if (error) {
-            reject(error)
+            reject(error);
           } else if (resp) {
-            resolve(resp.result as string)
+            resolve(resp.result as string);
           } else {
-            reject(new Error('empty-response'))
+            reject(new Error("empty-response"));
           }
         }
-      )
-    })
+      );
+    });
 
-    return signature
-  }
+    return signature;
+  };
 
-  sendSignedTransaction = async (signedTransactionData: string): Promise<TransactionResult> => {
-    return toTxResult(this.web3.eth.sendSignedTransaction(signedTransactionData))
-  }
+  sendSignedTransaction = async (
+    signedTransactionData: string
+  ): Promise<TransactionResult> => {
+    return toTxResult(
+      this.web3.eth.sendSignedTransaction(signedTransactionData)
+    );
+  };
 
   /** @deprecated no longer needed since gasPrice is available on node rpc */
   fillGasPrice(tx: PlanqTx): PlanqTx {
-    if (tx.feeCurrency && tx.gasPrice === '0' && this.currencyGasPrice.has(tx.feeCurrency)) {
+    if (tx.gasPrice === "0") {
       return {
         ...tx,
-        gasPrice: this.currencyGasPrice.get(tx.feeCurrency),
-      }
+      };
     }
-    return tx
-  }
-  /** @deprecated no longer needed since gasPrice is available on node rpc */
-  async setGasPriceForCurrency(address: Address, gasPrice: string) {
-    this.currencyGasPrice.set(address, gasPrice)
+    return tx;
   }
 
   estimateGas = async (
@@ -363,29 +375,32 @@ export class Connection {
     caller: (tx: PlanqTx) => Promise<string> = this.web3.eth.call
   ): Promise<number> => {
     try {
-      const gas = await gasEstimator({ ...tx })
-      debugGasEstimation('estimatedGas: %s', gas.toString())
-      return gas
+      const gas = await gasEstimator({...tx});
+      debugGasEstimation("estimatedGas: %s", gas.toString());
+      return gas;
     } catch (e) {
-      const called = await caller({ data: tx.data, to: tx.to, from: tx.from })
-      let revertReason = 'Could not decode transaction failure reason'
-      if (called.startsWith('0x08c379a')) {
-        revertReason = decodeStringParameter(this.getAbiCoder(), called.substring(10))
+      const called = await caller({data: tx.data, to: tx.to, from: tx.from});
+      let revertReason = "Could not decode transaction failure reason";
+      if (called.startsWith("0x08c379a")) {
+        revertReason = decodeStringParameter(
+          this.getAbiCoder(),
+          called.substring(10)
+        );
       }
-      debugGasEstimation('Recover transaction failure reason', {
+      debugGasEstimation("Recover transaction failure reason", {
         called,
         data: tx.data,
         to: tx.to,
         from: tx.from,
         error: e,
         revertReason,
-      })
-      return Promise.reject(`Gas estimation failed: ${revertReason} or ${e}`)
+      });
+      return Promise.reject(`Gas estimation failed: ${revertReason} or ${e}`);
     }
-  }
+  };
 
   getAbiCoder(): AbiCoder {
-    return this.web3.eth.abi as unknown as AbiCoder
+    return this.web3.eth.abi as unknown as AbiCoder;
   }
 
   estimateGasWithInflationFactor = async (
@@ -395,130 +410,140 @@ export class Connection {
   ): Promise<number> => {
     try {
       const gas = Math.round(
-        (await this.estimateGas(tx, gasEstimator, caller)) * this.config.gasInflationFactor
-      )
-      debugGasEstimation('estimatedGasWithInflationFactor: %s', gas)
-      return gas
+        (await this.estimateGas(tx, gasEstimator, caller)) *
+          this.config.gasInflationFactor
+      );
+      debugGasEstimation("estimatedGasWithInflationFactor: %s", gas);
+      return gas;
     } catch (e: any) {
-      throw new Error(e)
+      throw new Error(e);
     }
-  }
+  };
 
   chainId = async (): Promise<number> => {
     // Reference: https://eth.wiki/json-rpc/API#net_version
-    const response = await this.rpcCaller.call('net_version', [])
-    return parseInt(response.result.toString(), 10)
-  }
+    const response = await this.rpcCaller.call("net_version", []);
+    return parseInt(response.result.toString(), 10);
+  };
 
   getTransactionCount = async (address: Address): Promise<number> => {
     // Reference: https://eth.wiki/json-rpc/API#eth_gettransactioncount
-    const response = await this.rpcCaller.call('eth_getTransactionCount', [address, 'pending'])
+    const response = await this.rpcCaller.call("eth_getTransactionCount", [
+      address,
+      "pending",
+    ]);
 
-    return hexToNumber(response.result)!
-  }
+    return hexToNumber(response.result)!;
+  };
 
   nonce = async (address: Address): Promise<number> => {
-    return this.getTransactionCount(address)
-  }
+    return this.getTransactionCount(address);
+  };
 
   coinbase = async (): Promise<string> => {
     // Reference: https://eth.wiki/json-rpc/API#eth_coinbase
-    const response = await this.rpcCaller.call('eth_coinbase', [])
-    return response.result.toString()
-  }
+    const response = await this.rpcCaller.call("eth_coinbase", []);
+    return response.result.toString();
+  };
 
   gasPrice = async (feeCurrency?: Address): Promise<string> => {
     // Required otherwise is not backward compatible
-    const parameter = feeCurrency ? [feeCurrency] : []
+    const parameter = feeCurrency ? [feeCurrency] : [];
 
     // Reference: https://eth.wiki/json-rpc/API#eth_gasprice
-    const response = await this.rpcCaller.call('eth_gasPrice', parameter)
-    const gasPriceInHex = response.result.toString()
-    return gasPriceInHex
-  }
+    const response = await this.rpcCaller.call("eth_gasPrice", parameter);
+    const gasPriceInHex = response.result.toString();
+    return gasPriceInHex;
+  };
 
   getBlockNumber = async (): Promise<number> => {
-    const response = await this.rpcCaller.call('eth_blockNumber', [])
+    const response = await this.rpcCaller.call("eth_blockNumber", []);
 
-    return hexToNumber(response.result)!
-  }
+    return hexToNumber(response.result)!;
+  };
 
   private isBlockNumberHash = (blockNumber: BlockNumber) =>
-    blockNumber instanceof String && blockNumber.indexOf('0x') === 0
+    blockNumber instanceof String && blockNumber.indexOf("0x") === 0;
 
   getBlock = async (
     blockHashOrBlockNumber: BlockNumber,
     fullTxObjects: boolean = true
   ): Promise<Block> => {
     const endpoint = this.isBlockNumberHash(blockHashOrBlockNumber)
-      ? 'eth_getBlockByHash' // Reference: https://eth.wiki/json-rpc/API#eth_getBlockByHash
-      : 'eth_getBlockByNumber' // Reference: https://eth.wiki/json-rpc/API#eth_getBlockByNumber
+      ? "eth_getBlockByHash" // Reference: https://eth.wiki/json-rpc/API#eth_getBlockByHash
+      : "eth_getBlockByNumber"; // Reference: https://eth.wiki/json-rpc/API#eth_getBlockByNumber
 
     const response = await this.rpcCaller.call(endpoint, [
       inputBlockNumberFormatter(blockHashOrBlockNumber),
       fullTxObjects,
-    ])
+    ]);
 
-    return outputBlockFormatter(response.result)
-  }
+    return outputBlockFormatter(response.result);
+  };
 
-  getBlockHeader = async (blockHashOrBlockNumber: BlockNumber): Promise<BlockHeader> => {
+  getBlockHeader = async (
+    blockHashOrBlockNumber: BlockNumber
+  ): Promise<BlockHeader> => {
     const endpoint = this.isBlockNumberHash(blockHashOrBlockNumber)
-      ? 'eth_getHeaderByHash'
-      : 'eth_getHeaderByNumber'
+      ? "eth_getHeaderByHash"
+      : "eth_getHeaderByNumber";
 
     const response = await this.rpcCaller.call(endpoint, [
       inputBlockNumberFormatter(blockHashOrBlockNumber),
-    ])
+    ]);
 
-    return outputBlockHeaderFormatter(response.result)
-  }
+    return outputBlockHeaderFormatter(response.result);
+  };
 
-  getBalance = async (address: Address, defaultBlock?: BlockNumber): Promise<string> => {
+  getBalance = async (
+    address: Address,
+    defaultBlock?: BlockNumber
+  ): Promise<string> => {
     // Reference: https://eth.wiki/json-rpc/API#eth_getBalance
-    const response = await this.rpcCaller.call('eth_getBalance', [
+    const response = await this.rpcCaller.call("eth_getBalance", [
       inputAddressFormatter(address),
       inputDefaultBlockNumberFormatter(defaultBlock),
-    ])
-    return outputBigNumberFormatter(response.result)
-  }
+    ]);
+    return outputBigNumberFormatter(response.result);
+  };
 
   getTransaction = async (transactionHash: string): Promise<PlanqTxPending> => {
     // Reference: https://eth.wiki/json-rpc/API#eth_getTransactionByHash
-    const response = await this.rpcCaller.call('eth_getTransactionByHash', [
+    const response = await this.rpcCaller.call("eth_getTransactionByHash", [
       ensureLeading0x(transactionHash),
-    ])
-    return outputPlanqTxFormatter(response.result)
-  }
+    ]);
+    return outputPlanqTxFormatter(response.result);
+  };
 
-  getTransactionReceipt = async (txhash: string): Promise<PlanqTxReceipt | null> => {
+  getTransactionReceipt = async (
+    txhash: string
+  ): Promise<PlanqTxReceipt | null> => {
     // Reference: https://eth.wiki/json-rpc/API#eth_getTransactionReceipt
-    const response = await this.rpcCaller.call('eth_getTransactionReceipt', [
+    const response = await this.rpcCaller.call("eth_getTransactionReceipt", [
       ensureLeading0x(txhash),
-    ])
+    ]);
 
     if (response.result === null) {
-      return null
+      return null;
     }
 
-    return outputPlanqTxReceiptFormatter(response.result)
-  }
+    return outputPlanqTxReceiptFormatter(response.result);
+  };
 
   private fillTxDefaults(tx?: PlanqTx): PlanqTx {
     const defaultTx: PlanqTx = {
       from: this.config.from,
-      feeCurrency: this.config.feeCurrency,
       gasPrice: this.config.gasPrice,
-    }
+    };
 
     return {
       ...defaultTx,
       ...tx,
-    }
+    };
   }
 
   stop() {
-    assertIsPlanqProvider(this.web3.currentProvider)
-    this.web3.currentProvider.stop()
+    assertIsPlanqProvider(this.web3.currentProvider);
+    this.web3.currentProvider.stop();
   }
 }

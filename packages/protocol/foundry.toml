@@ -1,4 +1,4 @@
-[default]
+[profile.default]
 src = 'contracts'
 out = 'out'
 test = 'test-sol'
@@ -11,11 +11,17 @@ remappings = [
     'solidity-bytes-utils/=lib/solidity-bytes-utils/',
     'forge-std/=lib/planq-foundry/lib/forge-std/src/',
     'ds-test/=lib/planq-foundry/lib/forge-std/lib/ds-test/src/',
-    'planq-foundry/=lib/planq-foundry/src/',
-    '@summa-tx/memview.sol/=lib/memview.sol'
+    '@summa-tx/memview.sol/=lib/memview.sol',
+    '@mento-core/=lib/mento-core',
+    '@openzeppelin/contracts8/=lib/openzeppelin-contracts8/contracts/',
+    '@test-sol/=test-sol/',
+    '@migrations-sol/=migrations_sol/',
+    'solidity-bytes-utils/=lib/solidity-bytes-utils/',
 ]
-
-no_match_contract = "RandomTest"
-no_match_path = "contracts/common/libraries/test/BLS12Passthrough.sol"  # tested from planq-blockain repo
-
+no_match_test = "skip"
+# `BLS12Passthrough.sol` is excluded, because it's tested in the celo-blockain repo as
+# described here: https://github.com/celo-org/celo-monorepo/pull/10240
+# `Random.sol` is excluded, but I'm not sure why. It was already excluded so I'm leaving it here.
+no_match_path = "*test/{BLS12Passthrough.sol,RandomTest.sol}"
+fs_permissions = [{ access = "read", path = "./out"}, { access = "read", path = "./migrations_sol/migrationsConfig.json"}, { access = "read", path = "./governanceConstitution.json"}]
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
