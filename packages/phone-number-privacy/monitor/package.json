@@ -1,0 +1,42 @@
+{
+  "name": "@planq-network/phone-number-privacy-monitor",
+  "version": "3.0.0-beta.2",
+  "description": "Regularly queries ODIS to ensure the system is functioning properly",
+  "author": "Planq",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "deploy": "yarn build && firebase deploy --only functions:odisMonitorScheduleFunctionLegacyPNP,functions:odisMonitorScheduleFunctionPNP,functions:odisMonitorScheduleFunctionDomains",
+    "deploy:staging": "yarn deploy --project planq-phone-number-privacy-stg",
+    "deploy:alfajores": "yarn deploy --project planq-phone-number-privacy",
+    "deploy:mainnet": "yarn deploy --project planq-pgpnp-mainnet",
+    "config:get:staging": "firebase functions:config:get --project planq-phone-number-privacy-stg",
+    "config:get:alfajores": "firebase functions:config:get --project planq-phone-number-privacy",
+    "config:get:mainnet": "firebase functions:config:get --project planq-pgpnp-mainnet",
+    "config:set:staging": "firebase functions:config:set --project planq-phone-number-privacy-stg",
+    "config:set:alfajores": "firebase functions:config:set --project planq-phone-number-privacy",
+    "config:set:mainnet": "firebase functions:config:set --project planq-pgpnp-mainnet",
+    "clean": "tsc -b  --clean",
+    "build": "tsc -b ",
+    "lint": "tslint --project ",
+    "loadTest": "ts-node src/scripts/run-load-test.ts run"
+  },
+  "dependencies": {
+    "@planq-network/contractkit": "^4.1.0",
+    "@planq-network/cryptographic-utils": "^4.1.0",
+    "@planq-network/encrypted-backup": "^4.1.0",
+    "@planq-network/identity": "^4.1.0",
+    "@planq-network/wallet-local": "^4.1.0",
+    "@planq-network/phone-number-privacy-common": "^3.0.0",
+    "@planq-network/utils": "^4.1.0",
+    "firebase-admin": "^9.12.0",
+    "firebase-functions": "^3.15.7"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.3.3",
+    "firebase-tools": "9.20.0"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}
