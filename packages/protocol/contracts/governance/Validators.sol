@@ -7,7 +7,6 @@ import "solidity-bytes-utils/contracts/BytesLib.sol";
 
 import "./interfaces/IValidators.sol";
 
-import "../common/CalledByVm.sol";
 import "../common/Initializable.sol";
 import "../common/FixidityLib.sol";
 import "../common/linkedlists/AddressLinkedList.sol";
@@ -26,8 +25,7 @@ contract Validators is
   ReentrancyGuard,
   Initializable,
   UsingRegistry,
-  UsingPrecompiles,
-  CalledByVm
+  UsingPrecompiles
 {
   using FixidityLib for FixidityLib.Fraction;
   using AddressLinkedList for LinkedList.List;
@@ -458,7 +456,7 @@ contract Validators is
    * @param uptime The Fixidity representation of the validator's uptime, between 0 and 1.
    * @return True upon success.
    */
-  function updateValidatorScoreFromSigner(address signer, uint256 uptime) external onlyVm() {
+  function updateValidatorScoreFromSigner(address signer, uint256 uptime) external onlyOwner() {
     _updateValidatorScoreFromSigner(signer, uptime);
   }
 
@@ -497,7 +495,7 @@ contract Validators is
    */
   function distributeEpochPaymentsFromSigner(address signer, uint256 maxPayment)
     external
-    onlyVm()
+    onlyOwner()
     returns (uint256)
   {
     return _distributeEpochPaymentsFromSigner(signer, maxPayment);
@@ -534,7 +532,7 @@ contract Validators is
       (address beneficiary, uint256 fraction) = getAccounts().getPaymentDelegation(account);
       uint256 delegatedPayment = remainingPayment.multiply(FixidityLib.wrap(fraction)).fromFixed();
       uint256 validatorPayment = remainingPayment.fromFixed().sub(delegatedPayment);
-      IStableToken stableToken = getStableToken();
+      IStableTokenV2 stableToken = getStableToken();
       require(stableToken.mint(group, groupPayment), "mint failed to validator group");
       require(stableToken.mint(account, validatorPayment), "mint failed to validator account");
       if (fraction != 0) {

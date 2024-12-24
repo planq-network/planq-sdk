@@ -17,7 +17,7 @@ import { newFreezer } from './generated/Freezer'
 import { newGasPriceMinimum } from './generated/GasPriceMinimum'
 import { newPlanqToken } from './generated/PlanqToken'
 import { newGovernance } from './generated/Governance'
-import { newIerc20 } from './generated/IERC20'
+import { newIERC20 } from './generated/IERC20'
 import { newLockedPlanq } from './generated/LockedPlanq'
 import { newMetaTransactionWallet } from './generated/MetaTransactionWallet'
 import { newMetaTransactionWalletDeployer } from './generated/MetaTransactionWalletDeployer'
@@ -29,8 +29,8 @@ import { newRegistry } from './generated/Registry'
 import { newSortedOracles } from './generated/SortedOracles'
 import { newValidators } from './generated/Validators'
 import { newExchange } from './generated/mento/Exchange'
-import { newExchangeBrl } from './generated/mento/ExchangeBRL'
-import { newExchangeEur } from './generated/mento/ExchangeEUR'
+import { newExchangeBRL } from './generated/mento/ExchangeBRL'
+import { newExchangeEUR } from './generated/mento/ExchangeEUR'
 import { newGrandaMento } from './generated/mento/GrandaMento'
 import { newReserve } from './generated/mento/Reserve'
 import { newStableToken } from './generated/mento/StableToken'
@@ -45,11 +45,11 @@ export const ContractFactories = {
   [PlanqContract.DowntimeSlasher]: newDowntimeSlasher,
   [PlanqContract.Election]: newElection,
   [PlanqContract.EpochRewards]: newEpochRewards,
-  [PlanqContract.ERC20]: newIerc20,
+  [PlanqContract.ERC20]: newIERC20,
   [PlanqContract.Escrow]: newEscrow,
   [PlanqContract.Exchange]: newExchange,
-  [PlanqContract.ExchangeEUR]: newExchangeEur,
-  [PlanqContract.ExchangeBRL]: newExchangeBrl,
+  [PlanqContract.ExchangeEUR]: newExchangeEUR,
+  [PlanqContract.ExchangeBRL]: newExchangeBRL,
   [PlanqContract.FederatedAttestations]: newFederatedAttestations,
   [PlanqContract.FeeCurrencyWhitelist]: newFeeCurrencyWhitelist,
   [PlanqContract.Freezer]: newFreezer,

@@ -3,14 +3,15 @@
 // referencing '@planq-network/utils/node_modules/bignumber.js'
 import 'bignumber.js'
 import { IPlanqToken } from '../generated/IPlanqToken'
-import { Ierc20 } from '../generated/IERC20'
+import { IERC20 } from '../generated/IERC20'
 import { proxyCall, proxySend, valueToInt } from './BaseWrapper'
 import { Erc20Wrapper } from './Erc20Wrapper'
+import {PlanqToken} from "../generated/PlanqToken";
 
 /**
  * Contract for Planq native currency that adheres to the IPlanqToken and IERC20 interfaces.
  */
-export class PlanqTokenWrapper<T extends Ierc20 & IPlanqToken> extends Erc20Wrapper<T> {
+export class PlanqTokenWrapper<T extends IERC20 & IPlanqToken> extends Erc20Wrapper<T> {
   /**
    * Returns the name of the token.
    * @returns Name of the token.
@@ -37,3 +38,5 @@ export class PlanqTokenWrapper<T extends Ierc20 & IPlanqToken> extends Erc20Wrap
    */
   transferWithComment = proxySend(this.connection, this.contract.methods.transferWithComment)
 }
+
+export type PlanqTokenWrapperType = PlanqTokenWrapper<PlanqToken>

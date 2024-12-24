@@ -3,7 +3,7 @@ import { AddressRegistry } from './address-registry'
 import { PlanqContract } from './base'
 import { ContractCacheType } from './basic-contract-cache-type'
 import { StableToken, stableTokenInfos } from './planq-tokens'
-import { Ierc20 } from './generated/IERC20'
+import { IERC20 } from './generated/IERC20'
 import { Web3ContractCache } from './web3-contract-cache'
 import { AccountsWrapper } from './wrappers/Accounts'
 import { AttestationsWrapper } from './wrappers/Attestations'
@@ -90,7 +90,7 @@ interface WrapperCacheMap {
   [PlanqContract.DowntimeSlasher]?: DowntimeSlasherWrapper
   [PlanqContract.Election]?: ElectionWrapper
   [PlanqContract.EpochRewards]?: EpochRewardsWrapper
-  [PlanqContract.ERC20]?: Erc20Wrapper<Ierc20>
+  [PlanqContract.ERC20]?: Erc20Wrapper<IERC20>
   [PlanqContract.Escrow]?: EscrowWrapper
   [PlanqContract.Exchange]?: ExchangeWrapper
   [PlanqContract.ExchangeEUR]?: ExchangeWrapper

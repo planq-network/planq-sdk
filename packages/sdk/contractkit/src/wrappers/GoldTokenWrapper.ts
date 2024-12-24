@@ -16,7 +16,7 @@ import { PlanqTokenWrapper } from './PlanqTokenWrapper'
 /**
  * ERC-20 contract for Planq native currency.
  */
-export class PlanqTokenWrapper extends PlanqTokenWrapper<PlanqToken> {
+export class GoldTokenWrapper extends PlanqTokenWrapper<PlanqToken> {
   /**
    * Increases the allowance of another user.
    * @param spender The address which is being approved to spend PLQ.
@@ -48,4 +48,4 @@ export class PlanqTokenWrapper extends PlanqTokenWrapper<PlanqToken> {
     this.connection.web3.eth.getBalance(account).then(valueToBigNumber)
 }
 
-export type PlanqTokenWrapperType = PlanqTokenWrapper
+export type PlanqTokenWrapperType = GoldTokenWrapper

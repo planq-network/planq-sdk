@@ -8,11 +8,11 @@ import { newAccounts } from './generated/Accounts'
 import { newGasPriceMinimum } from './generated/GasPriceMinimum'
 import { newPlanqToken } from './generated/PlanqToken'
 import { newExchange } from './generated/mento/Exchange'
-import { newExchangeBrl } from './generated/mento/ExchangeBRL'
-import { newExchangeEur } from './generated/mento/ExchangeEUR'
+import { newExchangeBRL } from './generated/mento/ExchangeBRL'
+import { newExchangeEUR } from './generated/mento/ExchangeEUR'
 import { newStableToken } from './generated/mento/StableToken'
-import { newStableTokenBrl } from './generated/mento/StableTokenBRL'
-import { newStableTokenEur } from './generated/mento/StableTokenEUR'
+import { newStableTokenBRL } from './generated/mento/StableTokenBRL'
+import { newStableTokenEUR } from './generated/mento/StableTokenEUR'
 import { AccountsWrapper } from './wrappers/Accounts'
 import { ExchangeWrapper } from './wrappers/Exchange'
 import { GasPriceMinimumWrapper } from './wrappers/GasPriceMinimum'
@@ -37,11 +37,11 @@ const MINIMUM_CONTRACTS = {
     wrapper: ExchangeWrapper,
   },
   [PlanqContract.ExchangeEUR]: {
-    newInstance: newExchangeEur,
+    newInstance: newExchangeEUR,
     wrapper: ExchangeWrapper,
   },
   [PlanqContract.ExchangeBRL]: {
-    newInstance: newExchangeBrl,
+    newInstance: newExchangeBRL,
     wrapper: ExchangeWrapper,
   },
   [PlanqContract.StableToken]: {
@@ -49,11 +49,11 @@ const MINIMUM_CONTRACTS = {
     wrapper: StableTokenWrapper,
   },
   [PlanqContract.StableTokenBRL]: {
-    newInstance: newStableTokenBrl,
+    newInstance: newStableTokenBRL,
     wrapper: StableTokenWrapper,
   },
   [PlanqContract.StableTokenEUR]: {
-    newInstance: newStableTokenEur,
+    newInstance: newStableTokenEUR,
     wrapper: StableTokenWrapper,
   },
 }

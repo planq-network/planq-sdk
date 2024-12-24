@@ -5,14 +5,12 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 
 import "./UsingRegistry.sol";
-import "./CalledByVm.sol";
 import "./Initializable.sol";
 import "./interfaces/IPlanqToken.sol";
 import "../common/interfaces/IPlanqVersionedContract.sol";
 
 contract PlanqToken is
     Initializable,
-    CalledByVm,
     UsingRegistry,
     IERC20,
     IPlanqToken,
@@ -201,7 +199,7 @@ contract PlanqToken is
    * @param to The account for which to mint tokens.
    * @param value The amount of PLQ to mint.
    */
-    function mint(address to, uint256 value) external onlyVm returns (bool) {
+    function mint(address to, uint256 value) external onlyOwner returns (bool) {
         if (value == 0) {
             return true;
         }
@@ -272,7 +270,7 @@ contract PlanqToken is
    * @notice Increases the variable for total amount of PLQ in existence.
    * @param amount The amount to increase counter by
    */
-    function increaseSupply(uint256 amount) external onlyVm {
+    function increaseSupply(uint256 amount) external onlyOwner {
         totalSupply_ = totalSupply_.add(amount);
     }
 

@@ -3,7 +3,6 @@ pragma solidity ^0.5.13;
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-import "../common/CalledByVm.sol";
 import "../common/FixidityLib.sol";
 import "../common/Freezable.sol";
 import "../common/Initializable.sol";
@@ -20,8 +19,7 @@ contract EpochRewards is
     Initializable,
     UsingPrecompiles,
     UsingRegistry,
-    Freezable,
-    CalledByVm
+    Freezable
 {
     using FixidityLib for FixidityLib.Fraction;
     using SafeMath for uint256;
@@ -588,7 +586,7 @@ contract EpochRewards is
    *   voting Planq fraction.
    * @dev Only called directly by the protocol.
    */
-    function updateTargetVotingYield() external onlyVm onlyWhenNotFrozen {
+    function updateTargetVotingYield() external onlyOwner onlyWhenNotFrozen {
         _updateTargetVotingYield();
     }
 

@@ -4,7 +4,6 @@ import "./interfaces/IRandom.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-import "../common/CalledByVm.sol";
 import "../common/Initializable.sol";
 import "../common/UsingPrecompiles.sol";
 import "../common/interfaces/IPlanqVersionedContract.sol";
@@ -17,8 +16,7 @@ contract Random is
   IPlanqVersionedContract,
   Ownable,
   Initializable,
-  UsingPrecompiles,
-  CalledByVm
+  UsingPrecompiles
 {
   using SafeMath for uint256;
 
@@ -83,7 +81,7 @@ contract Random is
    */
   function revealAndCommit(bytes32 randomness, bytes32 newCommitment, address proposer)
     external
-    onlyVm
+  onlyOwner
   {
     _revealAndCommit(randomness, newCommitment, proposer);
   }

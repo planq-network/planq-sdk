@@ -1,10 +1,10 @@
 /* tslint:disable no-console */
+import Web3V1Planq from '@planq-network/typechain-target-web3-v1-planq'
 import {execSync} from "child_process";
 import {readJSONSync} from "fs-extra";
 import path from "path";
 import {tsGenerator} from "ts-generator";
 import {MENTO_PACKAGE} from "../contractPackages";
-import {TypeChain} from "typechain/dist/TypeChain";
 
 const ROOT_DIR = path.normalize(path.join(__dirname, "../"));
 const BUILD_DIR = path.join(ROOT_DIR, process.env.BUILD_DIR ?? "./build");
@@ -160,11 +160,10 @@ async function generateFilesForContractKit(outdir: string) {
 
   await tsGenerator(
     {cwd, loggingLvl: "info"},
-    new TypeChain({
+    new Web3V1Planq({
       cwd,
       rawConfig: {
         files: globPattern,
-        target: "web3-v1",
         outDir: relativePath,
       },
     })
@@ -173,13 +172,12 @@ async function generateFilesForContractKit(outdir: string) {
   for (const externalContractPackage of externalContractPackages) {
     await tsGenerator(
       {cwd, loggingLvl: "info"},
-      new TypeChain({
+      new Web3V1Planq({
         cwd,
         rawConfig: {
           files: `${BUILD_DIR}/contracts-${
             externalContractPackage.name
           }/@(${externalContractPackage.contracts.join("|")}).json`,
-          target: "web3-v1",
           outDir: path.join(relativePath, externalContractPackage.name),
         },
       })

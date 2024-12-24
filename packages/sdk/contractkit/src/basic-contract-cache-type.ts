@@ -4,6 +4,7 @@ import { AccountsWrapper } from './wrappers/Accounts'
 import { ExchangeWrapper } from './wrappers/Exchange'
 import { PlanqTokenWrapper, PlanqTokenWrapperType } from './wrappers/PlanqTokenWrapper'
 import { StableTokenWrapper } from './wrappers/StableTokenWrapper'
+import {PlanqToken} from "./generated/PlanqToken";
 
 /**
  * Interface for a class with the minimum required wrappers
@@ -13,7 +14,7 @@ export interface ContractCacheType {
   getAccounts(): Promise<AccountsWrapper>
   getExchange(stableToken: StableToken): Promise<ExchangeWrapper>
 
-  getPlanqToken(): Promise<PlanqTokenWrapper>
+  getPlanqToken(): Promise<PlanqTokenWrapper<PlanqToken>>
 
   getStableToken(stableToken: StableToken): Promise<StableTokenWrapper>
 

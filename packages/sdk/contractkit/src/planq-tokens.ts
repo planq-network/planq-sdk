@@ -5,13 +5,14 @@ import { PlanqContract, PlanqTokenContract, ExchangeContract, StableTokenContrac
 import { ContractCacheType } from './basic-contract-cache-type'
 import { PlanqTokenWrapper } from './wrappers/PlanqTokenWrapper'
 import { StableTokenWrapper } from './wrappers/StableTokenWrapper'
+import {PlanqToken} from "./generated/PlanqToken";
 export { PlanqTokenType, StableToken, Token } from '@planq-network/base'
 
 export type EachPlanqToken<T> = {
   [key in PlanqTokenType]?: T
 }
 
-export type PlanqTokenWrapper = PlanqTokenWrapper | StableTokenWrapper
+export type PlanqTokensWrapper = PlanqTokenWrapper<PlanqToken> | StableTokenWrapper
 
 export interface PlanqTokenInfo {
   contract: PlanqTokenContract
@@ -78,7 +79,7 @@ export class PlanqTokens {
    * Gets the wrapper for each planq token.
    * @return an promise resolving to an object containing the wrapper for each planq token.
    */
-  getWrappers(): Promise<EachPlanqToken<PlanqTokenWrapper>> {
+  getWrappers(): Promise<EachPlanqToken<PlanqTokensWrapper>> {
     return this.forEachPlanqToken((info: PlanqTokenInfo) => this.contracts.getContract(info.contract))
   }
 
@@ -214,9 +215,9 @@ export class PlanqTokens {
    * @return an promise resolving to the wrapper for the token
    */
   getWrapper(token: StableToken): Promise<StableTokenWrapper>
-  getWrapper(token: Token): Promise<PlanqTokenWrapper>
-  getWrapper(token: PlanqTokenType): Promise<PlanqTokenWrapper>
-  getWrapper(token: PlanqTokenType): Promise<PlanqTokenWrapper> {
+  getWrapper(token: Token): Promise<PlanqTokensWrapper>
+  getWrapper(token: PlanqTokenType): Promise<PlanqTokensWrapper>
+  getWrapper(token: PlanqTokenType): Promise<PlanqTokensWrapper> {
     return this.contracts.getContract(planqTokenInfos[token].contract)
   }
 
