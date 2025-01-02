@@ -13,7 +13,7 @@ import { spawn, SpawnOptions } from 'child_process';
 import { keccak256 } from 'ethereum-cryptography/keccak';
 import { GovernanceApproverMultiSigInstance, GovernanceInstance, LockedPlanqInstance, ProxyInstance, RegistryInstance, UsingRegistryInstance } from 'types';
 import Web3 from 'web3';
-import { ContractPackage, MENTO_PACKAGE } from '../contractPackages';
+import { ContractPackage, ASTONIC_PACKAGE } from '../contractPackages';
 
 import BN = require('bn.js')
 
@@ -269,7 +269,7 @@ export const assertContractsRegistered = async (getContract: ContratGetter) => {
 export const assertRegistryAddressesSet = async (getContract: ContratGetter) => {
   const registry: RegistryInstance = await getContract('Registry')
   for (const contractName of usesRegistry) {
-    const contract: UsingRegistryInstance = await getContract(contractName, MENTO_PACKAGE)
+    const contract: UsingRegistryInstance = await getContract(contractName, ASTONIC_PACKAGE)
     assert.strictEqual(
       registry.address.toLowerCase(),
       (await contract.registry()).toLowerCase(),
@@ -458,7 +458,7 @@ const proxiedContracts = [{
       'Reserve',
       'StableToken',
     ],
-    __contractPackage: MENTO_PACKAGE
+    __contractPackage: ASTONIC_PACKAGE
  }
 ]
 
@@ -476,7 +476,7 @@ const ownedContracts = [{
     'Exchange',
     'StableToken'
   ],
-  __contractPackage: MENTO_PACKAGE
+  __contractPackage: ASTONIC_PACKAGE
  }
 ]
 

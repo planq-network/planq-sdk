@@ -89,7 +89,6 @@ export class RpcSigner implements Signer {
       value: toRpcHex(tx.value),
       gas: toRpcHex(tx.gas),
       gasPrice: toRpcHex(tx.gasPrice),
-      gatewayFee: toRpcHex(tx.gatewayFee),
     }
     return this.callAndCheckResponse(RpcSignerEndpoint.SignTransaction, [rpcTx])
   }

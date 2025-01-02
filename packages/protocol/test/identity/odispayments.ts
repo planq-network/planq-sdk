@@ -18,13 +18,13 @@ import {
   RegistryInstance,
 } from 'types'
 import { StableTokenContract, StableTokenInstance } from 'types/mento'
-import { MENTO_PACKAGE } from '../../contractPackages'
+import { ASTONIC_PACKAGE } from '../../contractPackages'
 
 const Freezer: FreezerContract = artifacts.require('Freezer')
 const OdisPayments: OdisPaymentsContract = artifacts.require('OdisPayments')
 const StableTokenCUSD: StableTokenContract = makeTruffleContractForMigration(
   'StableToken',
-  MENTO_PACKAGE,
+  ASTONIC_PACKAGE,
   web3
 )
 

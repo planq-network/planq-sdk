@@ -5,7 +5,7 @@ import {
 } from '@planq-network/protocol/lib/web3-utils'
 import { config } from '@planq-network/protocol/migrationsConfig'
 import { ReserveSpenderMultiSigInstance } from 'types/mento'
-import { MENTO_PACKAGE } from '../contractPackages'
+import { ASTONIC_PACKAGE } from '../contractPackages'
 import { ArtifactsSingleton } from '../lib/artifactsSingleton'
 
 const initializeArgs = async (): Promise<any[]> => {
@@ -25,8 +25,8 @@ module.exports = deploymentForProxiedContract<ReserveSpenderMultiSigInstance>(
     await transferOwnershipOfProxy(
       PlanqContractName.ReserveSpenderMultiSig,
       reserveSpenderMultiSig.address,
-      ArtifactsSingleton.getInstance(MENTO_PACKAGE)
+      ArtifactsSingleton.getInstance(ASTONIC_PACKAGE)
     )
   },
-  MENTO_PACKAGE
+  ASTONIC_PACKAGE
 )

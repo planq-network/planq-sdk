@@ -12,7 +12,7 @@ const argv = require("minimist")(process.argv.slice(2), {
   boolean: ["reset"],
 });
 
-const SOLC_VERSION = "0.8.18";
+const SOLC_VERSION = "0.5.13";
 const ALFAJORES_NETWORKID = 44787;
 const BAKLAVA_NETWORKID = 62320;
 const BAKLAVASTAGING_NETWORKID = 31420;

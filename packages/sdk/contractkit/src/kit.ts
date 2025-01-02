@@ -12,7 +12,7 @@ import { LocalWallet } from '@planq-network/wallet-local'
 import { BigNumber } from 'bignumber.js'
 import Web3 from 'web3'
 import { AddressRegistry } from './address-registry'
-import { PlanqContract, PlanqTokenContract } from './base'
+import { PlanqContract } from './base'
 import { PlanqTokens, EachPlanqToken } from './planq-tokens'
 import { ValidWrappers, WrapperCache } from './contract-cache'
 import {
@@ -191,29 +191,6 @@ export class ContractKit {
 
   getHumanReadableNetworkConfig = () => this.getNetworkConfig(true)
 
-  /**
-   * Set PlanqToken to use to pay for gas fees
-   * @param tokenContract PLQ (PlanqToken) or a supported StableToken contract
-   */
-  async setFeeCurrency(tokenContract: PlanqTokenContract): Promise<void> {
-    const address =
-      tokenContract === PlanqContract.PlanqToken
-        ? undefined
-        : await this.registry.addressFor(tokenContract)
-    if (address) {
-      await this.updateGasPriceInConnectionLayer(address)
-    }
-    this.connection.defaultFeeCurrency = address
-  }
-
-  /** @deprecated no longer needed since gasPrice is available on node rpc */
-  async updateGasPriceInConnectionLayer(currency: Address) {
-    const gasPriceMinimum = await this.contracts.getGasPriceMinimum()
-    const rawGasPrice = await gasPriceMinimum.getGasPriceMinimum(currency)
-    const gasPrice = rawGasPrice.multipliedBy(this.gasPriceSuggestionMultiplier).toFixed()
-    await this.connection.setGasPriceForCurrency(currency, gasPrice)
-  }
-
   async getEpochSize(): Promise<number> {
     const blockchainParamsWrapper = await this.contracts.getBlockchainParameters()
     return blockchainParamsWrapper.getEpochSizeNumber()
@@ -266,14 +243,6 @@ export class ContractKit {
     return this.connection.defaultGasPrice
   }
 
-  set defaultFeeCurrency(address: Address | undefined) {
-    this.connection.defaultFeeCurrency = address
-  }
-
-  get defaultFeeCurrency() {
-    return this.connection.defaultFeeCurrency
-  }
-
   isListening(): Promise<boolean> {
     return this.connection.isListening()
   }
@@ -283,9 +252,6 @@ export class ContractKit {
   }
   /** @deprecated no longer needed since gasPrice is available on node rpc */
   async fillGasPrice(tx: PlanqTx): Promise<PlanqTx> {
-    if (tx.feeCurrency && tx.gasPrice === '0') {
-      await this.updateGasPriceInConnectionLayer(tx.feeCurrency)
-    }
     return this.connection.fillGasPrice(tx)
   }
 

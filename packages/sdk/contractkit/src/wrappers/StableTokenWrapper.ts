@@ -1,6 +1,6 @@
 import { fromFixed } from '@planq-network/utils/lib/fixidity'
 import BigNumber from 'bignumber.js'
-import { StableToken } from '../generated/mento/StableToken'
+import { StableToken } from '../generated/astonic/StableToken'
 import {
   proxyCall,
   proxySend,

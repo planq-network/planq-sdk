@@ -28,12 +28,12 @@ import { newRandom } from './generated/Random'
 import { newRegistry } from './generated/Registry'
 import { newSortedOracles } from './generated/SortedOracles'
 import { newValidators } from './generated/Validators'
-import { newExchange } from './generated/mento/Exchange'
-import { newExchangeBRL } from './generated/mento/ExchangeBRL'
-import { newExchangeEUR } from './generated/mento/ExchangeEUR'
-import { newGrandaMento } from './generated/mento/GrandaMento'
-import { newReserve } from './generated/mento/Reserve'
-import { newStableToken } from './generated/mento/StableToken'
+import { newExchange } from './generated/astonic/Exchange'
+import { newExchangeBRL } from './generated/astonic/ExchangeBRL'
+import { newExchangeEUR } from './generated/astonic/ExchangeEUR'
+import { newGrandaMento } from './generated/astonic/GrandaMento'
+import { newReserve } from './generated/astonic/Reserve'
+import { newStableToken } from './generated/astonic/StableToken'
 
 const debug = debugFactory('kit:web3-contract-cache')
 

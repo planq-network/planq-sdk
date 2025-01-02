@@ -169,9 +169,9 @@ contract UsingRegistry is Ownable {
             );
     }
 
-    function getStableToken() internal view returns (IStableTokenV2) {
+    function getStableToken() internal view returns (IStableToken) {
         return
-            IStableTokenV2(
+            IStableToken(
                 registry.getAddressForOrDie(STABLE_TOKEN_REGISTRY_ID)
             );
     }

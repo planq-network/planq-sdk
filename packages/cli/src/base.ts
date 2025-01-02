@@ -199,15 +199,7 @@ export abstract class BaseCommand extends Command {
       ? (gasOptions as any)[res.flags.gasCurrency]
       : getGasCurrency(this.config.configDir)
 
-    const setStableTokenGas = async (stable: StableToken) => {
-      await this.kit.setFeeCurrency(stableTokenInfos[stable].contract)
-      await this.kit.updateGasPriceInConnectionLayer(
-        await this.kit.registry.addressFor(stableTokenInfos[stable].contract)
-      )
-    }
-    if (Object.keys(StableToken).includes(gasCurrencyConfig)) {
-      await setStableTokenGas(StableToken[gasCurrencyConfig as keyof typeof StableToken])
-    } else if (gasCurrencyConfig === gasOptions.auto && this.kit.defaultAccount) {
+    if (gasCurrencyConfig === gasOptions.auto && this.kit.defaultAccount) {
       const balances = await this.kit.getTotalBalance(this.kit.defaultAccount)
       if (balances.PLQ!.isZero()) {
         const stables = Object.entries(StableToken)
@@ -216,7 +208,6 @@ export abstract class BaseCommand extends Command {
           const stableToken = stable[1]
           // has balance
           if ((balances as any)[stableName] && !(balances as any)[stableName].isZero()) {
-            await setStableTokenGas(stableToken)
             break
           }
         }

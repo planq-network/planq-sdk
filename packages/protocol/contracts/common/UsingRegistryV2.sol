@@ -224,29 +224,29 @@ contract UsingRegistryV2 {
             );
     }
 
-    function getStableToken() internal view returns (IStableTokenV2) {
+    function getStableToken() internal view returns (IStableToken) {
         return
-            IStableTokenV2(
+            IStableToken(
                 registryContract.getAddressForOrDie(STABLE_TOKEN_REGISTRY_ID)
             );
     }
 
-    function getStableDollarToken() internal view returns (IStableTokenV2) {
+    function getStableDollarToken() internal view returns (IStableToken) {
         return getStableToken();
     }
 
-    function getStableEuroToken() internal view returns (IStableTokenV2) {
+    function getStableEuroToken() internal view returns (IStableToken) {
         return
-            IStableTokenV2(
+            IStableToken(
                 registryContract.getAddressForOrDie(
                     STABLE_EURO_TOKEN_REGISTRY_ID
                 )
             );
     }
 
-    function getStableRealToken() internal view returns (IStableTokenV2) {
+    function getStableRealToken() internal view returns (IStableToken) {
         return
-            IStableTokenV2(
+            IStableToken(
                 registryContract.getAddressForOrDie(
                     STABLE_REAL_TOKEN_REGISTRY_ID
                 )

@@ -99,7 +99,7 @@ interface WrapperCacheMap {
   // [PlanqContract.FeeCurrencyWhitelist]?: FeeCurrencyWhitelistWrapper,
   [PlanqContract.Freezer]?: FreezerWrapper
   [PlanqContract.GasPriceMinimum]?: GasPriceMinimumWrapper
-  [PlanqContract.PlanqToken]?: PlanqTokenWrapper
+  [PlanqContract.PlanqToken]?: PlanqTokenWrapper<any>
   [PlanqContract.Governance]?: GovernanceWrapper
   [PlanqContract.GrandaMento]?: GrandaMentoWrapper
   [PlanqContract.LockedPlanq]?: LockedPlanqWrapper
@@ -233,6 +233,7 @@ export class WrapperCache implements ContractCacheType {
       } else {
         const simpleContractName = contract as keyof typeof WrapperFactories
         const Klass = WrapperFactories[simpleContractName]
+        // @ts-ignore
         this.wrapperCache[simpleContractName] = new Klass(this.connection, instance as any) as any
       }
     }

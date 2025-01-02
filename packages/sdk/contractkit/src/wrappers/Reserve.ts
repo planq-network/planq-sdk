@@ -1,6 +1,6 @@
 import { Address, EventLog } from '@planq-network/connect'
 import BigNumber from 'bignumber.js'
-import { Reserve } from '../generated/mento/Reserve'
+import { Reserve } from '../generated/astonic/Reserve'
 import {
   BaseWrapper,
   fixidityValueToBigNumber,
@@ -82,12 +82,6 @@ export class ReserveWrapper extends BaseWrapper<Reserve> {
     undefined,
     valueToBigNumber
   )
-
-  /**
-   * @notice Returns the amount of PLQ included in the reserve
-   * @return {BigNumber} The PLQ amount included in the reserve.
-   */
-  getReservePlanqBalance = this.getReservePlanqBalance
 
   /**
    * @notice Returns the amount of unfrozen PLQ in the Reserve contract.

@@ -7,12 +7,12 @@ import { stableTokenInfos } from './planq-tokens'
 import { newAccounts } from './generated/Accounts'
 import { newGasPriceMinimum } from './generated/GasPriceMinimum'
 import { newPlanqToken } from './generated/PlanqToken'
-import { newExchange } from './generated/mento/Exchange'
-import { newExchangeBRL } from './generated/mento/ExchangeBRL'
-import { newExchangeEUR } from './generated/mento/ExchangeEUR'
-import { newStableToken } from './generated/mento/StableToken'
-import { newStableTokenBRL } from './generated/mento/StableTokenBRL'
-import { newStableTokenEUR } from './generated/mento/StableTokenEUR'
+import { newExchange } from './generated/astonic/Exchange'
+import { newExchangeBRL } from './generated/astonic/ExchangeBRL'
+import { newExchangeEUR } from './generated/astonic/ExchangeEUR'
+import { newStableToken } from './generated/astonic/StableToken'
+import { newStableTokenBRL } from './generated/astonic/StableTokenBRL'
+import { newStableTokenEUR } from './generated/astonic/StableTokenEUR'
 import { AccountsWrapper } from './wrappers/Accounts'
 import { ExchangeWrapper } from './wrappers/Exchange'
 import { GasPriceMinimumWrapper } from './wrappers/GasPriceMinimum'
@@ -100,7 +100,7 @@ export class MiniContractCache implements ContractCacheType {
     return this.getContract(stableTokenInfos[stableToken].exchangeContract)
   }
 
-  getPlanqToken(): Promise<PlanqTokenWrapper> {
+  getPlanqToken(): Promise<PlanqTokenWrapper<any>> {
     return this.getContract(PlanqContract.PlanqToken)
   }
 

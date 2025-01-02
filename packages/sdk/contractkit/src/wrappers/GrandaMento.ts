@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js'
 import { StableTokenContract } from '../base'
 import { StableToken as StableTokenEnum, stableTokenInfos } from '../planq-tokens'
-import { GrandaMento } from '../generated/mento/GrandaMento'
-import { newStableToken } from '../generated/mento/StableToken'
+import { GrandaMento } from '../generated/astonic/GrandaMento'
+import { newStableToken } from '../generated/astonic/StableToken'
 import {
   BaseWrapper,
   fixidityValueToBigNumber,

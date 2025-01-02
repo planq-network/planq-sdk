@@ -7,13 +7,13 @@ import {
 import { config } from '@planq-network/protocol/migrationsConfig'
 import { AttestationsInstance } from 'types'
 import { StableTokenInstance } from 'types/mento'
-import { MENTO_PACKAGE } from '../contractPackages'
+import { ASTONIC_PACKAGE } from '../contractPackages'
 import { ArtifactsSingleton } from '../lib/artifactsSingleton'
 
 const initializeArgs = async (): Promise<[string, string, string, string, string[], string[]]> => {
   const stableToken: StableTokenInstance = await getDeployedProxiedContract<StableTokenInstance>(
     'StableToken',
-    ArtifactsSingleton.getInstance(MENTO_PACKAGE)
+    ArtifactsSingleton.getInstance(ASTONIC_PACKAGE)
   )
 
   const attestationFee = await convertToContractDecimals(

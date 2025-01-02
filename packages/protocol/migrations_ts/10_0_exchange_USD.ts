@@ -9,7 +9,7 @@ import { config } from '@planq-network/protocol/migrationsConfig'
 import { toFixed } from '@planq-network/utils/lib/fixidity'
 import { FreezerInstance } from 'types'
 import { ExchangeInstance } from 'types/mento'
-import { MENTO_PACKAGE } from '../contractPackages'
+import { ASTONIC_PACKAGE } from '../contractPackages'
 
 const initializeArgs = async (): Promise<any[]> => {
   return [
@@ -37,5 +37,5 @@ module.exports = deploymentForCoreContract<ExchangeInstance>(
     }
     await exchange.activateStable()
   },
-  MENTO_PACKAGE
+  ASTONIC_PACKAGE
 )

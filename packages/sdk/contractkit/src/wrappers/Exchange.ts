@@ -1,6 +1,6 @@
 import { PlanqTransactionObject } from '@planq-network/connect'
 import BigNumber from 'bignumber.js'
-import { Exchange } from '../generated/mento/Exchange'
+import { Exchange } from '../generated/astonic/Exchange'
 import {
   BaseWrapper,
   fixidityValueToBigNumber,

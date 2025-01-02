@@ -1,4 +1,3 @@
-import { PlanqContract } from '@planq-network/contractkit'
 import { describe, test } from '@jest/globals'
 import BigNumber from 'bignumber.js'
 import { EnvTestContext } from '../context'
@@ -62,7 +61,6 @@ export function runReserveTest(context: EnvTestContext) {
       )
       const multiSigTxReceipt = await multiSigTx.sendAndWaitForReceipt({
         from: spender.address,
-        feeCurrency: await context.kit.registry.addressFor(PlanqContract.StableToken),
       })
 
       logger.debug({ receipt: multiSigTxReceipt }, 'funds moved to custodian via spender')

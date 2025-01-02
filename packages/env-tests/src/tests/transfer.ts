@@ -23,7 +23,6 @@ export function runTransfersTest(context: EnvTestContext, stableTokensToTest: St
         const to = await getKey(context.mnemonic, TestAccounts.TransferTo)
         context.kit.connection.addAccount(from.privateKey)
         context.kit.connection.addAccount(to.privateKey)
-        context.kit.connection.defaultFeeCurrency = stableTokenInstance.address
 
         const toBalanceBefore = await stableTokenInstance.balanceOf(to.address)
         const fromBalanceBefore = await stableTokenInstance.balanceOf(from.address)

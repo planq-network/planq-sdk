@@ -196,7 +196,7 @@ export const getRandomInt = (from: number, to: number) => {
   return Math.floor(Math.random() * (to - from)) + from
 }
 
-const getRandomToken = (planqToken: PlanqTokenWrapper, stableToken: StableTokenWrapper) => {
+const getRandomToken = (planqToken: PlanqTokenWrapper<any>, stableToken: StableTokenWrapper) => {
   const tokenType = getRandomInt(0, 2)
   if (tokenType === 0) {
     return planqToken
@@ -316,7 +316,7 @@ const exitTracerTool = (logMessage: any) => {
 
 const transferAndTrace = async (
   kit: ContractKit,
-  planqToken: PlanqTokenWrapper,
+  planqToken: PlanqTokenWrapper<any>,
   stableToken: StableTokenWrapper,
   from: string,
   to: string,
@@ -393,7 +393,7 @@ const transferAndTrace = async (
 
 export const traceTransactions = async (
   kit: ContractKit,
-  planqToken: PlanqTokenWrapper,
+  planqToken: PlanqTokenWrapper<any>,
   stableToken: StableTokenWrapper,
   addresses: string[],
   blockscoutUrl: string
@@ -447,9 +447,6 @@ export const transferCalldata = async (
   txOptions: {
     gas?: number
     gasPrice?: string
-    feeCurrency?: string
-    gatewayFeeRecipient?: string
-    gatewayFee?: string
     nonce?: number
   } = {}
 ) => {
@@ -460,8 +457,6 @@ export const transferCalldata = async (
     data: dataStr,
     gas: txOptions.gas,
     gasPrice: txOptions.gasPrice,
-    gatewayFeeRecipient: txOptions.gatewayFeeRecipient,
-    gatewayFee: txOptions.gatewayFee,
     nonce: txOptions.nonce,
   })
 }
@@ -476,8 +471,6 @@ export const transferPlanqPlanq = async (
     gas?: number
     gasPrice?: string
     feeCurrency?: string
-    gatewayFeeRecipient?: string
-    gatewayFee?: string
     nonce?: number
   } = {}
 ) => {
@@ -486,9 +479,6 @@ export const transferPlanqPlanq = async (
     from: fromAddress,
     gas: txOptions.gas,
     gasPrice: txOptions.gasPrice,
-    feeCurrency: txOptions.feeCurrency || undefined,
-    gatewayFeeRecipient: txOptions.gatewayFeeRecipient,
-    gatewayFee: txOptions.gatewayFee,
     nonce: txOptions.nonce,
   })
 }
@@ -502,9 +492,6 @@ export const transferPlanqDollars = async (
   txOptions: {
     gas?: number
     gasPrice?: string
-    feeCurrency?: string
-    gatewayFeeRecipient?: string
-    gatewayFee?: string
     nonce?: number
   } = {}
 ) => {
@@ -513,9 +500,6 @@ export const transferPlanqDollars = async (
     from: fromAddress,
     gas: txOptions.gas,
     gasPrice: txOptions.gasPrice,
-    feeCurrency: txOptions.feeCurrency || undefined,
-    gatewayFeeRecipient: txOptions.gatewayFeeRecipient,
-    gatewayFee: txOptions.gatewayFee,
     nonce: txOptions.nonce,
   })
 }
@@ -583,7 +567,6 @@ export const simulateClient = async (
     threadID: thread,
     sender: senderAddress,
     recipient: recipientAddressFinal,
-    feeCurrency: '',
     txHash: '',
   }
 
@@ -681,14 +664,14 @@ const getTxConf = async (testMode: TestMode) => {
   if (testMode === TestMode.Data) {
     return {
       feeCurrencyPlanq: true,
-      tokenName: 'cGLD.L',
+      tokenName: 'PLQ',
       transferFn: transferCalldata,
     }
   }
   if (testMode === TestMode.Transfer) {
     return {
       feeCurrencyPlanq: true,
-      tokenName: 'cGLD',
+      tokenName: 'PLQ',
       transferFn: transferPlanqPlanq,
     }
   }
@@ -855,7 +838,7 @@ export function getIndexForLoadTestThread(pod: number, thread: number) {
  */
 export const transferERC20Token = async (
   kit: ContractKit,
-  token: PlanqTokenWrapper | StableTokenWrapper,
+  token: PlanqTokenWrapper<any> | StableTokenWrapper,
   from: string,
   to: string,
   amount: BigNumber,

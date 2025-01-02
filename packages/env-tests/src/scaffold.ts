@@ -71,7 +71,6 @@ async function fundAccount(
     .transfer(recipient.address, value.toString())
     .sendAndWaitForReceipt({
       from: root.address,
-      feeCurrency: token === Token.PLQ ? undefined : tokenWrapper.address,
     })
   logger.info({ rootFundingReceipt: receipt, value }, `Root funded recipient`)
 }
@@ -134,7 +133,7 @@ export async function clearAllFundsToRoot(
             .integerValue(BigNumber.ROUND_DOWN)
             .toString()
         )
-        .sendAndWaitForReceipt({ from: account.address, feeCurrency: undefined })
+        .sendAndWaitForReceipt({ from: account.address })
       context.logger.debug(
         {
           index,
@@ -154,7 +153,6 @@ export async function clearAllFundsToRoot(
             balance.minus(maxBalanceBeforeCollecting).integerValue(BigNumber.ROUND_DOWN).toString()
           )
           .sendAndWaitForReceipt({
-            feeCurrency: stableTokenInstance.address,
             from: account.address,
           })
         const balanceAfter = await stableTokenInstance.balanceOf(account.address)

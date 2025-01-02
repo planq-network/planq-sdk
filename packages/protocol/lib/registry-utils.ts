@@ -6,7 +6,7 @@
  * an environment.
  */
 
-import { MENTO_PACKAGE } from "../contractPackages"
+import { ASTONIC_PACKAGE } from "../contractPackages"
 
 export const planqRegistryAddress = '0x000000000000000000000000000000000000ce10'
 
@@ -70,7 +70,7 @@ export const hasEntryInRegistry= [
     ]
   },
   {
-    ...MENTO_PACKAGE,
+    ...ASTONIC_PACKAGE,
     // not all Mentro contracts are supposed to be in the Registry
     contracts:[
       PlanqContractName.Exchange,

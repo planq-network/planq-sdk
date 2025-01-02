@@ -28,7 +28,7 @@ import {
   RegistryInstance,
 } from 'types'
 import { ReserveContract, ReserveInstance } from 'types/mento'
-import { MENTO_PACKAGE } from '../../../contractPackages'
+import { ASTONIC_PACKAGE } from '../../../contractPackages'
 
 const EpochRewards: EpochRewardsTestContract = artifacts.require('EpochRewardsTest')
 const Freezer: FreezerContract = artifacts.require('Freezer')
@@ -37,7 +37,7 @@ const MockPlanqToken: MockPlanqTokenContract = artifacts.require('MockPlanqToken
 const MockStableToken: MockStableTokenContract = artifacts.require('MockStableToken')
 const MockSortedOracles: MockSortedOraclesContract = artifacts.require('MockSortedOracles')
 const Registry: RegistryContract = artifacts.require('Registry')
-const Reserve: ReserveContract = makeTruffleContractForMigration('Reserve', MENTO_PACKAGE, web3)
+const Reserve: ReserveContract = makeTruffleContractForMigration('Reserve', ASTONIC_PACKAGE, web3)
 
 // @ts-ignore
 // TODO(mcortesi): Use BN

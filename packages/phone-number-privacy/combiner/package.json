@@ -53,7 +53,7 @@
     "uuid": "^7.0.3"
   },
   "devDependencies": {
-    "@types/node": "18.15.13",
+    "@types/node": "18.19.69",
     "@planq-network/utils": "^4.1.0",
     "@planq-network/phone-utils": "^4.1.0",
     "@types/express": "^4.17.6",

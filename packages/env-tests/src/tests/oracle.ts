@@ -16,8 +16,6 @@ export function runOracleTest(context: EnvTestContext) {
       const from = await getKey(context.mnemonic, TestAccounts.Oracle)
       context.kit.connection.addAccount(from.privateKey)
       context.kit.defaultAccount = from.address
-      const stableToken = await context.kit.contracts.getStableToken()
-      context.kit.defaultFeeCurrency = stableToken.address
 
       const oracles = await context.kit.contracts.getSortedOracles()
 

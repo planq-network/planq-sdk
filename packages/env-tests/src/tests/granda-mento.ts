@@ -45,8 +45,8 @@ export function runGrandaMentoTest(context: EnvTestContext, stableTokensToTest: 
             }
           })
 
-          let buyToken: PlanqTokenWrapper | StableTokenWrapper
-          let sellToken: PlanqTokenWrapper | StableTokenWrapper
+          let buyToken: PlanqTokenWrapper<any> | StableTokenWrapper
+          let sellToken: PlanqTokenWrapper<any> | StableTokenWrapper
           let stableTokenAddress: string
           let sellAmount: BigNumber
 

@@ -4,7 +4,7 @@ import {execSync} from "child_process";
 import {readJSONSync} from "fs-extra";
 import path from "path";
 import {tsGenerator} from "ts-generator";
-import {MENTO_PACKAGE} from "../contractPackages";
+import {ASTONIC_PACKAGE} from "../contractPackages";
 
 const ROOT_DIR = path.normalize(path.join(__dirname, "../"));
 const BUILD_DIR = path.join(ROOT_DIR, process.env.BUILD_DIR ?? "./build");
@@ -76,7 +76,7 @@ const OtherContracts = [
   "UsingRegistry",
 ];
 
-const externalContractPackages = [MENTO_PACKAGE];
+const externalContractPackages = [ASTONIC_PACKAGE];
 
 const Interfaces = ["IPlanqToken", "IERC20", "IPlanqVersionedContract"];
 

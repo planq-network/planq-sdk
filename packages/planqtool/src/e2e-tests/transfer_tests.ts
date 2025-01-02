@@ -395,7 +395,6 @@ describe('Transfer tests', function (this: any) {
     total: BigNumber
     tip: BigNumber
     base: BigNumber
-    gateway: BigNumber
   }
 
   interface GasUsage {
@@ -466,14 +465,11 @@ describe('Transfer tests', function (this: any) {
     const txFee = new BigNumber(gasVal).times(tx.gasPrice)
     const txFeeBase = new BigNumber(gasVal).times(minGasPrice)
     const txFeeTip = txFee.minus(txFeeBase)
-    const gatewayFee = new BigNumber(tx.gatewayFee || 0)
-    assert.equal(tx.gatewayFeeRecipient === null, gatewayFee.eq(0))
 
     const fees: Fees = {
-      total: txFee.plus(gatewayFee),
+      total: txFee,
       base: txFeeBase,
       tip: txFeeTip,
-      gateway: gatewayFee,
     }
     const gas: GasUsage = {
       used: receipt && receipt.gasUsed,
@@ -647,7 +643,7 @@ describe('Transfer tests', function (this: any) {
     }
 
     it(`should increment the gateway fee recipient's ${feeToken} balance by the gateway fee`, () =>
-      assertEqualBN(balances.delta(gatewayFeeRecipientAddress, feeToken), txRes.fees.gateway))
+      assertEqualBN(balances.delta(gatewayFeeRecipientAddress, feeToken), txRes.fees.total))
 
     it(`should increment the infrastructure fund's ${feeToken} balance by the base portion of the gas fee`, () =>
       assertEqualBN(balances.delta(governanceAddress, feeToken), txRes.fees.base))
@@ -920,7 +916,7 @@ describe('Transfer tests', function (this: any) {
                 balances
                   .current(gatewayFeeRecipientAddress, StableToken.pUSD)
                   .minus(balances.initial(gatewayFeeRecipientAddress, StableToken.pUSD).idiv(2)),
-                expectedFees.gateway
+                expectedFees.total
               )
             })
 

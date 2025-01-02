@@ -5,9 +5,9 @@ export interface ContractPackage {
   proxyContracts?: string[];
 }
 
-export const MENTO_PACKAGE: ContractPackage = {
+export const ASTONIC_PACKAGE: ContractPackage = {
   path: "astonic-core",
-  name: "mento",
+  name: "astonic",
   contracts: [
     "Exchange",
     "ExchangeEUR",

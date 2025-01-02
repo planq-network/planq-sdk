@@ -9,7 +9,7 @@ import { config } from '@planq-network/protocol/migrationsConfig'
 import { toFixed } from '@planq-network/utils/lib/fixidity'
 import { FreezerInstance } from 'types'
 import { ExchangeBRLInstance, ReserveInstance } from 'types/mento'
-import { MENTO_PACKAGE } from '../contractPackages'
+import { ASTONIC_PACKAGE } from '../contractPackages'
 import { ArtifactsSingleton } from '../lib/artifactsSingleton'
 
 const initializeArgs = async (): Promise<any[]> => {
@@ -39,11 +39,11 @@ module.exports = deploymentForCoreContract<ExchangeBRLInstance>(
 
     const reserve: ReserveInstance = await getDeployedProxiedContract<ReserveInstance>(
       'Reserve',
-      ArtifactsSingleton.getInstance(MENTO_PACKAGE)
+      ArtifactsSingleton.getInstance(ASTONIC_PACKAGE)
     )
     // pUSD doesn't need to be added as it is currently harcoded in Reserve.sol
     await reserve.addExchangeSpender(exchange.address)
     await exchange.activateStable()
   },
-  MENTO_PACKAGE
+  ASTONIC_PACKAGE
 )

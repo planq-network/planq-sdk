@@ -11,7 +11,7 @@ import {
 import { config } from '@planq-network/protocol/migrationsConfig'
 import { toFixed } from '@planq-network/utils/lib/fixidity'
 import { GovernanceApproverMultiSigInstance, GovernanceInstance } from 'types'
-import { MENTO_PACKAGE } from '../contractPackages'
+import { ASTONIC_PACKAGE } from '../contractPackages'
 import { ArtifactsSingleton } from '../lib/artifactsSingleton'
 
 const initializeArgs = async (networkName: string): Promise<any[]> => {
@@ -122,7 +122,7 @@ module.exports = deploymentForCoreContract<GovernanceInstance>(
           'StableTokenEUR',
           'StableTokenBRL',
         ],
-        __contractPackage: MENTO_PACKAGE, // TODO refactor this
+        __contractPackage: ASTONIC_PACKAGE, // TODO refactor this
       },
     ]
 

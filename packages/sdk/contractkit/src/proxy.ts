@@ -25,10 +25,10 @@ import { ABI as RandomABI } from './generated/Random'
 import { ABI as RegistryABI } from './generated/Registry'
 import { ABI as SortedOraclesABI } from './generated/SortedOracles'
 import { ABI as ValidatorsABI } from './generated/Validators'
-import { ABI as ExchangeABI } from './generated/mento/Exchange'
-import { ABI as GrandaMentoABI } from './generated/mento/GrandaMento'
-import { ABI as ReserveABI } from './generated/mento/Reserve'
-import { ABI as StableTokenABI } from './generated/mento/StableToken'
+import { ABI as ExchangeABI } from './generated/astonic/Exchange'
+import { ABI as GrandaMentoABI } from './generated/astonic/GrandaMento'
+import { ABI as ReserveABI } from './generated/astonic/Reserve'
+import { ABI as StableTokenABI } from './generated/astonic/StableToken'
 
 export const GET_IMPLEMENTATION_ABI: ABIDefinition = {
   constant: true,

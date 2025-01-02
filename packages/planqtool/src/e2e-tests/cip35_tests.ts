@@ -27,7 +27,6 @@ const validatorPrivateKey = generatePrivateKey(mnemonic, AccountType.VALIDATOR, 
 const validatorAddress = privateKeyToAddress(validatorPrivateKey)
 // Arbitrary addresses to use in the transactions
 const toAddress = '0x8c36775E95A5f7FEf6894Ba658628352Ac58605B'
-const gatewayFeeRecipientAddress = '0xc77538d1e30C0e4ec44B0DcaD97FD3dc63fcaCC4'
 
 // Simple contract with a single constant
 const bytecode =
@@ -343,15 +342,6 @@ class TestEnv {
           gasPrice: this.gasPrice,
           chainId: this.gethConfig.networkId,
           nonce: await this.kit.connection.nonce(validatorAddress),
-        }
-        if (testCase.useFeeCurrency) {
-          tx.feeCurrency = this.stableTokenAddr
-        }
-        if (testCase.useGatewayFee) {
-          tx.gatewayFee = '0x25'
-        }
-        if (testCase.useGatewayFeeRecipient) {
-          tx.gatewayFeeRecipient = gatewayFeeRecipientAddress
         }
 
         if (testCase.contractCreation) {

@@ -10,7 +10,7 @@ import { toFixed } from '@planq-network/utils/lib/fixidity'
 import { FeeCurrencyWhitelistInstance, FreezerInstance, SortedOraclesInstance } from 'types'
 import { ReserveInstance, StableTokenInstance } from 'types/mento'
 import Web3 from 'web3'
-import { MENTO_PACKAGE } from '../contractPackages'
+import { ASTONIC_PACKAGE } from '../contractPackages'
 import { ArtifactsSingleton } from '../lib/artifactsSingleton'
 
 const truffle = require('@planq-network/protocol/truffle-config.js')
@@ -71,7 +71,7 @@ module.exports = deploymentForCoreContract<StableTokenInstance>(
       )
       const reserve: ReserveInstance = await getDeployedProxiedContract<ReserveInstance>(
         'Reserve',
-        ArtifactsSingleton.getInstance(MENTO_PACKAGE)
+        ArtifactsSingleton.getInstance(ASTONIC_PACKAGE)
       )
       console.info('Adding StableToken (USD) to Reserve')
       await reserve.addToken(stableToken.address)
@@ -85,5 +85,5 @@ module.exports = deploymentForCoreContract<StableTokenInstance>(
       )
     await feeCurrencyWhitelist.addToken(stableToken.address)
   },
-  MENTO_PACKAGE
+  ASTONIC_PACKAGE
 )

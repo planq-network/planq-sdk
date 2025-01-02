@@ -98,7 +98,6 @@ test('should retrieve currency gasPrice with feeCurrency', async () => {
     },
   }))
   kit.contracts.getGasPriceMinimum = getGasPriceMin.bind(kit.contracts)
-  await kit.updateGasPriceInConnectionLayer('XXX')
   const options: PlanqTx = { gas: 555, feeCurrency: 'XXX', from: '0xAAFFF' }
   await kit.connection.sendTransactionObject(txo, options)
   expect(txo.send).toBeCalledWith({

@@ -9,7 +9,7 @@ import {toFixed} from "@planq-network/utils/lib/fixidity";
 import {RegistryInstance} from "types";
 import {ReserveInstance, ReserveSpenderMultiSigInstance} from "types/mento";
 import Web3 from "web3";
-import {MENTO_PACKAGE} from "../contractPackages";
+import {ASTONIC_PACKAGE} from "../contractPackages";
 import {ArtifactsSingleton} from "../lib/artifactsSingleton";
 
 import Web3Utils = require("web3-utils");
@@ -81,12 +81,12 @@ module.exports = deploymentForCoreContract<ReserveInstance>(
     const reserveSpenderMultiSig: ReserveSpenderMultiSigInstance =
       await getDeployedProxiedContract<ReserveSpenderMultiSigInstance>(
         PlanqContractName.ReserveSpenderMultiSig,
-        ArtifactsSingleton.getInstance(MENTO_PACKAGE)
+        ArtifactsSingleton.getInstance(ASTONIC_PACKAGE)
       );
     console.info(
       `Marking ${reserveSpenderMultiSig.address} as a reserve spender`
     );
     await reserve.addSpender(reserveSpenderMultiSig.address);
   },
-  MENTO_PACKAGE
+  ASTONIC_PACKAGE
 );

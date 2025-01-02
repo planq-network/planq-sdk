@@ -8,7 +8,7 @@ import {
 import { config } from '@planq-network/protocol/migrationsConfig'
 import { toFixed } from '@planq-network/utils/lib/fixidity'
 import { GrandaMentoInstance, ReserveInstance } from 'types/mento'
-import { MENTO_PACKAGE } from '../contractPackages'
+import { ASTONIC_PACKAGE } from '../contractPackages'
 import { ArtifactsSingleton } from '../lib/artifactsSingleton'
 
 const initializeArgs = async (): Promise<any[]> => {
@@ -30,7 +30,7 @@ module.exports = deploymentForCoreContract<GrandaMentoInstance>(
     // Add as a spender of the Reserve
     const reserve: ReserveInstance = await getDeployedProxiedContract<ReserveInstance>(
       'Reserve',
-      ArtifactsSingleton.getInstance(MENTO_PACKAGE)
+      ArtifactsSingleton.getInstance(ASTONIC_PACKAGE)
     )
     await reserve.addExchangeSpender(grandaMento.address)
 
@@ -39,5 +39,5 @@ module.exports = deploymentForCoreContract<GrandaMentoInstance>(
       await grandaMento.setStableTokenExchangeLimits(stableToken, min, max)
     }
   },
-  MENTO_PACKAGE
+  ASTONIC_PACKAGE
 )

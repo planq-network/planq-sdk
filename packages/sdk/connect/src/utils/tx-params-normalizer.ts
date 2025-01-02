@@ -13,7 +13,6 @@ function isEmpty(value: string | undefined) {
 
 export class TxParamsNormalizer {
   private chainId: number | null = null;
-  private gatewayFeeRecipient: string | null = null;
 
   constructor(readonly connection: Connection) {}
 
@@ -40,22 +39,5 @@ export class TxParamsNormalizer {
       this.chainId = await this.connection.chainId();
     }
     return this.chainId;
-  }
-
-  // Right now, Forno does not expose a node's coinbase so we can't
-  // set the gatewayFeeRecipient. Once that is fixed, we can reenable
-  // this.
-  // @ts-ignore - see comment above
-  private async getCoinbase(): Promise<string> {
-    if (this.gatewayFeeRecipient === null) {
-      this.gatewayFeeRecipient = await this.connection.coinbase();
-    }
-    if (this.gatewayFeeRecipient == null) {
-      throw new Error(
-        "missing-tx-params-populator@getCoinbase: Coinbase is null, we are not connected to a full " +
-          "node, cannot sign transactions locally"
-      );
-    }
-    return this.gatewayFeeRecipient;
   }
 }

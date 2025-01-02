@@ -1,17 +1,21 @@
 import Web3 from 'web3'
-import { HttpProviderOptions as Web3HttpProviderOptions } from 'web3-providers-http'
+import { HttpProviderOptions as Web3HttpProviderOptions } from 'web3-core-helpers'
 export type HttpProviderOptions = Web3HttpProviderOptions
 
 export const API_KEY_HEADER_KEY = 'apiKey'
 
 /** @internal */
 export function setupAPIKey(apiKey: string) {
-  const options: HttpProviderOptions = {}
+  const options: HttpProviderOptions = { }
+
   options.headers = []
-  options.headers.push({
-    name: API_KEY_HEADER_KEY,
-    value: apiKey,
-  })
+  options.headers.push(
+    {
+      name: API_KEY_HEADER_KEY,
+      value: apiKey,
+    }
+  )
+
   return options
 }
 /** @internal */

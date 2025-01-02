@@ -23,7 +23,6 @@ export function runExchangeTest(context: EnvTestContext, stableTokensToTest: Sta
         const from = await getKey(context.mnemonic, TestAccounts.Exchange)
         context.kit.connection.addAccount(from.privateKey)
         context.kit.defaultAccount = from.address
-        context.kit.connection.defaultFeeCurrency = stableTokenInstance.address
         const planqToken = await context.kit.contracts.getPlanqToken()
 
         const exchange = await context.kit.contracts.getExchange(stableToken)
