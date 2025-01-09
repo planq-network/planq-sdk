@@ -137,7 +137,7 @@ const DefaultConfig = {
     randomnessBlockRetentionWindow: HOUR / 5, // 1 hour to match attestationExpiryBlocks
   },
   registry: {
-    predeployedProxyAddress: '0x000000000000000000000000000000000000ce10',
+    predeployedProxyAddress: '0x9DabFe01de024C681320eb80FBc64EccEaa58ca2',
   },
   reserve: {
     tobinTaxStalenessThreshold: 100 * YEAR, // Tobin tax turned off to start
@@ -148,10 +148,10 @@ const DefaultConfig = {
     frozenAssetsDays: null,
     spenders: [],
     otherAddresses: [
-      '0x246f4599eFD3fA67AC44335Ed5e749E518Ffd8bB',
-      '0x298FbD6dad2Fc2cB56d7E37d8aCad8Bf07324f67',
+      '0xe7aB5A40b8Ef85Fa3ff91EEc6444f4472F616887',
+      '0x603a83FDd8Ae3f6F5B7F1a2A0A8933b1c735315d',
     ],
-    assetAllocationSymbols: ['cGLD', 'BTC', 'ETH', 'DAI'],
+    assetAllocationSymbols: ['PLQ', 'BTC', 'ETH', 'DAI'],
     assetAllocationWeights: [0.5, 0.3, 0.15, 0.05],
   },
   reserveSpenderMultiSig: {
@@ -162,8 +162,8 @@ const DefaultConfig = {
   stableToken: {
     decimals: 18,
     planqPrice: 1,
-    tokenName: 'Planq Dollar',
-    tokenSymbol: 'pUSD',
+    tokenName: 'Astonic Dollar',
+    tokenSymbol: 'aUSD',
     inflationRate: 1,
     inflationPeriod: 1.5 * YEAR,
     initialBalances: {
@@ -176,8 +176,8 @@ const DefaultConfig = {
   stableTokenEUR: {
     decimals: 18,
     planqPrice: 1.2,
-    tokenName: 'Planq Euro',
-    tokenSymbol: 'pEUR',
+    tokenName: 'Astonic Euro',
+    tokenSymbol: 'aEUR',
     inflationRate: 1,
     inflationPeriod: 1.5 * YEAR,
     initialBalances: {
@@ -190,8 +190,8 @@ const DefaultConfig = {
   stableTokenBRL: {
     decimals: 18,
     planqPrice: 1.2,
-    tokenName: 'Planq Brazilian Real',
-    tokenSymbol: 'pREAL',
+    tokenName: 'Astonic Brazilian Real',
+    tokenSymbol: 'aREAL',
     inflationRate: 1,
     inflationPeriod: 1.5 * YEAR,
     initialBalances: {
@@ -225,7 +225,7 @@ const DefaultConfig = {
     // Register cLabs groups to contain an initial set of validators to run test networks.
     validatorKeys: [],
     attestationKeys: [],
-    groupName: 'cLabs',
+    groupName: '',
     commission: 0.1,
     votesRatioOfLastVsFirstGroup: 2.0,
   },
@@ -391,7 +391,7 @@ const NetworkConfigs = {
       votesRatioOfLastVsFirstGroup: 1.0,
     },
   },
-  alfajores: {
+  alfajoresold: {
     downtimeSlasher: {
       slashableDowntime: (8 * HOUR) / 5, // ~8 hours
     },
@@ -479,7 +479,7 @@ const NetworkConfigs = {
       votesRatioOfLastVsFirstGroup: 1.0,
     },
   },
-  rc1: {
+  alfajores: {
     downtimeSlasher: {
       slashableDowntime: (8 * HOUR) / 5, // ~8 hours
     },
@@ -494,7 +494,7 @@ const NetworkConfigs = {
       frozen: true,
     },
     planqToken: {
-      frozen: true,
+      frozen: false,
     },
     governance: {
       queueExpiry: 4 * WEEK,
@@ -512,25 +512,18 @@ const NetworkConfigs = {
     governanceApproverMultiSig: {
       // 3/9 multsig, with 5/9 to make multisig changes.
       signatories: [
-        '0xBE0c3B35Ec3f759D9A67c4B7c539b0D5b52A4642',
-        '0xD6d48412dA0804CF88258bfDf5AaFcBe5FEd7ecC',
-        '0xFD74A4b05F12B9aB6020CB202aDE1BBa4Bc99aba',
-        '0x114a0f28f20a6cF1AD428C396f78248d0E76724e',
-        '0xC631Eb5dE231000f96F4973ca8516d487108b2BF',
-        '0xc85639289d4bbb5f90e380a0f4db6b77a2f777bf',
-        '0x92AD020Cde6A4e566770C603ae8315a9d7252740',
-        '0xba4862643d476acbc13276bd73daca7b27bf567c',
-        '0xe5bD469Ad2d2A160604e38ad123828B7754aa23b',
+        '0xe7aB5A40b8Ef85Fa3ff91EEc6444f4472F616887',
+        '0x603a83FDd8Ae3f6F5B7F1a2A0A8933b1c735315d',
       ],
-      numRequiredConfirmations: 3,
-      numInternalRequiredConfirmations: 5,
+      numRequiredConfirmations: 2,
+      numInternalRequiredConfirmations: 2,
       useMultiSig: true,
     },
     reserveSpenderMultiSig: {
       // 2/2 multsig
       signatories: [
-        '0x21E7082D7b0Bc12BF65296CF859E09Fe529d366d',
-        '0xbf4D39e774F438B6f8B8d7e56f26Fd2409F6ACF2',
+        '0xe7aB5A40b8Ef85Fa3ff91EEc6444f4472F616887',
+        '0x603a83FDd8Ae3f6F5B7F1a2A0A8933b1c735315d',
       ],
       numRequiredConfirmations: 2,
       numInternalRequiredConfirmations: 2,
@@ -538,13 +531,13 @@ const NetworkConfigs = {
     stableToken: {
       decimals: 18,
       planqPrice: 1,
-      tokenName: 'Planq Dollar',
-      tokenSymbol: 'pUSD',
+      tokenName: 'Astonic Dollar',
+      tokenSymbol: 'aUSD',
       inflationRate: 1,
       inflationPeriod: 1.5 * YEAR,
       initialBalances: {
-        addresses: ['0xc471776eA02705004C451959129bF09423B56526'],
-        values: ['5000000000000000000000000'],
+        addresses: ['0xe7aB5A40b8Ef85Fa3ff91EEc6444f4472F616887'],
+        values: ['1000000000000000000'],
       },
       oracles: [
         '0x0aee051be85ba9c7c1bc635fb76b52039341ab26',

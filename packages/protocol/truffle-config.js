@@ -1,6 +1,7 @@
 /* tslint:disable: object-literal-sort-keys */
 require("ts-node/register");
 const ProviderEngine = require("web3-provider-engine");
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 const WebsocketSubprovider = require("web3-provider-engine/subproviders/websocket.js");
 const {TruffleArtifactAdapter} = require("@0x/sol-trace");
 const {CoverageSubprovider} = require("@0x/sol-coverage");
@@ -13,7 +14,7 @@ const argv = require("minimist")(process.argv.slice(2), {
 });
 
 const SOLC_VERSION = "0.5.13";
-const ALFAJORES_NETWORKID = 44787;
+const ALFAJORES_NETWORKID = 7070;
 const BAKLAVA_NETWORKID = 62320;
 const BAKLAVASTAGING_NETWORKID = 31420;
 
@@ -28,7 +29,7 @@ const DEVELOPMENT_FROM = "0x5409ed021d9299bf6814279a6a1411a7e866a631";
 const INTEGRATION_FROM = "0x47e172F6CfB6c7D01C1574fa3E2Be7CC73269D95";
 const INTEGRATION_TESTING_FROM = "0x47e172F6CfB6c7D01C1574fa3E2Be7CC73269D95";
 const ALFAJORESSTAGING_FROM = "0xf4314cb9046bece6aa54bb9533155434d0c76909";
-const ALFAJORES_FROM = "0x456f41406B32c45D59E539e4BBA3D7898c3584dA";
+const ALFAJORES_FROM = "0xe7aB5A40b8Ef85Fa3ff91EEc6444f4472F616887";
 const PILOT_FROM = "0x387bCb16Bfcd37AccEcF5c9eB2938E30d3aB8BF2";
 const PILOTSTAGING_FROM = "0x545DEBe3030B570731EDab192640804AC8Cf65CA";
 const RC0_FROM = "0x469be98FE71AFf8F6e7f64F9b732e28A03596B5C";
@@ -45,6 +46,7 @@ const defaultConfig = {
   port: hostPort,
   network_id: 1101,
   from: OG_FROM,
+  mnemonic: process.env.MNEMONIC,
   gas: gasLimit,
   gasPrice: 100000000000,
 };
@@ -55,11 +57,11 @@ const freeGasConfig = {...defaultConfig, ...{gasPrice: 0}};
 let coverageProvider = null;
 
 const fornoUrls = {
-  alfajores: "https://evm-atlas.planq.network",
-  baklava: "https://evm-atlas.planq.network",
-  rc1: "https://forno.celo.org",
-  mainnet: "https://forno.celo.org",
-  staging: "https://staging-forno.celo-networks-dev.org",
+  alfajores: "https://evm-rpc.planq.network",
+  baklava: "https://evm-rpc-atlas.planq.network",
+  rc1: "",
+  mainnet: "https://evm-rpc.planq.network",
+  staging: "",
 };
 
 const networks = {
@@ -83,7 +85,7 @@ const networks = {
     host: "127.0.0.1",
     port: 8545,
     from: "0xE23a4c6615669526Ab58E9c37088bee4eD2b2dEE",
-    network_id: 42220,
+    network_id: 7070,
     gas: gasLimit,
     gasPrice: 10000000000,
   },
@@ -169,6 +171,11 @@ const networks = {
     ...defaultConfig,
     network_id: ALFAJORES_NETWORKID,
     from: ALFAJORES_FROM,
+    provider: new HDWalletProvider({
+        privateKeys: [process.env.SECRET],
+        providerOrUrl: fornoUrls.alfajores,
+    }),
+    gasPrice: 22500000000,
   },
 
   pilot: {
@@ -211,6 +218,7 @@ if (argv.truffle_override || !(argv.network in networks)) {
 }
 
 if (process.argv.includes("--forno")) {
+  argv.network = "alfajores"
   if (!fornoUrls[argv.network]) {
     console.log(`Forno URL for network ${argv.network} not known!`);
     process.exit(1);

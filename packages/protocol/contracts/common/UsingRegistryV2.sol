@@ -23,7 +23,7 @@ import "../common/interfaces/IStableToken.sol";
 import "../stability/interfaces/ISortedOracles.sol";
 
 contract UsingRegistryV2 {
-    address internal constant registryAddress = 0x000000000000000000000000000000000000ce10;
+    address internal constant registryAddress = 0x9DabFe01de024C681320eb80FBc64EccEaa58ca2;
     IRegistry public constant registryContract = IRegistry(registryAddress);
 
     bytes32 internal constant ACCOUNTS_REGISTRY_ID = keccak256(

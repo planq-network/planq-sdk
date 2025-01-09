@@ -9,8 +9,10 @@ set -euo pipefail
 
 TRUFFLE_OVERRIDE=""
 MIGRATION_OVERRIDE=""
-NETWORK=""
+NETWORK="alfajores"
 RESET=""
+FROM="5"
+TO="5"
 # https://github.com/trufflesuite/truffle-migrate/blob/develop/index.js#L161
 # Default to larger than the number of contracts we will ever have
 
@@ -28,10 +30,7 @@ done
 
 [ -z "$NETWORK" ] && echo "Need to set the NETWORK via the -n flag" && exit 1;
 
-if ! nc -z 127.0.0.1 8545 ; then
-  echo "Port 8545 not open"
-  exit 1
-fi
+
 
 yarn run build && \
 echo "Migrating contracts migrations${FROM:+ from number $FROM}${TO:+ up to number $TO}" && \
