@@ -1,7 +1,7 @@
 /* tslint:disable: object-literal-sort-keys */
 require("ts-node/register");
 const ProviderEngine = require("web3-provider-engine");
-const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 const WebsocketSubprovider = require("web3-provider-engine/subproviders/websocket.js");
 const {TruffleArtifactAdapter} = require("@0x/sol-trace");
 const {CoverageSubprovider} = require("@0x/sol-coverage");
@@ -172,8 +172,12 @@ const networks = {
     network_id: ALFAJORES_NETWORKID,
     from: ALFAJORES_FROM,
     provider: new HDWalletProvider({
-        privateKeys: [process.env.SECRET],
-        providerOrUrl: fornoUrls.alfajores,
+      privateKeys: [
+        process.env.SECRET
+          ? process.env.SECRET
+          : "0000000000000000000000000000000000000000000000000000000000000001",
+      ],
+      providerOrUrl: fornoUrls.alfajores,
     }),
     gasPrice: 22500000000,
   },
@@ -218,7 +222,7 @@ if (argv.truffle_override || !(argv.network in networks)) {
 }
 
 if (process.argv.includes("--forno")) {
-  argv.network = "alfajores"
+  argv.network = "alfajores";
   if (!fornoUrls[argv.network]) {
     console.log(`Forno URL for network ${argv.network} not known!`);
     process.exit(1);
