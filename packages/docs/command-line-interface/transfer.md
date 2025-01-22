@@ -31,10 +31,10 @@ _See code: [src/commands/transfer/planq.ts](https://github.com/planq-network/pla
 
 ## `planqcli transfer:dollars`
 
-Transfer Planq Dollars (pUSD) to a specified address.
+Transfer Planq Dollars (aUSD) to a specified address.
 
 ```
-Transfer Planq Dollars (pUSD) to a specified address.
+Transfer Planq Dollars (aUSD) to a specified address.
 
 USAGE
   $ planqcli transfer:dollars
@@ -91,10 +91,10 @@ _See code: [src/commands/transfer/erc20.ts](https://github.com/planq-network/pla
 
 ## `planqcli transfer:euros`
 
-Transfer Planq Euros (pEUR) to a specified address.
+Transfer Planq Euros (aEUR) to a specified address.
 
 ```
-Transfer Planq Euros (pEUR) to a specified address.
+Transfer Planq Euros (aEUR) to a specified address.
 
 USAGE
   $ planqcli transfer:euros
@@ -143,10 +143,10 @@ _See code: [src/commands/transfer/planq.ts](https://github.com/planq-network/pla
 
 ## `planqcli transfer:reals`
 
-Transfer Planq Brazilian Real (pREAL) to a specified address.
+Transfer Planq Brazilian Real (aREAL) to a specified address.
 
 ```
-Transfer Planq Brazilian Real (pREAL) to a specified address.
+Transfer Planq Brazilian Real (aREAL) to a specified address.
 
 USAGE
   $ planqcli transfer:reals
@@ -181,7 +181,7 @@ OPTIONS
   --comment=comment                                  Transfer comment
   --from=0xc1912fEE45d61C87Cc5EA59DaE31190FFFFf232d  (required) Address of the sender
   --globalHelp                                       View all available global flags
-  --stableToken=(pUSD|pusd|pEUR|peur|pREAL|preal)    Name of the stable to be transfered
+  --stableToken=(aUSD|ausd|aEUR|aeur|aREAL|areal)    Name of the stable to be transfered
   --to=0xc1912fEE45d61C87Cc5EA59DaE31190FFFFf232d    (required) Address of the receiver
 
   --value=value                                      (required) Amount to transfer (in

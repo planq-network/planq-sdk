@@ -93,7 +93,7 @@ OPTIONS
 
   --tokenAddress=0xc1912fEE45d61C87Cc5EA59DaE31190FFFFf232d  The address of the token
                                                              that will be withdrawn.
-                                                             Defaults to pUSD
+                                                             Defaults to aUSD
 ```
 
 _See code: [src/commands/identity/withdraw-attestation-rewards.ts](https://github.com/planq-network/planq-sdk/tree/master/packages/cli/src/commands/identity/withdraw-attestation-rewards.ts)_

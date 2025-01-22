@@ -1,23 +1,23 @@
-import { StableToken } from '@planq-network/base'
-import { Connection } from '@planq-network/connect'
-import { AddressRegistry } from './address-registry'
-import { PlanqContract } from './base'
-import { ContractCacheType } from './basic-contract-cache-type'
-import { stableTokenInfos } from './planq-tokens'
-import { newAccounts } from './generated/Accounts'
-import { newGasPriceMinimum } from './generated/GasPriceMinimum'
-import { newPlanqToken } from './generated/PlanqToken'
-import { newExchange } from './generated/astonic/Exchange'
-import { newExchangeBRL } from './generated/astonic/ExchangeBRL'
-import { newExchangeEUR } from './generated/astonic/ExchangeEUR'
-import { newStableToken } from './generated/astonic/StableToken'
-import { newStableTokenBRL } from './generated/astonic/StableTokenBRL'
-import { newStableTokenEUR } from './generated/astonic/StableTokenEUR'
-import { AccountsWrapper } from './wrappers/Accounts'
-import { ExchangeWrapper } from './wrappers/Exchange'
-import { GasPriceMinimumWrapper } from './wrappers/GasPriceMinimum'
-import { PlanqTokenWrapper } from './wrappers/PlanqTokenWrapper'
-import { StableTokenWrapper } from './wrappers/StableTokenWrapper'
+import {StableToken} from "@planq-network/base";
+import {Connection} from "@planq-network/connect";
+import {AddressRegistry} from "./address-registry";
+import {PlanqContract} from "./base";
+import {ContractCacheType} from "./basic-contract-cache-type";
+import {stableTokenInfos} from "./planq-tokens";
+import {newAccounts} from "./generated/Accounts";
+import {newGasPriceMinimum} from "./generated/GasPriceMinimum";
+import {newPlanqToken} from "./generated/PlanqToken";
+import {newExchange} from "./generated/astonic/Exchange";
+import {newExchangeBRL} from "./generated/astonic/ExchangeBRL";
+import {newExchangeEUR} from "./generated/astonic/ExchangeEUR";
+import {newStableToken} from "./generated/astonic/StableToken";
+import {newStableTokenBRL} from "./generated/astonic/StableTokenBRL";
+import {newStableTokenEUR} from "./generated/astonic/StableTokenEUR";
+import {AccountsWrapper} from "./wrappers/Accounts";
+import {ExchangeWrapper} from "./wrappers/Exchange";
+import {GasPriceMinimumWrapper} from "./wrappers/GasPriceMinimum";
+import {PlanqTokenWrapper} from "./wrappers/PlanqTokenWrapper";
+import {StableTokenWrapper} from "./wrappers/StableTokenWrapper";
 
 const MINIMUM_CONTRACTS = {
   [PlanqContract.Accounts]: {
@@ -56,13 +56,15 @@ const MINIMUM_CONTRACTS = {
     newInstance: newStableTokenEUR,
     wrapper: StableTokenWrapper,
   },
-}
+};
 
-export type ContractsBroughtBase = typeof MINIMUM_CONTRACTS
+export type ContractsBroughtBase = typeof MINIMUM_CONTRACTS;
 
-type Keys = keyof ContractsBroughtBase
+type Keys = keyof ContractsBroughtBase;
 
-type Wrappers<T extends Keys> = InstanceType<ContractsBroughtBase[T]['wrapper']>
+type Wrappers<T extends Keys> = InstanceType<
+  ContractsBroughtBase[T]["wrapper"]
+>;
 
 const contractsWhichRequireCache = new Set([
   PlanqContract.Attestations,
@@ -72,7 +74,7 @@ const contractsWhichRequireCache = new Set([
   PlanqContract.Governance,
   PlanqContract.LockedPlanq,
   PlanqContract.Validators,
-])
+]);
 
 /**
  * Alternative Contract Cache with Minimal Contracts
@@ -85,7 +87,7 @@ const contractsWhichRequireCache = new Set([
  */
 
 export class MiniContractCache implements ContractCacheType {
-  private cache: Map<keyof ContractsBroughtBase, any> = new Map()
+  private cache: Map<keyof ContractsBroughtBase, any> = new Map();
 
   constructor(
     readonly connection: Connection,
@@ -94,18 +96,22 @@ export class MiniContractCache implements ContractCacheType {
   ) {}
 
   getAccounts(): Promise<AccountsWrapper> {
-    return this.getContract(PlanqContract.Accounts)
+    return this.getContract(PlanqContract.Accounts);
   }
-  getExchange(stableToken: StableToken = StableToken.pUSD): Promise<ExchangeWrapper> {
-    return this.getContract(stableTokenInfos[stableToken].exchangeContract)
+  getExchange(
+    stableToken: StableToken = StableToken.aUSD
+  ): Promise<ExchangeWrapper> {
+    return this.getContract(stableTokenInfos[stableToken].exchangeContract);
   }
 
   getPlanqToken(): Promise<PlanqTokenWrapper<any>> {
-    return this.getContract(PlanqContract.PlanqToken)
+    return this.getContract(PlanqContract.PlanqToken);
   }
 
-  getStableToken(stableToken: StableToken = StableToken.pUSD): Promise<StableTokenWrapper> {
-    return this.getContract(stableTokenInfos[stableToken].contract)
+  getStableToken(
+    stableToken: StableToken = StableToken.aUSD
+  ): Promise<StableTokenWrapper> {
+    return this.getContract(stableTokenInfos[stableToken].contract);
   }
 
   /**
@@ -118,19 +124,19 @@ export class MiniContractCache implements ContractCacheType {
     if (!this.isContractAvailable(contract)) {
       throw new Error(
         `This instance of MiniContracts was not given a mapping for ${contract}. Either add it or use WrapperCache for full set of contracts`
-      )
+      );
     }
 
     if (contractsWhichRequireCache.has(contract)) {
       throw new Error(
         `${contract} cannot be used with MiniContracts as it requires an instance of WrapperCache to be passed in as an argument`
-      )
+      );
     }
 
     if (this.cache.get(contract) == null || address !== undefined) {
-      await this.setContract<ContractKey>(contract, address)
+      await this.setContract<ContractKey>(contract, address);
     }
-    return this.cache.get(contract)! as Wrappers<ContractKey>
+    return this.cache.get(contract)! as Wrappers<ContractKey>;
   }
 
   private async setContract<ContractKey extends keyof ContractsBroughtBase>(
@@ -138,24 +144,25 @@ export class MiniContractCache implements ContractCacheType {
     address: string | undefined
   ) {
     if (!address) {
-      address = await this.registry.addressFor(contract)
+      address = await this.registry.addressFor(contract);
     }
 
-    const classes = this.contractClasses[contract]
+    const classes = this.contractClasses[contract];
 
-    const instance = classes.newInstance(this.connection.web3, address)
+    const instance = classes.newInstance(this.connection.web3, address);
 
-    const Klass = classes.wrapper as ContractsBroughtBase[ContractKey]['wrapper']
-    const wrapper = new Klass(this.connection, instance as any)
+    const Klass =
+      classes.wrapper as ContractsBroughtBase[ContractKey]["wrapper"];
+    const wrapper = new Klass(this.connection, instance as any);
 
-    this.cache.set(contract, wrapper)
+    this.cache.set(contract, wrapper);
   }
 
   public invalidateContract<C extends keyof ContractsBroughtBase>(contract: C) {
-    this.cache.delete(contract)
+    this.cache.delete(contract);
   }
 
   private isContractAvailable(contract: keyof ContractsBroughtBase) {
-    return !!this.contractClasses[contract]
+    return !!this.contractClasses[contract];
   }
 }

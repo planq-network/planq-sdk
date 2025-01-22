@@ -10,7 +10,7 @@
 
 ### Properties
 
-* [attestationServiceURL](_wrappers_attestations_.actionableattestation.md#attestationservipeurl)
+* [attestationServiceURL](_wrappers_attestations_.actionableattestation.md#attestationserviceurl)
 * [blockNumber](_wrappers_attestations_.actionableattestation.md#blocknumber)
 * [issuer](_wrappers_attestations_.actionableattestation.md#issuer)
 * [name](_wrappers_attestations_.actionableattestation.md#name)

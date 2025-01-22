@@ -13,7 +13,7 @@
 * [address](_wrappers_attestations_.attestationservicestatusresponse.md#address)
 * [affiliation](_wrappers_attestations_.attestationservicestatusresponse.md#affiliation)
 * [ageOfLatestBlock](_wrappers_attestations_.attestationservicestatusresponse.md#ageoflatestblock)
-* [attestationServiceURL](_wrappers_attestations_.attestationservicestatusresponse.md#attestationservipeurl)
+* [attestationServiceURL](_wrappers_attestations_.attestationservicestatusresponse.md#attestationserviceurl)
 * [attestationSigner](_wrappers_attestations_.attestationservicestatusresponse.md#attestationsigner)
 * [blacklistedRegionCodes](_wrappers_attestations_.attestationservicestatusresponse.md#blacklistedregioncodes)
 * [blsPublicKey](_wrappers_attestations_.attestationservicestatusresponse.md#blspublickey)

@@ -212,7 +212,7 @@ ___
 
 Name | Type | Default |
 ------ | ------ | ------ |
-`stableToken` | [StableToken](../enums/_base_.planqcontract.md#stabletoken) | StableToken.pUSD |
+`stableToken` | [StableToken](../enums/_base_.planqcontract.md#stabletoken) | StableToken.aUSD |
 
 **Returns:** *Promise‹Registry‹› | Accounts‹› | Exchange‹› | Ierc20‹› | PlanqToken‹› | StableToken‹› | Attestations‹› | BlockchainParameters‹› | DoubleSigningSlasher‹› | DowntimeSlasher‹› | Election‹› | EpochRewards‹› | Escrow‹› | ExchangeEur‹› | ExchangeBrl‹› | FeeCurrencyWhitelist‹› | Freezer‹› | GasPriceMinimum‹› | Governance‹› | GrandaMento‹› | LockedPlanq‹› | MetaTransactionWallet‹› | MetaTransactionWalletDeployer‹› | MultiSig‹› | Random‹› | Reserve‹› | SortedOracles‹› | TransferWhitelist‹› | Validators‹››*
 
@@ -386,7 +386,7 @@ ___
 
 Name | Type | Default |
 ------ | ------ | ------ |
-`stableToken` | [StableToken](../enums/_base_.planqcontract.md#stabletoken) | StableToken.pUSD |
+`stableToken` | [StableToken](../enums/_base_.planqcontract.md#stabletoken) | StableToken.aUSD |
 
 **Returns:** *Promise‹Registry‹› | Accounts‹› | Exchange‹› | Ierc20‹› | PlanqToken‹› | StableToken‹› | Attestations‹› | BlockchainParameters‹› | DoubleSigningSlasher‹› | DowntimeSlasher‹› | Election‹› | EpochRewards‹› | Escrow‹› | ExchangeEur‹› | ExchangeBrl‹› | FeeCurrencyWhitelist‹› | Freezer‹› | GasPriceMinimum‹› | Governance‹› | GrandaMento‹› | LockedPlanq‹› | MetaTransactionWallet‹› | MetaTransactionWalletDeployer‹› | MultiSig‹› | Random‹› | Reserve‹› | SortedOracles‹› | TransferWhitelist‹› | Validators‹››*
 

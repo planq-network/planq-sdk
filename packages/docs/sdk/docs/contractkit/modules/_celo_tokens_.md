@@ -113,7 +113,7 @@ ___
 
 Basic info for each stable token
 
-▪ **[StableToken.pEUR]**: *object*
+▪ **[StableToken.aEUR]**: *object*
 
 *Defined in [packages/sdk/contractkit/src/planq-tokens.ts:35](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/contractkit/src/planq-tokens.ts#L35)*
 
@@ -121,9 +121,9 @@ Basic info for each stable token
 
 * **exchangeContract**: *[ExchangeEUR](../enums/_base_.planqcontract.md#exchangeeur)* = PlanqContract.ExchangeEUR
 
-* **symbol**: *pEUR* = StableToken.pEUR
+* **symbol**: *aEUR* = StableToken.aEUR
 
-▪ **[StableToken.pREAL]**: *object*
+▪ **[StableToken.aREAL]**: *object*
 
 *Defined in [packages/sdk/contractkit/src/planq-tokens.ts:40](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/contractkit/src/planq-tokens.ts#L40)*
 
@@ -131,9 +131,9 @@ Basic info for each stable token
 
 * **exchangeContract**: *[ExchangeBRL](../enums/_base_.planqcontract.md#exchangebrl)* = PlanqContract.ExchangeBRL
 
-* **symbol**: *pREAL* = StableToken.pREAL
+* **symbol**: *aREAL* = StableToken.aREAL
 
-▪ **[StableToken.pUSD]**: *object*
+▪ **[StableToken.aUSD]**: *object*
 
 *Defined in [packages/sdk/contractkit/src/planq-tokens.ts:30](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/contractkit/src/planq-tokens.ts#L30)*
 
@@ -141,4 +141,4 @@ Basic info for each stable token
 
 * **exchangeContract**: *[Exchange](../enums/_base_.planqcontract.md#exchange)* = PlanqContract.Exchange
 
-* **symbol**: *pUSD* = StableToken.pUSD
+* **symbol**: *aUSD* = StableToken.aUSD

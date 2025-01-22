@@ -6,16 +6,16 @@
 
 ### Type aliases
 
-* [AttestationServiceURLClaim](_identity_claims_attestation_service_url_.md#attestationservipeurlclaim)
+* [AttestationServiceURLClaim](_identity_claims_attestation_service_url_.md#attestationserviceurlclaim)
 
 ### Variables
 
-* [AttestationServiceURLClaimType](_identity_claims_attestation_service_url_.md#const-attestationservipeurlclaimtype)
+* [AttestationServiceURLClaimType](_identity_claims_attestation_service_url_.md#const-attestationserviceurlclaimtype)
 
 ### Functions
 
-* [createAttestationServiceURLClaim](_identity_claims_attestation_service_url_.md#const-createattestationservipeurlclaim)
-* [validateAttestationServiceUrl](_identity_claims_attestation_service_url_.md#validateattestationservipeurl)
+* [createAttestationServiceURLClaim](_identity_claims_attestation_service_url_.md#const-createattestationserviceurlclaim)
+* [validateAttestationServiceUrl](_identity_claims_attestation_service_url_.md#validateattestationserviceurl)
 
 ## Type aliases
 
@@ -41,7 +41,7 @@
 
 ### `Const` createAttestationServiceURLClaim
 
-▸ **createAttestationServiceURLClaim**(`url`: string): *[AttestationServiceURLClaim](_identity_claims_attestation_service_url_.md#attestationservipeurlclaim)*
+▸ **createAttestationServiceURLClaim**(`url`: string): *[AttestationServiceURLClaim](_identity_claims_attestation_service_url_.md#attestationserviceurlclaim)*
 
 *Defined in [packages/sdk/contractkit/src/identity/claims/attestation-service-url.ts:22](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/contractkit/src/identity/claims/attestation-service-url.ts#L22)*
 
@@ -51,13 +51,13 @@ Name | Type |
 ------ | ------ |
 `url` | string |
 
-**Returns:** *[AttestationServiceURLClaim](_identity_claims_attestation_service_url_.md#attestationservipeurlclaim)*
+**Returns:** *[AttestationServiceURLClaim](_identity_claims_attestation_service_url_.md#attestationserviceurlclaim)*
 
 ___
 
 ###  validateAttestationServiceUrl
 
-▸ **validateAttestationServiceUrl**(`kit`: [ContractKit](../classes/_kit_.contractkit.md), `claim`: [AttestationServiceURLClaim](_identity_claims_attestation_service_url_.md#attestationservipeurlclaim), `address`: Address): *Promise‹string | undefined›*
+▸ **validateAttestationServiceUrl**(`kit`: [ContractKit](../classes/_kit_.contractkit.md), `claim`: [AttestationServiceURLClaim](_identity_claims_attestation_service_url_.md#attestationserviceurlclaim), `address`: Address): *Promise‹string | undefined›*
 
 *Defined in [packages/sdk/contractkit/src/identity/claims/attestation-service-url.ts:28](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/contractkit/src/identity/claims/attestation-service-url.ts#L28)*
 
@@ -66,7 +66,7 @@ ___
 Name | Type |
 ------ | ------ |
 `kit` | [ContractKit](../classes/_kit_.contractkit.md) |
-`claim` | [AttestationServiceURLClaim](_identity_claims_attestation_service_url_.md#attestationservipeurlclaim) |
+`claim` | [AttestationServiceURLClaim](_identity_claims_attestation_service_url_.md#attestationserviceurlclaim) |
 `address` | Address |
 
 **Returns:** *Promise‹string | undefined›*

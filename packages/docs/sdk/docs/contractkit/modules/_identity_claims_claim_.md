@@ -35,7 +35,7 @@
 
 ###  Claim
 
-Ƭ **Claim**: *[AttestationServiceURLClaim](_identity_claims_attestation_service_url_.md#attestationservipeurlclaim) | [DomainClaim](_identity_claims_claim_.md#domainclaim) | [KeybaseClaim](_identity_claims_claim_.md#keybaseclaim) | [NameClaim](_identity_claims_claim_.md#nameclaim) | [AccountClaim](_identity_claims_account_.md#accountclaim) | [StorageClaim](_identity_claims_claim_.md#storageclaim)*
+Ƭ **Claim**: *[AttestationServiceURLClaim](_identity_claims_attestation_service_url_.md#attestationserviceurlclaim) | [DomainClaim](_identity_claims_claim_.md#domainclaim) | [KeybaseClaim](_identity_claims_claim_.md#keybaseclaim) | [NameClaim](_identity_claims_claim_.md#nameclaim) | [AccountClaim](_identity_claims_account_.md#accountclaim) | [StorageClaim](_identity_claims_claim_.md#storageclaim)*
 
 *Defined in [packages/sdk/contractkit/src/identity/claims/claim.ts:57](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/contractkit/src/identity/claims/claim.ts#L57)*
 

@@ -6,30 +6,30 @@
 
 ### Enumeration members
 
-* [pEUR](_currencies_.stabletoken.md#peur)
-* [pREAL](_currencies_.stabletoken.md#preal)
-* [pUSD](_currencies_.stabletoken.md#pusd)
+* [aEUR](_currencies_.stabletoken.md#aeur)
+* [aREAL](_currencies_.stabletoken.md#areal)
+* [aUSD](_currencies_.stabletoken.md#ausd)
 
 ## Enumeration members
 
-###  pEUR
+###  aEUR
 
-• **pEUR**: = "pEUR"
+• **aEUR**: = "aEUR"
 
 *Defined in [packages/sdk/base/src/currencies.ts:10](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/base/src/currencies.ts#L10)*
 
 ___
 
-###  pREAL
+###  aREAL
 
-• **pREAL**: = "pREAL"
+• **aREAL**: = "aREAL"
 
 *Defined in [packages/sdk/base/src/currencies.ts:11](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/base/src/currencies.ts#L11)*
 
 ___
 
-###  pUSD
+###  aUSD
 
-• **pUSD**: = "pUSD"
+• **aUSD**: = "aUSD"
 
 *Defined in [packages/sdk/base/src/currencies.ts:9](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/base/src/currencies.ts#L9)*

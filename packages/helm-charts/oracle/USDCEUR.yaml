@@ -20,11 +20,11 @@ oracle:
         {exchange: 'COINBASE', symbol: 'USDTEUR', toInvert: false}
       ],
       [
-        {exchange: 'WHITEBIT', symbol: 'USDCUSDT', toInvert: false},
+        {exchange: 'WHITEBIT', symbol: 'USDAUSDT', toInvert: false},
         {exchange: 'COINBASE', symbol: 'USDTEUR', toInvert: false}
       ],
       [
-        {exchange: 'KRAKEN', symbol: 'USDCUSD', toInvert: false},
+        {exchange: 'KRAKEN', symbol: 'USDAUSD', toInvert: false},
         {exchange: 'KRAKEN', symbol: 'EURUSD', toInvert: true}
       ],
     ]"

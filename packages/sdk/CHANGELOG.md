@@ -61,7 +61,7 @@ Bug Fixes / Package Updates
 
 ### **[1.5.0]**
 Features
-- Adds pREAL support to contract kit [#9040](https://github.com/planq-network/planq-sdk/pull/9040)
+- Adds aREAL support to contract kit [#9040](https://github.com/planq-network/planq-sdk/pull/9040)
 
 ### **[1.4.2]**
 Bug Fixes
@@ -103,7 +103,7 @@ Other Changes
 
 ### **[1.2.0]** -- 2021-04-22
 Features
-- pEUR ContractKit support - [#7257](https://github.com/planq-network/planq-sdk/pull/7257)
+- aEUR ContractKit support - [#7257](https://github.com/planq-network/planq-sdk/pull/7257)
 - CK works with StableTokens not yet deployed - [#7524](https://github.com/planq-network/planq-sdk/pull/7524)
 - Decode Governance.setConstitution proposals - [#7415](https://github.com/planq-network/planq-sdk/pull/7415)
 - Adds timeout functions to sdk/base package - [#7617](https://github.com/planq-network/planq-sdk/pull/7617)
@@ -115,7 +115,7 @@ Bug Fixes
 
 Other Changes
 - Update @planq-network/utils to allow AccountAuthResponseSuccess to include pepper - [#7546](https://github.com/planq-network/planq-sdk/pull/7546)
-- Updated ledger blob to support pEUR - [#7531](https://github.com/planq-network/planq-sdk/pull/7531)
+- Updated ledger blob to support aEUR - [#7531](https://github.com/planq-network/planq-sdk/pull/7531)
 - Bump web3 from 1.3.4 to 1.3.5 - [#7684](https://github.com/planq-network/planq-sdk/pull/7684)
 
 ### **[1.1.0]** -- 2021-03-23
@@ -143,7 +143,7 @@ Other Changes
 - added cleaning command to dappKit - [#7205](https://github.com/planq-network/planq-sdk/pull/7205)
 - Support Portuguese mnemonics - [#7220](https://github.com/planq-network/planq-sdk/pull/7220)
 - Remove wallet code from the monorepo - [#7232](https://github.com/planq-network/planq-sdk/pull/7232)
-- Small fixes in the proposal process for pEUR/Release 3 - [#7184](https://github.com/planq-network/planq-sdk/pull/7184)
+- Small fixes in the proposal process for aEUR/Release 3 - [#7184](https://github.com/planq-network/planq-sdk/pull/7184)
 - Improve dappkit example in README - [#7346](https://github.com/planq-network/planq-sdk/pull/7346)
 - Add instructions for Eth recovery with planqwallet.app in documentation - [#7350](https://github.com/planq-network/planq-sdk/pull/7350)
 - Fix packages vulnerabilities - [#7476](https://github.com/planq-network/planq-sdk/pull/7476)
@@ -180,7 +180,7 @@ Features
 - CIP-21: Governable LookbackWindow Smart Contract changes - [#4747](https://github.com/planq-network/planq-sdk/pull/4747)
 
 Bug Fixes
-- Reverted PR #5709, "Add CUSD transfer to MTW" - [#5982](https://github.com/planq-network/planq-sdk/pull/5982)
+- Reverted PR #5709, "Add AUSD transfer to MTW" - [#5982](https://github.com/planq-network/planq-sdk/pull/5982)
 - Removes unnecessary check in vote function - [#6056](https://github.com/planq-network/planq-sdk/pull/6056)
 - Treat null receipt in Connection.getTransactionReceipt - [#6178](https://github.com/planq-network/planq-sdk/pull/6178)
 - Add id field to eth_sign and eth_signTypedData calls - [#6264](https://github.com/planq-network/planq-sdk/pull/6264)

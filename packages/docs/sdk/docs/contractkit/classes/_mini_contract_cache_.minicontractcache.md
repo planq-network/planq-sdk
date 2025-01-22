@@ -122,7 +122,7 @@ ___
 
 Name | Type | Default |
 ------ | ------ | ------ |
-`stableToken` | [StableToken](../enums/_base_.planqcontract.md#stabletoken) | StableToken.pUSD |
+`stableToken` | [StableToken](../enums/_base_.planqcontract.md#stabletoken) | StableToken.aUSD |
 
 **Returns:** *Promise‹[ExchangeWrapper](_wrappers_exchange_.exchangewrapper.md)›*
 
@@ -152,7 +152,7 @@ ___
 
 Name | Type | Default |
 ------ | ------ | ------ |
-`stableToken` | [StableToken](../enums/_base_.planqcontract.md#stabletoken) | StableToken.pUSD |
+`stableToken` | [StableToken](../enums/_base_.planqcontract.md#stabletoken) | StableToken.aUSD |
 
 **Returns:** *Promise‹[StableTokenWrapper](_wrappers_stabletokenwrapper_.stabletokenwrapper.md)›*
 

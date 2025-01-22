@@ -11,7 +11,7 @@ ContractKit supports the following functionality:
 - Connect to a node
 - Access web3 object to interact with node's Json RPC API
 - Send Transaction with planq's extra fields: (feeCurrency)
-- Simple interface to interact with PLQ and pUSD
+- Simple interface to interact with PLQ and aUSD
 - Simple interface to interact with Planq Core contracts
 - Utilities
 
@@ -47,11 +47,11 @@ const kit = newKit('https://evm-atlas.planq.network')
 To access balances:
 
 ```ts
-// returns an object with {lockedPlanq, pending, pUSD, pEUR, pREAL}
+// returns an object with {lockedPlanq, pending, aUSD, aEUR, aREAL}
 
 const balances = await kit.getTotalBalance()
 
-// returns an object with {pUSD, pEUR, pREAL}
+// returns an object with {aUSD, aEUR, aREAL}
 const balances = await miniKit.getTotalBalance()
 
 ```
@@ -59,7 +59,7 @@ const balances = await miniKit.getTotalBalance()
 If you don't need the balances of all tokens use the balanceOf method
 ```ts
 
-const stableTokenWrapper = await kit.getStableToken(StableToken.pREAL)
+const stableTokenWrapper = await kit.getStableToken(StableToken.aREAL)
 
 const cRealBalance = stableTokenWrapper.balanceOf(accountAddress)
 
@@ -88,20 +88,20 @@ async function getKit(myAddress: string, privateKey: string) {
 }
 ```
 
-### Interacting with PLQ & pUSD
+### Interacting with PLQ & aUSD
 
-Planq has two initial coins: PLQ and pUSD (stableToken).
+Planq has two initial coins: PLQ and aUSD (stableToken).
 Both implement the ERC20 standard, and to interact with them is as simple as:
 
 ```ts
 // get the PLQ contract
 const planqToken = await kit.contracts.getPlanqToken()
 
-// get the pUSD contract
+// get the aUSD contract
 const stableToken = await kit.contracts.getStableToken()
 
 const planqBalance = await planqToken.balanceOf(someAddress)
-const pusdBalance = await stableToken.balanceOf(someAddress)
+const ausdBalance = await stableToken.balanceOf(someAddress)
 ```
 
 To send funds:
@@ -116,11 +116,11 @@ const hash = await tx.getHash()
 const receipt = await tx.waitReceipt()
 ```
 
-If you would like to pay fees in pUSD, (or other cStables like pEUR, pUSD).
+If you would like to pay fees in aUSD, (or other cStables like aEUR, aUSD).
 
 ```ts
 
-kit.setFeeCurrency(PlanqContract.StableToken) // Default to paying fees in pUSD
+kit.setFeeCurrency(PlanqContract.StableToken) // Default to paying fees in aUSD
 
 const stableTokenContract = kit.contracts.getStableToken()
 

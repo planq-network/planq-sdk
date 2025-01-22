@@ -23,7 +23,7 @@ OPTIONS
 
   --globalHelp                                       View all available global flags
 
-  --stableToken=(pUSD|pusd|pEUR|peur|pREAL|preal)    [default: pUSD] Name of the stable
+  --stableToken=(aUSD|ausd|aEUR|aeur|aREAL|areal)    [default: aUSD] Name of the stable
                                                      to receive
 
   --value=10000000000000000000000                    (required) The value of PLQ to
@@ -120,7 +120,7 @@ OPTIONS
 
   --globalHelp                                       View all available global flags
 
-  --stableToken=(pUSD|pusd|pEUR|peur|pREAL|preal)    [default: pUSD] Name of the stable
+  --stableToken=(aUSD|ausd|aEUR|aeur|aREAL|areal)    [default: aUSD] Name of the stable
                                                      to receive
 
   --value=10000000000000000000000                    (required) The value of PLQ to
@@ -130,17 +130,17 @@ EXAMPLES
   planq --value 5000000000000 --from 0xc1912fEE45d61C87Cc5EA59DaE31190FFFFf232d
 
   planq --value 5000000000000 --forAtLeast 100000000000000 --from
-  0xc1912fEE45d61C87Cc5EA59DaE31190FFFFf232d --stableToken pUSD
+  0xc1912fEE45d61C87Cc5EA59DaE31190FFFFf232d --stableToken aUSD
 ```
 
 _See code: [src/commands/exchange/planq.ts](https://github.com/planq-network/planq-sdk/tree/master/packages/cli/src/commands/exchange/planq.ts)_
 
 ## `planqcli exchange:reals`
 
-Exchange Planq Brazilian Real (pREAL) for PLQ via the stability mechanism
+Exchange Planq Brazilian Real (aREAL) for PLQ via the stability mechanism
 
 ```
-Exchange Planq Brazilian Real (pREAL) for PLQ via the stability mechanism
+Exchange Planq Brazilian Real (aREAL) for PLQ via the stability mechanism
 
 USAGE
   $ planqcli exchange:reals
@@ -207,7 +207,7 @@ OPTIONS
 
   --globalHelp                                       View all available global flags
 
-  --stableToken=(pUSD|pusd|pEUR|peur|pREAL|preal)    Name of the stable token to be
+  --stableToken=(aUSD|ausd|aEUR|aeur|aREAL|areal)    Name of the stable token to be
                                                      transfered
 
   --value=10000000000000000000000                    (required) The value of Stable

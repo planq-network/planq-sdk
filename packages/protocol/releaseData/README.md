@@ -24,6 +24,6 @@ standard release process.
 
 ### `releaseBRL.json`
 
-This file is the initialization data used when deploying the `pREAL`
+This file is the initialization data used when deploying the `aREAL`
 stable token. The release occured between Core Contracts releases 5 and 6 and
 didn't exactly follow the release process.

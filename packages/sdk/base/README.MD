@@ -10,9 +10,9 @@ This package contains shared classes and functions used by other planq packages.
 // enums StableTokens and Token are enums, PlanqTokenType is the type that must be one of the 2 enums
 import { StableTokens, Token, PlanqTokenType } from "@planq-network/base"
 
-StableTokens.pUSD
+StableTokens.aUSD
 
-StableTokens.pREAL
+StableTokens.aREAL
 
 Token.PLQ
 ```

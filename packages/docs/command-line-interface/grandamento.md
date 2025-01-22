@@ -59,7 +59,7 @@ OPTIONS
   --globalHelp                                     View all available global flags
   --sellPlanq=(true|false)                          (required) Sell or buy PLQ
 
-  --stableToken=(pUSD|pusd|pEUR|peur|pREAL|preal)  (required) [default: pUSD] Name of
+  --stableToken=(aUSD|ausd|aEUR|aeur|aREAL|areal)  (required) [default: aUSD] Name of
                                                    the stable to receive or send
 
   --value=10000000000000000000000                  (required) The value of the tokens to
@@ -102,7 +102,7 @@ OPTIONS
 
   --sellPlanq=(true|false)                            (required) Sell or buy PLQ
 
-  --stableToken=(pUSD|pusd|pEUR|peur|pREAL|preal)    (required) [default: pUSD] Name of
+  --stableToken=(aUSD|ausd|aEUR|aeur|aREAL|areal)    (required) [default: aUSD] Name of
                                                      the stable to receive or send
 
   --value=10000000000000000000000                    (required) The value of the tokens

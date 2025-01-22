@@ -13,7 +13,7 @@ The `env-tests` package is a set of tests that is designed to be run against PLQ
 
 All keys derive funds from the "root key" which should be funded. From it, all test keys are funded in the test setup, increase verbosity with the `LOG_LEVEL` env var to `info` or `debug` to see more information.
 
-By default, transfer and exchange tests are performed for pUSD. By setting the env variable `STABLETOKENS` other stabletokens can be included in testing. `STABLETOKENS` can be set to a comma-separated string of stabletokens to test (e.g. `‘pEUR’` for only testing pEUR or `‘pUSD,pEUR’` for testing both pUSD and pEUR). 
+By default, transfer and exchange tests are performed for aUSD. By setting the env variable `STABLETOKENS` other stabletokens can be included in testing. `STABLETOKENS` can be set to a comma-separated string of stabletokens to test (e.g. `‘aEUR’` for only testing aEUR or `‘aUSD,aEUR’` for testing both aUSD and aEUR). 
 
 As part of the testnet contract deploys in `planqtool`, privileged keys like reserve spender or oracles can be authorized directly in the migrations. Hence, the relevant tests will pass on environments like `staging` while failing on public environments as the keys are not yet authorized.
 

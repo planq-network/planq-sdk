@@ -33,13 +33,19 @@ contract StableToken is
 
     event InflationFactorUpdated(uint256 factor, uint256 lastUpdated);
 
-    event InflationParametersUpdated(uint256 rate, uint256 updatePeriod, uint256 lastUpdated);
+    event InflationParametersUpdated(
+        uint256 rate,
+        uint256 updatePeriod,
+        uint256 lastUpdated
+    );
 
     event Transfer(address indexed from, address indexed to, uint256 value);
 
     event TransferComment(string comment);
 
-    bytes32 constant GRANDA_MENTO_REGISTRY_ID = keccak256(abi.encodePacked("GrandaMento"));
+    bytes32 constant GRANDA_MENTO_REGISTRY_ID = keccak256(
+        abi.encodePacked("GrandaMento")
+    );
 
     string internal name_;
     string internal symbol_;
@@ -84,7 +90,10 @@ contract StableToken is
         if (lastUpdated != inflationState.factorLastUpdated) {
             inflationState.factor = updatedInflationFactor;
             inflationState.factorLastUpdated = lastUpdated;
-            emit InflationFactorUpdated(inflationState.factor.unwrap(), inflationState.factorLastUpdated);
+            emit InflationFactorUpdated(
+                inflationState.factor.unwrap(),
+                inflationState.factorLastUpdated
+            );
         }
         _;
     }
@@ -99,12 +108,7 @@ contract StableToken is
     function getVersionNumber()
         external
         pure
-        returns (
-            uint256,
-            uint256,
-            uint256,
-            uint256
-        )
+        returns (uint256, uint256, uint256, uint256)
     {
         return (1, 2, 0, 1);
     }
@@ -117,7 +121,7 @@ contract StableToken is
 
     /**
      * @param _name The name of the stable token (English)
-     * @param _symbol A short symbol identifying the token (e.g. "cUSD")
+     * @param _symbol A short symbol identifying the token (e.g. "aUSD")
      * @param _decimals Tokens are divisible to this many decimal places.
      * @param registryAddress Address of the Registry contract.
      * @param inflationRate Weekly inflation rate.
@@ -138,7 +142,10 @@ contract StableToken is
         string calldata exchangeIdentifier
     ) external initializer {
         require(inflationRate != 0, "Must provide a non-zero inflation rate");
-        require(inflationFactorUpdatePeriod > 0, "inflationFactorUpdatePeriod must be > 0");
+        require(
+            inflationFactorUpdatePeriod > 0,
+            "inflationFactorUpdatePeriod must be > 0"
+        );
 
         _transferOwnership(msg.sender);
 
@@ -153,7 +160,10 @@ contract StableToken is
         // solhint-disable-next-line not-rely-on-time
         inflationState.factorLastUpdated = now;
 
-        require(initialBalanceAddresses.length == initialBalanceValues.length, "Array length mismatch");
+        require(
+            initialBalanceAddresses.length == initialBalanceValues.length,
+            "Array length mismatch"
+        );
         for (uint256 i = 0; i < initialBalanceAddresses.length; i = i.add(1)) {
             _mint(initialBalanceAddresses[i], initialBalanceValues[i]);
         }
@@ -166,7 +176,11 @@ contract StableToken is
      * @param rate New rate.
      * @param updatePeriod How often inflationFactor is updated.
      */
-    function setInflationParameters(uint256 rate, uint256 updatePeriod) external onlyOwner updateInflationFactor {
+    function setInflationParameters(uint256 rate, uint256 updatePeriod)
+        external
+        onlyOwner
+        updateInflationFactor
+    {
         require(rate != 0, "Must provide a non-zero inflation rate.");
         require(updatePeriod > 0, "updatePeriod must be > 0");
         inflationState.rate = FixidityLib.wrap(rate);
@@ -186,8 +200,15 @@ contract StableToken is
      * @param value The increment of the amount of StableToken approved to the spender.
      * @return True if the transaction succeeds.
      */
-    function increaseAllowance(address spender, uint256 value) external updateInflationFactor returns (bool) {
-        require(spender != address(0), "reserved address 0x0 cannot have allowance");
+    function increaseAllowance(address spender, uint256 value)
+        external
+        updateInflationFactor
+        returns (bool)
+    {
+        require(
+            spender != address(0),
+            "reserved address 0x0 cannot have allowance"
+        );
         uint256 oldValue = allowed[msg.sender][spender];
         uint256 newValue = oldValue.add(value);
         allowed[msg.sender][spender] = newValue;
@@ -201,7 +222,11 @@ contract StableToken is
      * @param value The decrement of the amount of StableToken approved to the spender.
      * @return True if the transaction succeeds.
      */
-    function decreaseAllowance(address spender, uint256 value) external updateInflationFactor returns (bool) {
+    function decreaseAllowance(address spender, uint256 value)
+        external
+        updateInflationFactor
+        returns (bool)
+    {
         uint256 oldValue = allowed[msg.sender][spender];
         uint256 newValue = oldValue.sub(value);
         allowed[msg.sender][spender] = newValue;
@@ -215,8 +240,15 @@ contract StableToken is
      * @param value The amount of StableToken approved to the spender.
      * @return True if the transaction succeeds.
      */
-    function approve(address spender, uint256 value) external updateInflationFactor returns (bool) {
-        require(spender != address(0), "reserved address 0x0 cannot have allowance");
+    function approve(address spender, uint256 value)
+        external
+        updateInflationFactor
+        returns (bool)
+    {
+        require(
+            spender != address(0),
+            "reserved address 0x0 cannot have allowance"
+        );
         allowed[msg.sender][spender] = value;
         emit Approval(msg.sender, spender, value);
         return true;
@@ -227,9 +259,14 @@ contract StableToken is
      * @param to The account for which to mint tokens.
      * @param value The amount of StableToken to mint.
      */
-    function mint(address to, uint256 value) external updateInflationFactor returns (bool) {
+    function mint(address to, uint256 value)
+        external
+        updateInflationFactor
+        returns (bool)
+    {
         require(
-            msg.sender == registry.getAddressForOrDie(getExchangeRegistryId()) ||
+            msg.sender ==
+                registry.getAddressForOrDie(getExchangeRegistryId()) ||
                 msg.sender == registry.getAddressFor(VALIDATORS_REGISTRY_ID) ||
                 msg.sender == registry.getAddressFor(GRANDA_MENTO_REGISTRY_ID),
             "Sender not authorized to mint"
@@ -278,12 +315,16 @@ contract StableToken is
      */
     function burn(uint256 value) external updateInflationFactor returns (bool) {
         require(
-            msg.sender == registry.getAddressForOrDie(getExchangeRegistryId()) ||
+            msg.sender ==
+                registry.getAddressForOrDie(getExchangeRegistryId()) ||
                 msg.sender == registry.getAddressFor(GRANDA_MENTO_REGISTRY_ID),
             "Sender not authorized to burn"
         );
         uint256 units = _valueToUnits(inflationState.factor, value);
-        require(units <= balances[msg.sender], "value exceeded balance of sender");
+        require(
+            units <= balances[msg.sender],
+            "value exceeded balance of sender"
+        );
         totalSupply_ = totalSupply_.sub(units);
         balances[msg.sender] = balances[msg.sender].sub(units);
         emit Transfer(msg.sender, address(0), units);
@@ -297,15 +338,22 @@ contract StableToken is
      * @param value The amount of StableToken to transfer.
      * @return True if the transaction succeeds.
      */
-    function transferFrom(
-        address from,
-        address to,
-        uint256 value
-    ) external updateInflationFactor onlyWhenNotFrozen returns (bool) {
+    function transferFrom(address from, address to, uint256 value)
+        external
+        updateInflationFactor
+        onlyWhenNotFrozen
+        returns (bool)
+    {
         uint256 units = _valueToUnits(inflationState.factor, value);
         require(to != address(0), "transfer attempted to reserved address 0x0");
-        require(units <= balances[from], "transfer value exceeded balance of sender");
-        require(value <= allowed[from][msg.sender], "transfer value exceeded sender's allowance for recipient");
+        require(
+            units <= balances[from],
+            "transfer value exceeded balance of sender"
+        );
+        require(
+            value <= allowed[from][msg.sender],
+            "transfer value exceeded sender's allowance for recipient"
+        );
 
         balances[to] = balances[to].add(units);
         balances[from] = balances[from].sub(units);
@@ -341,7 +389,11 @@ contract StableToken is
      * @param spender The spender of the StableToken.
      * @return The amount of StableToken owner is allowing spender to spend.
      */
-    function allowance(address accountOwner, address spender) external view returns (uint256) {
+    function allowance(address accountOwner, address spender)
+        external
+        view
+        returns (uint256)
+    {
         return allowed[accountOwner][spender];
     }
 
@@ -372,12 +424,7 @@ contract StableToken is
     function getInflationParameters()
         external
         view
-        returns (
-            uint256,
-            uint256,
-            uint256,
-            uint256
-        )
+        returns (uint256, uint256, uint256, uint256)
     {
         return (
             inflationState.rate.unwrap(),
@@ -404,8 +451,8 @@ contract StableToken is
     /**
      * @notice Returns the exchange id in the registry of the corresponding fiat pair exchange.
      * @dev When this storage is uninitialized, it falls back to the default EXCHANGE_REGISTRY_ID.
-     * exchangeRegistryId was introduced after the initial release of cUSD's StableToken,
-     * so exchangeRegistryId will be uninitialized for that contract. If cUSD's StableToken
+     * exchangeRegistryId was introduced after the initial release of aUSD's StableToken,
+     * so exchangeRegistryId will be uninitialized for that contract. If aUSD's StableToken
      * exchangeRegistryId were to be correctly initialized, this function could be deprecated
      * in favor of using exchangeRegistryId directly.
      * @return Registry id for the corresponding exchange.
@@ -434,7 +481,11 @@ contract StableToken is
         // magnitude more than the initial proposal of 0.5%), in 500 years, the
         // inflation factor would be on the order of 10**10, which is still a safe
         // divisor.
-        return FixidityLib.newFixed(units).divide(updatedInflationFactor).fromFixed();
+        return
+            FixidityLib
+                .newFixed(units)
+                .divide(updatedInflationFactor)
+                .fromFixed();
     }
 
     /**
@@ -444,8 +495,12 @@ contract StableToken is
      * @return The units corresponding to `value` given the current inflation factor.
      * @dev We assume any function calling this will have updated the inflation factor.
      */
-    function _valueToUnits(FixidityLib.Fraction memory inflationFactor, uint256 value) private pure returns (uint256) {
-        return inflationFactor.multiply(FixidityLib.newFixed(value)).fromFixed();
+    function _valueToUnits(
+        FixidityLib.Fraction memory inflationFactor,
+        uint256 value
+    ) private pure returns (uint256) {
+        return
+            inflationFactor.multiply(FixidityLib.newFixed(value)).fromFixed();
     }
 
     /**
@@ -453,9 +508,16 @@ contract StableToken is
      * @return Current inflation factor.
      * @return Last time when the returned inflation factor was updated.
      */
-    function getUpdatedInflationFactor() private view returns (FixidityLib.Fraction memory, uint256) {
+    function getUpdatedInflationFactor()
+        private
+        view
+        returns (FixidityLib.Fraction memory, uint256)
+    {
         /* solhint-disable not-rely-on-time */
-        if (now < inflationState.factorLastUpdated.add(inflationState.updatePeriod)) {
+        if (
+            now <
+            inflationState.factorLastUpdated.add(inflationState.updatePeriod)
+        ) {
             return (inflationState.factor, inflationState.factorLastUpdated);
         }
 
@@ -463,7 +525,9 @@ contract StableToken is
         uint256 denominator;
 
         // TODO: handle retroactive updates given decreases to updatePeriod
-        uint256 timesToApplyInflation = now.sub(inflationState.factorLastUpdated).div(inflationState.updatePeriod);
+        uint256 timesToApplyInflation = now
+            .sub(inflationState.factorLastUpdated)
+            .div(inflationState.updatePeriod);
 
         (numerator, denominator) = fractionMulExp(
             inflationState.factor.unwrap(),
@@ -480,9 +544,9 @@ contract StableToken is
             return (inflationState.factor, inflationState.factorLastUpdated);
         }
 
-        FixidityLib.Fraction memory currentInflationFactor = FixidityLib.wrap(numerator).divide(
-            FixidityLib.wrap(denominator)
-        );
+        FixidityLib.Fraction memory currentInflationFactor = FixidityLib
+            .wrap(numerator)
+            .divide(FixidityLib.wrap(denominator));
         uint256 lastUpdated = inflationState.factorLastUpdated.add(
             inflationState.updatePeriod.mul(timesToApplyInflation)
         );
@@ -497,7 +561,12 @@ contract StableToken is
      * @param value The amount to be transferred.
      */
     // solhint-disable-next-line no-simple-event-func-name
-    function transfer(address to, uint256 value) public updateInflationFactor onlyWhenNotFrozen returns (bool) {
+    function transfer(address to, uint256 value)
+        public
+        updateInflationFactor
+        onlyWhenNotFrozen
+        returns (bool)
+    {
         return _transfer(to, value);
     }
 
@@ -509,7 +578,10 @@ contract StableToken is
     function _transfer(address to, uint256 value) internal returns (bool) {
         require(to != address(0), "transfer attempted to reserved address 0x0");
         uint256 units = _valueToUnits(inflationState.factor, value);
-        require(balances[msg.sender] >= units, "transfer value exceeded balance of sender");
+        require(
+            balances[msg.sender] >= units,
+            "transfer value exceeded balance of sender"
+        );
         balances[msg.sender] = balances[msg.sender].sub(units);
         balances[to] = balances[to].add(units);
         emit Transfer(msg.sender, to, value);
@@ -525,7 +597,12 @@ contract StableToken is
      * various tx fee recipients via a call to `creditGasFees`. Note too that the events emitted
      * by `creditGasFees` reflect the *net* gas fee payments for the transaction.
      */
-    function debitGasFees(address from, uint256 value) external onlyOwner onlyWhenNotFrozen updateInflationFactor {
+    function debitGasFees(address from, uint256 value)
+        external
+        onlyOwner
+        onlyWhenNotFrozen
+        updateInflationFactor
+    {
         uint256 units = _valueToUnits(inflationState.factor, value);
         balances[from] = balances[from].sub(units);
         totalSupply_ = totalSupply_.sub(units);
@@ -565,11 +642,10 @@ contract StableToken is
         totalSupply_ = totalSupply_.add(units);
     }
 
-    function _creditGas(
-        address from,
-        address to,
-        uint256 value
-    ) internal returns (uint256) {
+    function _creditGas(address from, address to, uint256 value)
+        internal
+        returns (uint256)
+    {
         if (to == address(0)) {
             return 0;
         }

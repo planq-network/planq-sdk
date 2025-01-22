@@ -6,110 +6,110 @@ import {
   RETRY_COUNT,
   RETRY_DELAY_IN_MS,
   toBool,
-} from '@planq-network/phone-number-privacy-common'
-import BigNumber from 'bignumber.js'
+} from "@planq-network/phone-number-privacy-common";
+import BigNumber from "bignumber.js";
 
-require('dotenv').config()
+require("dotenv").config();
 
 export function getSignerVersion(): string {
-  return process.env.npm_package_version ?? '0.0.0'
+  return process.env.npm_package_version ?? "0.0.0";
 }
-export const DEV_MODE = process.env.NODE_ENV !== 'production'
-export const VERBOSE_DB_LOGGING = toBool(process.env.VERBOSE_DB_LOGGING, false)
+export const DEV_MODE = process.env.NODE_ENV !== "production";
+export const VERBOSE_DB_LOGGING = toBool(process.env.VERBOSE_DB_LOGGING, false);
 
 export enum SupportedDatabase {
-  Postgres = 'postgres', // PostgresSQL
-  MySql = 'mysql', // MySQL
-  MsSql = 'mssql', // Microsoft SQL Server
-  Sqlite = 'sqlite3', // SQLite (for testing)
+  Postgres = "postgres", // PostgresSQL
+  MySql = "mysql", // MySQL
+  MsSql = "mssql", // Microsoft SQL Server
+  Sqlite = "sqlite3", // SQLite (for testing)
 }
 
 export enum SupportedKeystore {
-  AZURE_KEY_VAULT = 'AzureKeyVault',
-  GOOGLE_SECRET_MANAGER = 'GoogleSecretManager',
-  AWS_SECRET_MANAGER = 'AWSSecretManager',
-  MOCK_SECRET_MANAGER = 'MockSecretManager',
+  AZURE_KEY_VAULT = "AzureKeyVault",
+  GOOGLE_SECRET_MANAGER = "GoogleSecretManager",
+  AWS_SECRET_MANAGER = "AWSSecretManager",
+  MOCK_SECRET_MANAGER = "MockSecretManager",
 }
 
 export interface SignerConfig {
-  serviceName: string
+  serviceName: string;
   server: {
-    port: string | number | undefined
-    sslKeyPath?: string
-    sslCertPath?: string
-  }
+    port: string | number | undefined;
+    sslKeyPath?: string;
+    sslCertPath?: string;
+  };
   quota: {
-    unverifiedQueryMax: number
-    additionalVerifiedQueryMax: number
-    queryPerTransaction: number
-    minDollarBalance: BigNumber
-    minEuroBalance: BigNumber
-    minPlanqBalance: BigNumber
-    queryPriceInCUSD: BigNumber
-  }
+    unverifiedQueryMax: number;
+    additionalVerifiedQueryMax: number;
+    queryPerTransaction: number;
+    minDollarBalance: BigNumber;
+    minEuroBalance: BigNumber;
+    minPlanqBalance: BigNumber;
+    queryPriceInAUSD: BigNumber;
+  };
   api: {
     domains: {
-      enabled: boolean
-    }
+      enabled: boolean;
+    };
     phoneNumberPrivacy: {
-      enabled: boolean
-    }
-  }
-  blockchain: BlockchainConfig
+      enabled: boolean;
+    };
+  };
+  blockchain: BlockchainConfig;
   db: {
-    type: SupportedDatabase
-    user: string
-    password: string
-    database: string
-    host: string
-    port?: number
-    ssl: boolean
-    poolMaxSize: number
-    timeout: number
-  }
+    type: SupportedDatabase;
+    user: string;
+    password: string;
+    database: string;
+    host: string;
+    port?: number;
+    ssl: boolean;
+    poolMaxSize: number;
+    timeout: number;
+  };
   keystore: {
-    type: SupportedKeystore
+    type: SupportedKeystore;
     keys: {
       phoneNumberPrivacy: {
-        name: string
-        latest: number
-      }
+        name: string;
+        latest: number;
+      };
       domains: {
-        name: string
-        latest: number
-      }
-    }
+        name: string;
+        latest: number;
+      };
+    };
     azure: {
-      clientID: string
-      clientSecret: string
-      tenant: string
-      vaultName: string
-    }
+      clientID: string;
+      clientSecret: string;
+      tenant: string;
+      vaultName: string;
+    };
     google: {
-      projectId: string
-    }
+      projectId: string;
+    };
     aws: {
-      region: string
-      secretKey: string
-    }
-  }
-  timeout: number
-  test_quota_bypass_percentage: number
-  fullNodeTimeoutMs: number
-  fullNodeRetryCount: number
-  fullNodeRetryDelayMs: number
-  shouldMockAccountService: boolean
-  mockDek: string
-  mockTotalQuota: number
-  shouldMockRequestService: boolean
-  requestPrunningDays: number
-  requestPrunningAtServerStart: boolean
-  requestPrunningJobCronPattern: string
+      region: string;
+      secretKey: string;
+    };
+  };
+  timeout: number;
+  test_quota_bypass_percentage: number;
+  fullNodeTimeoutMs: number;
+  fullNodeRetryCount: number;
+  fullNodeRetryDelayMs: number;
+  shouldMockAccountService: boolean;
+  mockDek: string;
+  mockTotalQuota: number;
+  shouldMockRequestService: boolean;
+  requestPrunningDays: number;
+  requestPrunningAtServerStart: boolean;
+  requestPrunningJobCronPattern: string;
 }
 
-const env = process.env as any
+const env = process.env as any;
 export const config: SignerConfig = {
-  serviceName: env.SERVICE_NAME ?? 'odis-signer',
+  serviceName: env.SERVICE_NAME ?? "odis-signer",
   server: {
     port: Number(env.SERVER_PORT ?? 8080),
     sslKeyPath: env.SERVER_SSL_KEY_PATH,
@@ -119,14 +119,14 @@ export const config: SignerConfig = {
     unverifiedQueryMax: Number(env.UNVERIFIED_QUERY_MAX ?? 10),
     additionalVerifiedQueryMax: Number(env.ADDITIONAL_VERIFIED_QUERY_MAX ?? 30),
     queryPerTransaction: Number(env.QUERY_PER_TRANSACTION ?? 2),
-    // Min balance is .01 pUSD
+    // Min balance is .01 aUSD
     minDollarBalance: new BigNumber(env.MIN_DOLLAR_BALANCE ?? 1e16),
-    // Min balance is .01 pEUR
+    // Min balance is .01 aEUR
     minEuroBalance: new BigNumber(env.MIN_DOLLAR_BALANCE ?? 1e16),
     // Min balance is .005 PLQ
     minPlanqBalance: new BigNumber(env.MIN_DOLLAR_BALANCE ?? 5e15),
-    // Equivalent to 0.001 pUSD/query
-    queryPriceInCUSD: new BigNumber(env.QUERY_PRICE_PER_CUSD ?? 0.001),
+    // Equivalent to 0.001 aUSD/query
+    queryPriceInAUSD: new BigNumber(env.QUERY_PRICE_PER_AUSD ?? 0.001),
   },
   api: {
     domains: {
@@ -187,6 +187,10 @@ export const config: SignerConfig = {
   mockTotalQuota: Number(env.MOCK_TOTAL_QUOTA ?? 10),
   shouldMockRequestService: toBool(env.SHOULD_MOCK_REQUEST_SERVICE, false),
   requestPrunningDays: Number(env.REQUEST_PRUNNING_DAYS ?? 7),
-  requestPrunningAtServerStart: toBool(env.REQUEST_PRUNNING_AT_SERVER_START, false),
-  requestPrunningJobCronPattern: env.REQUEST_PRUNNING_JOB_CRON_PATTERN ?? '0 0 3 * * *',
-}
+  requestPrunningAtServerStart: toBool(
+    env.REQUEST_PRUNNING_AT_SERVER_START,
+    false
+  ),
+  requestPrunningJobCronPattern:
+    env.REQUEST_PRUNNING_JOB_CRON_PATTERN ?? "0 0 3 * * *",
+};

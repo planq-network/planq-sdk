@@ -1,5 +1,5 @@
 oracle:
-  currencyPair: USDCUSD
+  currencyPair: USDAUSD
   aggregation:
     mid:
       maxExchangeVolumeShare: 1
@@ -13,17 +13,17 @@ oracle:
   gasPriceMultiplier: 1.5
   priceSources: "[
       [
-        {exchange: 'KRAKEN', symbol: 'USDCUSD', toInvert: false}
+        {exchange: 'KRAKEN', symbol: 'USDAUSD', toInvert: false}
       ],
       [
-        {exchange: 'BINANCEUS', symbol: 'USDCUSD', toInvert: false}
+        {exchange: 'BINANCEUS', symbol: 'USDAUSD', toInvert: false}
       ],
       [
         {exchange: 'COINBASE', symbol: 'USDTUSDC', toInvert: true},
         {exchange: 'COINBASE', symbol: 'USDTUSD', toInvert: false}
       ],
       [
-        {exchange: 'WHITEBIT', symbol: 'USDCUSDT', toInvert: false},
+        {exchange: 'WHITEBIT', symbol: 'USDAUSDT', toInvert: false},
         {exchange: 'COINBASE', symbol: 'USDTUSD', toInvert: false}
       ]
     ]"

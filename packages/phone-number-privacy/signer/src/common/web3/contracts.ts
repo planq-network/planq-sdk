@@ -1,35 +1,43 @@
-import { retryAsyncWithBackOffAndTimeout } from '@planq-network/base'
-import { ContractKit } from '@planq-network/contractkit'
-import { getDataEncryptionKey } from '@planq-network/phone-number-privacy-common'
-import { BigNumber } from 'bignumber.js'
-import Logger from 'bunyan'
-import { config } from '../../config'
-import { Counters, Histograms, newMeter } from '../metrics'
+import {retryAsyncWithBackOffAndTimeout} from "@planq-network/base";
+import {ContractKit} from "@planq-network/contractkit";
+import {getDataEncryptionKey} from "@planq-network/phone-number-privacy-common";
+import {BigNumber} from "bignumber.js";
+import Logger from "bunyan";
+import {config} from "../../config";
+import {Counters, Histograms, newMeter} from "../metrics";
 
 export async function getOnChainOdisPayments(
   kit: ContractKit,
   logger: Logger,
   account: string
 ): Promise<BigNumber> {
-  const _meter = newMeter(Histograms.fullNodeLatency, 'getOnChainOdisPayments')
+  const _meter = newMeter(Histograms.fullNodeLatency, "getOnChainOdisPayments");
   return _meter(() =>
     retryAsyncWithBackOffAndTimeout(
-      async () => (await kit.contracts.getOdisPayments()).totalPaidCUSD(account),
+      async () =>
+        (await kit.contracts.getOdisPayments()).totalPaidAUSD(account),
       config.fullNodeRetryCount,
       [],
       config.fullNodeRetryDelayMs,
       undefined,
       config.fullNodeTimeoutMs
     ).catch((err: any) => {
-      logger.error({ err, account }, 'failed to get on-chain odis balance for account')
-      Counters.blockchainErrors.inc()
-      throw err
+      logger.error(
+        {err, account},
+        "failed to get on-chain odis balance for account"
+      );
+      Counters.blockchainErrors.inc();
+      throw err;
     })
-  )
+  );
 }
 
-export async function getDEK(kit: ContractKit, logger: Logger, account: string): Promise<string> {
-  const _meter = newMeter(Histograms.fullNodeLatency, 'getDataEncryptionKey')
+export async function getDEK(
+  kit: ContractKit,
+  logger: Logger,
+  account: string
+): Promise<string> {
+  const _meter = newMeter(Histograms.fullNodeLatency, "getDataEncryptionKey");
   return _meter(() =>
     getDataEncryptionKey(
       account,
@@ -39,9 +47,9 @@ export async function getDEK(kit: ContractKit, logger: Logger, account: string):
       config.fullNodeRetryCount,
       config.fullNodeRetryDelayMs
     ).catch((err) => {
-      logger.error({ err, account }, 'failed to get on-chain DEK for account')
-      Counters.blockchainErrors.inc()
-      throw err
+      logger.error({err, account}, "failed to get on-chain DEK for account");
+      Counters.blockchainErrors.inc();
+      throw err;
     })
-  )
+  );
 }

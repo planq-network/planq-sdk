@@ -62,7 +62,7 @@ Name | Type |
 
 *Defined in [packages/sdk/base/src/currencies.ts:35](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/base/src/currencies.ts#L35)*
 
-* **code**: *string* = "pUSD"
+* **code**: *string* = "aUSD"
 
 * **displayDecimals**: *number* = 2
 
@@ -72,7 +72,7 @@ Name | Type |
 
 *Defined in [packages/sdk/base/src/currencies.ts:40](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/base/src/currencies.ts#L40)*
 
-* **code**: *string* = "pEUR"
+* **code**: *string* = "aEUR"
 
 * **displayDecimals**: *number* = 2
 

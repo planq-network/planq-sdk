@@ -33,7 +33,7 @@ OPTIONS
   -n, --node=node
       URL of the node to run commands against (defaults to 'http://localhost:8545')
 
-  --gasCurrency=(auto|Auto|PLQ|planq|pUSD|pusd|pEUR|peur|pREAL|preal)
+  --gasCurrency=(auto|Auto|PLQ|planq|aUSD|ausd|aEUR|aeur|aREAL|areal)
       Use a specific gas currency for transaction fees (defaults to 'auto' which uses
       whatever feeCurrency is available)
 
@@ -45,7 +45,7 @@ EXAMPLES
 
   set --node <geth-location>/geth.ipc
 
-  set --gasCurrency pUSD
+  set --gasCurrency aUSD
 
   set --gasCurrency PLQ
 ```

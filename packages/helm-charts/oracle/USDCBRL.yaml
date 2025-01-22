@@ -16,7 +16,7 @@ oracle:
       { exchange: 'MERCADO', symbol: 'USDCBRL', toInvert: false }
     ],
     [
-      {exchange: 'KRAKEN', symbol: 'USDCUSD', toInvert: false},
+      {exchange: 'KRAKEN', symbol: 'USDAUSD', toInvert: false},
       {exchange: 'BITSO', symbol: 'USDBRL', toInvert: false }
     ],
     [
@@ -24,7 +24,7 @@ oracle:
       {exchange: 'BINANCE', symbol: 'USDTBRL', toInvert: false }
     ],
     [
-      {exchange: 'WHITEBIT', symbol: 'USDCUSDT', toInvert: false},
+      {exchange: 'WHITEBIT', symbol: 'USDAUSDT', toInvert: false},
       {exchange: 'BINANCE', symbol: 'USDTBRL', toInvert: false }
     ],
     [
@@ -36,7 +36,7 @@ oracle:
       {exchange: 'BITGET', symbol: 'USDTBRL', toInvert: false }
     ],
     [
-      {exchange: 'WHITEBIT', symbol: 'USDCUSDT', toInvert: false},
+      {exchange: 'WHITEBIT', symbol: 'USDAUSDT', toInvert: false},
       {exchange: 'BITGET', symbol: 'USDTBRL', toInvert: false }
     ],
    ]"

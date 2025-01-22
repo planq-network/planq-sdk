@@ -443,7 +443,7 @@ Name | Type | Default | Description |
 ------ | ------ | ------ | ------ |
 `value` | BigNumber.Value | - | The amount of US Dollars equal to one PLQ. |
 `oracleAddress` | Address | - | The address to report as |
-`token` | [StableToken](../enums/_base_.planqcontract.md#stabletoken) | StableToken.pUSD | The token to report for  |
+`token` | [StableToken](../enums/_base_.planqcontract.md#stabletoken) | StableToken.aUSD | The token to report for  |
 
 **Returns:** *Promise‹PlanqTransactionObject‹void››*
 

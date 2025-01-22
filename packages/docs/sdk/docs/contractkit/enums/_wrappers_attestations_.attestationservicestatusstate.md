@@ -6,10 +6,10 @@
 
 ### Enumeration members
 
-* [InvalidAttestationServiceURL](_wrappers_attestations_.attestationservicestatusstate.md#invalidattestationservipeurl)
+* [InvalidAttestationServiceURL](_wrappers_attestations_.attestationservicestatusstate.md#invalidattestationserviceurl)
 * [InvalidMetadata](_wrappers_attestations_.attestationservicestatusstate.md#invalidmetadata)
 * [MetadataTimeout](_wrappers_attestations_.attestationservicestatusstate.md#metadatatimeout)
-* [NoAttestationServiceURL](_wrappers_attestations_.attestationservicestatusstate.md#noattestationservipeurl)
+* [NoAttestationServiceURL](_wrappers_attestations_.attestationservicestatusstate.md#noattestationserviceurl)
 * [NoAttestationSigner](_wrappers_attestations_.attestationservicestatusstate.md#noattestationsigner)
 * [NoMetadataURL](_wrappers_attestations_.attestationservicestatusstate.md#nometadataurl)
 * [Unhealthy](_wrappers_attestations_.attestationservicestatusstate.md#unhealthy)

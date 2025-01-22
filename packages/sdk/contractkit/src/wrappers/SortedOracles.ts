@@ -1,12 +1,21 @@
-import { eqAddress, NULL_ADDRESS } from '@planq-network/base/lib/address'
-import { Address, PlanqTransactionObject, Connection, toTransactionObject } from '@planq-network/connect'
-import { isValidAddress } from '@planq-network/utils/lib/address'
-import { fromFixed, toFixed } from '@planq-network/utils/lib/fixidity'
-import BigNumber from 'bignumber.js'
-import { AddressRegistry } from '../address-registry'
-import { PlanqContract, StableTokenContract } from '../base'
-import { isStableTokenContract, StableToken, stableTokenInfos } from '../planq-tokens'
-import { SortedOracles } from '../generated/SortedOracles'
+import {eqAddress, NULL_ADDRESS} from "@planq-network/base/lib/address";
+import {
+  Address,
+  PlanqTransactionObject,
+  Connection,
+  toTransactionObject,
+} from "@planq-network/connect";
+import {isValidAddress} from "@planq-network/utils/lib/address";
+import {fromFixed, toFixed} from "@planq-network/utils/lib/fixidity";
+import BigNumber from "bignumber.js";
+import {AddressRegistry} from "../address-registry";
+import {PlanqContract, StableTokenContract} from "../base";
+import {
+  isStableTokenContract,
+  StableToken,
+  stableTokenInfos,
+} from "../planq-tokens";
+import {SortedOracles} from "../generated/SortedOracles";
 import {
   BaseWrapper,
   proxyCall,
@@ -14,7 +23,7 @@ import {
   valueToBigNumber,
   valueToFrac,
   valueToInt,
-} from './BaseWrapper'
+} from "./BaseWrapper";
 
 export enum MedianRelation {
   Undefined,
@@ -24,32 +33,32 @@ export enum MedianRelation {
 }
 
 export interface SortedOraclesConfig {
-  reportExpirySeconds: BigNumber
+  reportExpirySeconds: BigNumber;
 }
 
 export interface OracleRate {
-  address: Address
-  rate: BigNumber
-  medianRelation: MedianRelation
+  address: Address;
+  rate: BigNumber;
+  medianRelation: MedianRelation;
 }
 
 export interface OracleTimestamp {
-  address: Address
-  timestamp: BigNumber
-  medianRelation: MedianRelation
+  address: Address;
+  timestamp: BigNumber;
+  medianRelation: MedianRelation;
 }
 
 export interface OracleReport {
-  address: Address
-  rate: BigNumber
-  timestamp: BigNumber
+  address: Address;
+  rate: BigNumber;
+  timestamp: BigNumber;
 }
 
 export interface MedianRate {
-  rate: BigNumber
+  rate: BigNumber;
 }
 
-export type ReportTarget = StableTokenContract | Address
+export type ReportTarget = StableTokenContract | Address;
 
 /**
  * Currency price oracle contract.
@@ -60,7 +69,7 @@ export class SortedOraclesWrapper extends BaseWrapper<SortedOracles> {
     protected readonly contract: SortedOracles,
     protected readonly registry: AddressRegistry
   ) {
-    super(connection, contract)
+    super(connection, contract);
   }
   /**
    * Gets the number of rates that have been reported for the given target
@@ -68,9 +77,9 @@ export class SortedOraclesWrapper extends BaseWrapper<SortedOracles> {
    * @return The number of reported oracle rates for `token`.
    */
   async numRates(target: ReportTarget): Promise<number> {
-    const identifier = await this.toCurrencyPairIdentifier(target)
-    const response = await this.contract.methods.numRates(identifier).call()
-    return valueToInt(response)
+    const identifier = await this.toCurrencyPairIdentifier(target);
+    const response = await this.contract.methods.numRates(identifier).call();
+    return valueToInt(response);
   }
 
   /**
@@ -80,11 +89,11 @@ export class SortedOraclesWrapper extends BaseWrapper<SortedOracles> {
    *   amount of that token / equivalent amount in PLQ
    */
   async medianRate(target: ReportTarget): Promise<MedianRate> {
-    const identifier = await this.toCurrencyPairIdentifier(target)
-    const response = await this.contract.methods.medianRate(identifier).call()
+    const identifier = await this.toCurrencyPairIdentifier(target);
+    const response = await this.contract.methods.medianRate(identifier).call();
     return {
       rate: valueToFrac(response[0], response[1]),
-    }
+    };
   }
 
   /**
@@ -94,8 +103,8 @@ export class SortedOraclesWrapper extends BaseWrapper<SortedOracles> {
    * @returns boolean describing whether this account is an oracle
    */
   async isOracle(target: ReportTarget, oracle: Address): Promise<boolean> {
-    const identifier = await this.toCurrencyPairIdentifier(target)
-    return this.contract.methods.isOracle(identifier, oracle).call()
+    const identifier = await this.toCurrencyPairIdentifier(target);
+    return this.contract.methods.isOracle(identifier, oracle).call();
   }
 
   /**
@@ -104,8 +113,8 @@ export class SortedOraclesWrapper extends BaseWrapper<SortedOracles> {
    * @returns The list of whitelisted oracles for a given token.
    */
   async getOracles(target: ReportTarget): Promise<Address[]> {
-    const identifier = await this.toCurrencyPairIdentifier(target)
-    return this.contract.methods.getOracles(identifier).call()
+    const identifier = await this.toCurrencyPairIdentifier(target);
+    return this.contract.methods.getOracles(identifier).call();
   }
 
   /**
@@ -116,7 +125,7 @@ export class SortedOraclesWrapper extends BaseWrapper<SortedOracles> {
     this.contract.methods.reportExpirySeconds,
     undefined,
     valueToBigNumber
-  )
+  );
 
   /**
    * Returns the expiry for the target if exists, if not the default.
@@ -124,19 +133,25 @@ export class SortedOraclesWrapper extends BaseWrapper<SortedOracles> {
    * @return The report expiry in seconds.
    */
   async getTokenReportExpirySeconds(target: ReportTarget): Promise<BigNumber> {
-    const identifier = await this.toCurrencyPairIdentifier(target)
-    const response = await this.contract.methods.getTokenReportExpirySeconds(identifier).call()
-    return valueToBigNumber(response)
+    const identifier = await this.toCurrencyPairIdentifier(target);
+    const response = await this.contract.methods
+      .getTokenReportExpirySeconds(identifier)
+      .call();
+    return valueToBigNumber(response);
   }
 
   /**
    * Checks if the oldest report for a given target is expired
    * @param target The ReportTarget, either PlanqToken or currency pair
    */
-  async isOldestReportExpired(target: ReportTarget): Promise<[boolean, Address]> {
-    const identifier = await this.toCurrencyPairIdentifier(target)
-    const response = await this.contract.methods.isOldestReportExpired(identifier).call()
-    return response as [boolean, Address]
+  async isOldestReportExpired(
+    target: ReportTarget
+  ): Promise<[boolean, Address]> {
+    const identifier = await this.toCurrencyPairIdentifier(target);
+    const response = await this.contract.methods
+      .isOldestReportExpired(identifier)
+      .call();
+    return response as [boolean, Address];
   }
 
   /**
@@ -150,14 +165,14 @@ export class SortedOraclesWrapper extends BaseWrapper<SortedOracles> {
     target: ReportTarget,
     numReports?: number
   ): Promise<PlanqTransactionObject<void>> {
-    const identifier = await this.toCurrencyPairIdentifier(target)
+    const identifier = await this.toCurrencyPairIdentifier(target);
     if (!numReports) {
-      numReports = (await this.getReports(target)).length - 1
+      numReports = (await this.getReports(target)).length - 1;
     }
     return toTransactionObject(
       this.connection,
       this.contract.methods.removeExpiredReports(identifier, numReports)
-    )
+    );
   }
 
   /**
@@ -170,20 +185,25 @@ export class SortedOraclesWrapper extends BaseWrapper<SortedOracles> {
     value: BigNumber.Value,
     oracleAddress: Address
   ): Promise<PlanqTransactionObject<void>> {
-    const identifier = await this.toCurrencyPairIdentifier(target)
-    const fixedValue = toFixed(valueToBigNumber(value))
+    const identifier = await this.toCurrencyPairIdentifier(target);
+    const fixedValue = toFixed(valueToBigNumber(value));
 
-    const { lesserKey, greaterKey } = await this.findLesserAndGreaterKeys(
+    const {lesserKey, greaterKey} = await this.findLesserAndGreaterKeys(
       target,
       valueToBigNumber(value),
       oracleAddress
-    )
+    );
 
     return toTransactionObject(
       this.connection,
-      this.contract.methods.report(identifier, fixedValue.toFixed(), lesserKey, greaterKey),
-      { from: oracleAddress }
-    )
+      this.contract.methods.report(
+        identifier,
+        fixedValue.toFixed(),
+        lesserKey,
+        greaterKey
+      ),
+      {from: oracleAddress}
+    );
   }
 
   /**
@@ -195,9 +215,9 @@ export class SortedOraclesWrapper extends BaseWrapper<SortedOracles> {
   async reportStableToken(
     value: BigNumber.Value,
     oracleAddress: Address,
-    token: StableToken = StableToken.pUSD
+    token: StableToken = StableToken.aUSD
   ): Promise<PlanqTransactionObject<void>> {
-    return this.report(stableTokenInfos[token].contract, value, oracleAddress)
+    return this.report(stableTokenInfos[token].contract, value, oracleAddress);
   }
 
   /**
@@ -206,7 +226,7 @@ export class SortedOraclesWrapper extends BaseWrapper<SortedOracles> {
   async getConfig(): Promise<SortedOraclesConfig> {
     return {
       reportExpirySeconds: await this.reportExpirySeconds(),
-    }
+    };
   }
 
   /**
@@ -214,17 +234,18 @@ export class SortedOraclesWrapper extends BaseWrapper<SortedOracles> {
    * @return SortedOraclesConfig object
    */
   async getHumanReadableConfig() {
-    const config = await this.getConfig()
+    const config = await this.getConfig();
     return {
       reportExpiry: secondsToDurationString(config.reportExpirySeconds),
-    }
+    };
   }
 
   /**
    * Helper function to get the rates for StableToken, by passing the address
    * of StableToken to `getRates`.
    */
-  getStableTokenRates = async (): Promise<OracleRate[]> => this.getRates(PlanqContract.StableToken)
+  getStableTokenRates = async (): Promise<OracleRate[]> =>
+    this.getRates(PlanqContract.StableToken);
 
   /**
    * Gets all elements from the doubly linked list.
@@ -232,18 +253,18 @@ export class SortedOraclesWrapper extends BaseWrapper<SortedOracles> {
    * @return An unpacked list of elements from largest to smallest.
    */
   async getRates(target: ReportTarget): Promise<OracleRate[]> {
-    const identifier = await this.toCurrencyPairIdentifier(target)
-    const response = await this.contract.methods.getRates(identifier).call()
-    const rates: OracleRate[] = []
+    const identifier = await this.toCurrencyPairIdentifier(target);
+    const response = await this.contract.methods.getRates(identifier).call();
+    const rates: OracleRate[] = [];
     for (let i = 0; i < response[0].length; i++) {
-      const medRelIndex = parseInt(response[2][i], 10)
+      const medRelIndex = parseInt(response[2][i], 10);
       rates.push({
         address: response[0][i],
         rate: fromFixed(valueToBigNumber(response[1][i])),
         medianRelation: medRelIndex,
-      })
+      });
     }
-    return rates
+    return rates;
   }
 
   /**
@@ -252,66 +273,78 @@ export class SortedOraclesWrapper extends BaseWrapper<SortedOracles> {
    * @return An unpacked list of elements from largest to smallest.
    */
   async getTimestamps(target: ReportTarget): Promise<OracleTimestamp[]> {
-    const identifier = await this.toCurrencyPairIdentifier(target)
-    const response = await this.contract.methods.getTimestamps(identifier).call()
-    const timestamps: OracleTimestamp[] = []
+    const identifier = await this.toCurrencyPairIdentifier(target);
+    const response = await this.contract.methods
+      .getTimestamps(identifier)
+      .call();
+    const timestamps: OracleTimestamp[] = [];
     for (let i = 0; i < response[0].length; i++) {
-      const medRelIndex = parseInt(response[2][i], 10)
+      const medRelIndex = parseInt(response[2][i], 10);
       timestamps.push({
         address: response[0][i],
         timestamp: valueToBigNumber(response[1][i]),
         medianRelation: medRelIndex,
-      })
+      });
     }
-    return timestamps
+    return timestamps;
   }
 
   async getReports(target: ReportTarget): Promise<OracleReport[]> {
     const [rates, timestamps] = await Promise.all([
       this.getRates(target),
       this.getTimestamps(target),
-    ])
-    const reports: OracleReport[] = []
+    ]);
+    const reports: OracleReport[] = [];
     for (const rate of rates) {
-      const match = timestamps.filter((t: OracleTimestamp) => eqAddress(t.address, rate.address))
-      reports.push({ address: rate.address, rate: rate.rate, timestamp: match[0].timestamp })
+      const match = timestamps.filter((t: OracleTimestamp) =>
+        eqAddress(t.address, rate.address)
+      );
+      reports.push({
+        address: rate.address,
+        rate: rate.rate,
+        timestamp: match[0].timestamp,
+      });
     }
-    return reports
+    return reports;
   }
 
   private async findLesserAndGreaterKeys(
     target: ReportTarget,
     value: BigNumber.Value,
     oracleAddress: Address
-  ): Promise<{ lesserKey: Address; greaterKey: Address }> {
-    const currentRates: OracleRate[] = await this.getRates(target)
-    let greaterKey = NULL_ADDRESS
-    let lesserKey = NULL_ADDRESS
+  ): Promise<{lesserKey: Address; greaterKey: Address}> {
+    const currentRates: OracleRate[] = await this.getRates(target);
+    let greaterKey = NULL_ADDRESS;
+    let lesserKey = NULL_ADDRESS;
 
     // This leverages the fact that the currentRates are already sorted from
     // greatest to lowest value
     for (const rate of currentRates) {
       if (!eqAddress(rate.address, oracleAddress)) {
         if (rate.rate.isLessThanOrEqualTo(value)) {
-          lesserKey = rate.address
-          break
+          lesserKey = rate.address;
+          break;
         }
-        greaterKey = rate.address
+        greaterKey = rate.address;
       }
     }
 
-    return { lesserKey, greaterKey }
+    return {lesserKey, greaterKey};
   }
 
-  private async toCurrencyPairIdentifier(target: ReportTarget): Promise<Address> {
+  private async toCurrencyPairIdentifier(
+    target: ReportTarget
+  ): Promise<Address> {
     if (isStableTokenContract(target as PlanqContract)) {
-      return this.registry.addressFor(target as StableTokenContract)
+      return this.registry.addressFor(target as StableTokenContract);
     } else if (isValidAddress(target)) {
-      return target
+      return target;
     } else {
-      throw new Error(`${target} is not StableTokenContract deployed or a valid Address`)
+      throw new Error(
+        `${target} is not StableTokenContract deployed or a valid Address`
+      );
     }
   }
 }
 
-export type SortedOraclesWrapperType = SortedOraclesWrapper
+export type SortedOraclesWrapperType = SortedOraclesWrapper;
