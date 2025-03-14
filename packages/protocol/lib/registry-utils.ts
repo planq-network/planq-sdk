@@ -6,51 +6,52 @@
  * an environment.
  */
 
-import { ASTONIC_PACKAGE } from "../contractPackages"
+import {ASTONIC_PACKAGE} from "../contractPackages";
 
-export const planqRegistryAddress = '0x000000000000000000000000000000000000ce10'
+export const planqRegistryAddress =
+  "0x9DabFe01de024C681320eb80FBc64EccEaa58ca2";
 
 export enum PlanqContractName {
-  Accounts = 'Accounts',
-  Attestations = 'Attestations',
-  BlockchainParameters = 'BlockchainParameters',
-  DoubleSigningSlasher = 'DoubleSigningSlasher',
-  DowntimeSlasher = 'DowntimeSlasher',
-  Election = 'Election',
-  EpochRewards = 'EpochRewards',
-  Escrow = 'Escrow',
-  Exchange = 'Exchange',
-  ExchangeEUR = 'ExchangeEUR',
-  ExchangeBRL = 'ExchangeBRL',
-  FederatedAttestations = 'FederatedAttestations',
-  FeeCurrencyWhitelist = 'FeeCurrencyWhitelist',
-  Freezer = 'Freezer',
-  GasPriceMinimum = 'GasPriceMinimum',
-  PlanqToken = 'PlanqToken',
-  Governance = 'Governance',
-  GovernanceSlasher = 'GovernanceSlasher',
-  GovernanceApproverMultiSig = 'GovernanceApproverMultiSig',
-  GrandaMento = 'GrandaMento',
-  LockedPlanq = 'LockedPlanq',
-  OdisPayments = 'OdisPayments',
-  Random = 'Random',
-  Reserve = 'Reserve',
-  ReserveSpenderMultiSig = 'ReserveSpenderMultiSig',
-  SortedOracles = 'SortedOracles',
-  StableToken = 'StableToken',
-  StableTokenEUR = 'StableTokenEUR',
-  StableTokenBRL = 'StableTokenBRL',
-  Validators = 'Validators',
+  Accounts = "Accounts",
+  Attestations = "Attestations",
+  BlockchainParameters = "BlockchainParameters",
+  DoubleSigningSlasher = "DoubleSigningSlasher",
+  DowntimeSlasher = "DowntimeSlasher",
+  Election = "Election",
+  EpochRewards = "EpochRewards",
+  Escrow = "Escrow",
+  Exchange = "Exchange",
+  ExchangeEUR = "ExchangeEUR",
+  ExchangeBRL = "ExchangeBRL",
+  FederatedAttestations = "FederatedAttestations",
+  FeeCurrencyWhitelist = "FeeCurrencyWhitelist",
+  Freezer = "Freezer",
+  GasPriceMinimum = "GasPriceMinimum",
+  PlanqToken = "PlanqToken",
+  Governance = "Governance",
+  GovernanceSlasher = "GovernanceSlasher",
+  GovernanceApproverMultiSig = "GovernanceApproverMultiSig",
+  GrandaMento = "GrandaMento",
+  LockedPlanq = "LockedPlanq",
+  OdisPayments = "OdisPayments",
+  Random = "Random",
+  Reserve = "Reserve",
+  ReserveSpenderMultiSig = "ReserveSpenderMultiSig",
+  SortedOracles = "SortedOracles",
+  StableToken = "StableToken",
+  StableTokenEUR = "StableTokenEUR",
+  StableTokenBRL = "StableTokenBRL",
+  Validators = "Validators",
 }
 
 export const usesRegistry = [
   PlanqContractName.Reserve,
   PlanqContractName.StableToken,
-]
+];
 
-export const hasEntryInRegistry= [
+export const hasEntryInRegistry = [
   {
-    contracts:[
+    contracts: [
       PlanqContractName.Accounts,
       PlanqContractName.Attestations,
       PlanqContractName.BlockchainParameters,
@@ -67,16 +68,16 @@ export const hasEntryInRegistry= [
       PlanqContractName.OdisPayments,
       PlanqContractName.Random,
       PlanqContractName.SortedOracles,
-    ]
+    ],
   },
   {
     ...ASTONIC_PACKAGE,
     // not all Mentro contracts are supposed to be in the Registry
-    contracts:[
+    contracts: [
       PlanqContractName.Exchange,
       PlanqContractName.GrandaMento,
       PlanqContractName.Reserve,
       PlanqContractName.StableToken,
     ],
-  }
-]
+  },
+];

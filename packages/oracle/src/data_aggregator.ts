@@ -2,12 +2,12 @@ import * as aggregators from './aggregator_functions'
 
 import {
   AggregationMethod,
+  allSettled,
   CurrencyPairBaseQuote,
   Exchange,
   OracleCurrencyPair,
   PromiseStatus,
   SettledPromise,
-  allSettled,
 } from './utils'
 import { ExchangeAdapter, ExchangeAdapterConfig } from './exchange_adapters/base'
 import {
@@ -43,6 +43,8 @@ import { WhitebitAdapter } from './exchange_adapters/whitebit'
 import { XigniteAdapter } from './exchange_adapters/xignite'
 import { strict as assert } from 'assert'
 import { BingxAdapter } from './exchange_adapters/bingx'
+import { CoingeckoOsmosisAdapter } from './exchange_adapters/coingecko_osmosis'
+import { CoingeckoGeneralAdapter } from './exchange_adapters/coingecko_general'
 
 function adapterFromExchangeName(name: Exchange, config: ExchangeAdapterConfig): ExchangeAdapter {
   switch (name) {
@@ -86,6 +88,10 @@ function adapterFromExchangeName(name: Exchange, config: ExchangeAdapterConfig):
       return new CurrencyApiAdapter(config)
     case Exchange.XIGNITE:
       return new XigniteAdapter(config)
+    case Exchange.COINGECKOOSMOSIS:
+      return new CoingeckoOsmosisAdapter(config)
+    case Exchange.COINGECKOGENERAL:
+      return new CoingeckoGeneralAdapter(config)
   }
 }
 

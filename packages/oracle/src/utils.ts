@@ -6,6 +6,7 @@ import Web3 from 'web3'
 import { min } from 'mathjs'
 import { secp256k1 } from 'ethereum-cryptography/secp256k1'
 import { keccak256 } from 'ethers/lib/utils'
+import { STABLE_TOKEN_ADDRESS_MAPPING } from './constants'
 
 export const MS_PER_SECOND = 1000
 export const MS_PER_MINUTE = 60 * MS_PER_SECOND
@@ -44,6 +45,8 @@ export enum Exchange {
   ALPHAVANTAGE = 'ALPHAVANTAGE',
   CURRENCYAPI = 'CURRENCYAPI',
   XIGNITE = 'XIGNITE',
+  COINGECKOOSMOSIS = 'COINGECKOOSMOSIS',
+  COINGECKOGENERAL = 'COINGECKOGENERAL',
 }
 
 export enum ExternalCurrency {
