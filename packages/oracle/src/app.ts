@@ -13,7 +13,6 @@ import {
   requireVariables,
   ensureLeading0x,
   isValidPrivateKey,
-  privateKeyToAddress,
 } from './utils'
 
 import Logger from 'bunyan'
@@ -186,7 +185,7 @@ export class OracleApplication {
         if (!this.config.devMode) {
           const privateKey = this.getPrivateKeyFromPath(privateKeyPath!)
           kit.addAccount(privateKey)
-          this.config.address = privateKeyToAddress(privateKey)
+          this.config.address = kit.getWallet()!.getAccounts()[0]
         } else {
           this.config.address = this.config.mockAccount
           this.logger.info(`DEVMODE enabled, used mock address ${this.config.mockAccount}`)

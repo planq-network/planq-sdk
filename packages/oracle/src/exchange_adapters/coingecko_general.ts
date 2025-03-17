@@ -9,7 +9,7 @@ export class CoingeckoGeneralAdapter extends BaseExchangeAdapter implements Exch
   readonly _exchangeName: Exchange = Exchange.COINGECKOGENERAL
   // E1 - validity not after: 15/09/2025, 13:00:00 GMT-3
   readonly _certFingerprint256 =
-    '0E:58:19:FB:A8:CF:BE:1A:1F:3A:16:6D:BD:0A:3B:B5:BD:70:DC:71:72:DF:FD:45:C8:FC:93:F2:A8:E8:85:25'
+    '89:23:D3:75:A3:D8:77:EC:BB:21:8F:91:63:EB:01:95:4F:0D:E6:33:09:E2:32:6F:AF:CB:0A:04:9B:E6:47:26'
 
   private static readonly tokenSymbolMap = new Map<Currency, string>([
     ...CoingeckoGeneralAdapter.standardTokenSymbolMap,
