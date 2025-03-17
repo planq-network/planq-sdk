@@ -115,9 +115,6 @@ export function rlpEncodedTx(tx: PlanqTx): RLPEncodedTx {
     transaction.to,
     transaction.value,
     transaction.data,
-    stringNumberToHex(transaction.chainId),
-    "0x",
-    "0x",
   ]);
 
   return {transaction, rlpEncode};
