@@ -464,7 +464,7 @@ export abstract class BaseReporter {
    * Returns gasPriceMinimum for PLANQ as BigNumber
    */
   private async getGasPriceMin() {
-    const gasPriceMinWrapper = await this.config.kit.gasPrice
+    const gasPriceMinWrapper = await this.config.kit.web3.eth.getGasPrice()
     return new BigNumber(gasPriceMinWrapper)
   }
 

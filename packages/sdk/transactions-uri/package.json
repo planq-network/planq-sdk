@@ -30,7 +30,7 @@
     "@planq-network/connect": "4.1.0",
     "bn.js": "4.11.9",
     "qrcode": "1.4.4",
-    "web3-eth-abi": "1.10.0"
+    "web3-eth-abi": "1.10.4"
   },
   "devDependencies": {
     "@planq-network/dev-utils": "0.0.1-dev",
