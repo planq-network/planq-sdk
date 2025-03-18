@@ -6,7 +6,7 @@ import { baseLogger, defaultDataAggregatorConfig } from '../../src/default_confi
 
 import BigNumber from 'bignumber.js'
 import { DataAggregator } from '../../src/data_aggregator'
-import { GasPriceMinimumWrapper } from '@celo/contractkit/lib/wrappers/GasPriceMinimum'
+import { GasPriceMinimumWrapper } from '@planq-network/contractkit/lib/wrappers/GasPriceMinimum'
 import { ethers } from 'ethers'
 
 const { ReportStrategy } = utils

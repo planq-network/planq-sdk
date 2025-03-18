@@ -25,7 +25,7 @@ describe('kraken adapter', () => {
   const validMockTickerJson = {
     error: [],
     result: {
-      USDAUSD: {
+      USDCUSD: {
         a: ['1.00000000', '3881916', '3881916.000'],
         b: ['0.99990000', '1158130', '1158130.000'],
         c: ['0.99990000', '20839.31050808'],
@@ -42,7 +42,7 @@ describe('kraken adapter', () => {
   const inValidMockMultipleTickerJson = {
     error: [],
     result: {
-      USDAUSD: {
+      USDCUSD: {
         a: [],
         b: [],
         c: [],
@@ -70,7 +70,7 @@ describe('kraken adapter', () => {
   const inValidMockTickerJson = {
     error: [],
     result: {
-      USDAUSD: {
+      USDCUSD: {
         a: [],
         b: [],
         c: [],
