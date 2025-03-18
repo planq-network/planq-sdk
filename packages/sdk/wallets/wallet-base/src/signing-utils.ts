@@ -131,7 +131,7 @@ export async function encodeTransaction(
   const v = sanitizedSignature.v;
   const r = sanitizedSignature.r;
   const s = sanitizedSignature.s;
-  const rawTx = RLP.decode(rlpEncoded.rlpEncode).slice(0, 9).concat([v, r, s]);
+  const rawTx = RLP.decode(rlpEncoded.rlpEncode).slice(0, 6).concat([v, r, s]);
 
   const rawTransaction = RLP.encode(rawTx);
   const hash = getHashFromEncoded(rawTransaction);
@@ -160,15 +160,15 @@ export function extractSignature(rawTx: string): {
   s: Buffer;
 } {
   const rawValues = RLP.decode(rawTx);
-  let r = rawValues[10];
-  let s = rawValues[11];
+  let r = rawValues[7];
+  let s = rawValues[8];
   // Account.recover cannot handle canonicalized signatures
   // A canonicalized signature may have the first byte removed if its value is 0
   r = ensureLeading0x(trimLeading0x(r).padStart(64, "0"));
   s = ensureLeading0x(trimLeading0x(s).padStart(64, "0"));
 
   return {
-    v: rawValues[9],
+    v: rawValues[6],
     r,
     s,
   };
@@ -179,7 +179,7 @@ export function extractSignature(rawTx: string): {
 export function recoverTransaction(rawTx: string): [PlanqTx, string] {
   const rawValues = RLP.decode(rawTx);
   debug("signing-utils@recoverTransaction: values are %s", rawValues);
-  const recovery = Bytes.toNumber(rawValues[9]);
+  const recovery = Bytes.toNumber(rawValues[6]);
   // tslint:disable-next-line:no-bitwise
   const chainId = Bytes.fromNumber((recovery - 35) >> 1);
   const planqTx: PlanqTx = {
@@ -192,15 +192,15 @@ export function recoverTransaction(rawTx: string): [PlanqTx, string] {
     data: rawValues[5],
     chainId,
   };
-  let r = rawValues[6];
-  let s = rawValues[7];
+  let r = rawValues[7];
+  let s = rawValues[8];
   // Account.recover cannot handle canonicalized signatures
   // A canonicalized signature may have the first byte removed if its value is 0
   r = ensureLeading0x(trimLeading0x(r).padStart(64, "0"));
   s = ensureLeading0x(trimLeading0x(s).padStart(64, "0"));
-  const signature = Account.encodeSignature([rawValues[8], r, s]);
+  const signature = Account.encodeSignature([rawValues[6], r, s]);
   const extraData = recovery < 35 ? [] : [chainId, "0x", "0x"];
-  const signingData = rawValues.slice(0, 9).concat(extraData);
+  const signingData = rawValues.slice(0, 6).concat(extraData);
   const signingDataHex = RLP.encode(signingData);
   const signer = Account.recover(getHashFromEncoded(signingDataHex), signature);
   return [planqTx, signer];
