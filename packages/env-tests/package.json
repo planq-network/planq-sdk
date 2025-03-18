@@ -25,10 +25,10 @@
     "build": "tsc -b .",
     "lint": "tslint -c tslint.json --project tsconfig.json",
     "test": "jest --runInBand",
-    "baklava-test": "PLQ_ENV=baklava PLQ_PROVIDER=https://evm-atlas.planq.network jest --runInBand",
-    "alfajores-test": "PLQ_ENV=alfajores PLQ_PROVIDER=https://evm-atlas.planq.network jest --runInBand",
-    "mainnet-test": "PLQ_ENV=rc1 PLQ_PROVIDER=https://forno.celo.org jest --runInBand",
-    "staging-test": "PLQ_ENV=staging PLQ_PROVIDER=https://staging-forno.celo-networks-dev.org jest --runInBand"
+    "baklava-test": "PLQ_ENV=baklava PLQ_PROVIDER=https://evm-rpc-atlas.planq.network jest --runInBand",
+    "alfajores-test": "PLQ_ENV=alfajores PLQ_PROVIDER=https://evm-rpc-atlas.planq.network jest --runInBand",
+    "mainnet-test": "PLQ_ENV=rc1 PLQ_PROVIDER=https://evm-rpc.planq.network jest --runInBand",
+    "staging-test": "PLQ_ENV=staging PLQ_PROVIDER=https://evm-rpc.planq.network jest --runInBand"
   },
   "devDependencies": {
     "typescript": "4.9.5"
