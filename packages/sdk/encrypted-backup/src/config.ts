@@ -1,16 +1,19 @@
 import {
   CircuitBreakerServiceContext,
-  VALORA_ALFAJORES_CIRCUIT_BREAKER_ENVIRONMENT,
+  VALORA_ATLAS_CIRCUIT_BREAKER_ENVIRONMENT,
   VALORA_MAINNET_CIRCUIT_BREAKER_ENVIRONMENT,
-} from '@planq-network/identity/lib/odis/circuit-breaker'
+} from "@planq-network/identity/lib/odis/circuit-breaker";
 import {
-  ODIS_ALFAJORES_CONTEXT_DOMAINS,
+  ODIS_ATLAS_CONTEXT_DOMAINS,
   ODIS_MAINNET_CONTEXT_DOMAINS,
   ServiceContext as OdisServiceContext,
-} from '@planq-network/identity/lib/odis/query'
-import { SequentialDelayStage } from '@planq-network/phone-number-privacy-common'
-import { defined, noNumber } from '@planq-network/utils/lib/sign-typed-data-utils'
-import { ScryptOptions } from './utils'
+} from "@planq-network/identity/lib/odis/query";
+import {SequentialDelayStage} from "@planq-network/phone-number-privacy-common";
+import {
+  defined,
+  noNumber,
+} from "@planq-network/utils/lib/sign-typed-data-utils";
+import {ScryptOptions} from "./utils";
 
 export interface HardeningConfig {
   /**
@@ -22,15 +25,15 @@ export interface HardeningConfig {
    * generating backups on low-power devices (e.g. budget smart phones) and encrypting with
    * low-entropy secrets (e.g. 6-digit PINs) local hardening cannot offer significant protection.
    */
-  computational?: ComputationalHardeningConfig
+  computational?: ComputationalHardeningConfig;
 
   /** If provided, ODIS will be used with the given configuration to harden the backup key */
-  odis?: OdisHardeningConfig
+  odis?: OdisHardeningConfig;
 
   /**
    * If provided, a circuit breaker will be used with the given configuration to protect the backup key
    */
-  circuitBreaker?: CircuitBreakerConfig
+  circuitBreaker?: CircuitBreakerConfig;
 }
 
 /** Configuration for usage of ODIS to harden the encryption keys */
@@ -42,33 +45,33 @@ export interface OdisHardeningConfig {
    * @remarks Currently supports the SequentialDelayDomain. In the future, as additional domains are
    * standardized for key hardening, they may be added here to allow a wider range of configuration.
    */
-  rateLimit: SequentialDelayStage[]
+  rateLimit: SequentialDelayStage[];
 
   /** Environment information including the URL and public key of the ODIS service */
-  environment: OdisServiceContext
+  environment: OdisServiceContext;
 }
 
 /** Configuration for usage of a circuit breaker to protect the encryption keys */
 export interface CircuitBreakerConfig {
   /** Environment information including the URL and public key of the circuit breaker service */
-  environment: CircuitBreakerServiceContext
+  environment: CircuitBreakerServiceContext;
 }
 
 export enum ComputationalHardeningFunction {
-  PBKDF = 'pbkdf2_sha256',
-  SCRYPT = 'scrypt',
+  PBKDF = "pbkdf2_sha256",
+  SCRYPT = "scrypt",
 }
 
 export interface PbkdfConfig {
-  function: ComputationalHardeningFunction.PBKDF
-  iterations: number
+  function: ComputationalHardeningFunction.PBKDF;
+  iterations: number;
 }
 
 export interface ScryptConfig extends ScryptOptions {
-  function: ComputationalHardeningFunction.SCRYPT
+  function: ComputationalHardeningFunction.SCRYPT;
 }
 
-export type ComputationalHardeningConfig = PbkdfConfig | ScryptConfig
+export type ComputationalHardeningConfig = PbkdfConfig | ScryptConfig;
 
 /**
  * ODIS SequentialDelayDomain rate limit configured to be appropriate for hardening a 6-digit PIN.
@@ -188,7 +191,7 @@ const PIN_HARDENING_RATE_LIMIT: SequentialDelayStage[] = [
     batchSize: defined(1),
     repetitions: noNumber,
   },
-]
+];
 
 /**
  * ODIS SequentialDelayDomain rate limit configured to be appropriate for hardening a password.
@@ -246,7 +249,7 @@ const PASSWORD_HARDENING_RATE_LIMIT: SequentialDelayStage[] = [
     batchSize: defined(2),
     repetitions: defined(10),
   },
-]
+];
 
 /**
  * ODIS SequentialDelayDomain rate limit configured for e2e testing where no rate limit should be applied.
@@ -260,7 +263,7 @@ const E2E_TESTING_RATE_LIMIT: SequentialDelayStage[] = [
     batchSize: defined(1000000000),
     repetitions: defined(1000000000),
   },
-]
+];
 
 /**
  * ODIS SequentialDelayDomain rate limit configured for e2e testing where the user should have no quota.
@@ -274,11 +277,11 @@ const NO_QUOTA_RATE_LIMIT: SequentialDelayStage[] = [
     batchSize: defined(0),
     repetitions: defined(0),
   },
-]
+];
 
 export enum EnvironmentIdentifier {
-  MAINNET = 'MAINNET',
-  ALFAJORES = 'ALFAJORES',
+  MAINNET = "MAINNET",
+  ATLAS = "ATLAS",
 }
 
 export const PIN_HARDENING_MAINNET_CONFIG: HardeningConfig = {
@@ -289,17 +292,17 @@ export const PIN_HARDENING_MAINNET_CONFIG: HardeningConfig = {
   circuitBreaker: {
     environment: VALORA_MAINNET_CIRCUIT_BREAKER_ENVIRONMENT,
   },
-}
+};
 
-export const PIN_HARDENING_ALFAJORES_CONFIG: HardeningConfig = {
+export const PIN_HARDENING_ATLAS_CONFIG: HardeningConfig = {
   odis: {
     rateLimit: PIN_HARDENING_RATE_LIMIT,
-    environment: ODIS_ALFAJORES_CONTEXT_DOMAINS,
+    environment: ODIS_ATLAS_CONTEXT_DOMAINS,
   },
   circuitBreaker: {
-    environment: VALORA_ALFAJORES_CIRCUIT_BREAKER_ENVIRONMENT,
+    environment: VALORA_ATLAS_CIRCUIT_BREAKER_ENVIRONMENT,
   },
-}
+};
 
 export const PASSWORD_HARDENING_MAINNET_CONFIG: HardeningConfig = {
   odis: {
@@ -312,7 +315,7 @@ export const PASSWORD_HARDENING_MAINNET_CONFIG: HardeningConfig = {
     blockSize: 8,
     parallelization: 1,
   },
-}
+};
 
 export const E2E_TESTING_MAINNET_CONFIG: HardeningConfig = {
   odis: {
@@ -325,7 +328,7 @@ export const E2E_TESTING_MAINNET_CONFIG: HardeningConfig = {
     blockSize: 8,
     parallelization: 1,
   },
-}
+};
 
 export const NO_QUOTA_MAINNET_CONFIG: HardeningConfig = {
   odis: {
@@ -338,12 +341,12 @@ export const NO_QUOTA_MAINNET_CONFIG: HardeningConfig = {
     blockSize: 8,
     parallelization: 1,
   },
-}
+};
 
-export const PASSWORD_HARDENING_ALFAJORES_CONFIG: HardeningConfig = {
+export const PASSWORD_HARDENING_ATLAS_CONFIG: HardeningConfig = {
   odis: {
     rateLimit: PASSWORD_HARDENING_RATE_LIMIT,
-    environment: ODIS_ALFAJORES_CONTEXT_DOMAINS,
+    environment: ODIS_ATLAS_CONTEXT_DOMAINS,
   },
   computational: {
     function: ComputationalHardeningFunction.SCRYPT,
@@ -351,12 +354,12 @@ export const PASSWORD_HARDENING_ALFAJORES_CONFIG: HardeningConfig = {
     blockSize: 8,
     parallelization: 1,
   },
-}
+};
 
-export const E2E_TESTING_ALFAJORES_CONFIG: HardeningConfig = {
+export const E2E_TESTING_ATLAS_CONFIG: HardeningConfig = {
   odis: {
     rateLimit: E2E_TESTING_RATE_LIMIT,
-    environment: ODIS_ALFAJORES_CONTEXT_DOMAINS,
+    environment: ODIS_ATLAS_CONTEXT_DOMAINS,
   },
   computational: {
     function: ComputationalHardeningFunction.SCRYPT,
@@ -364,12 +367,12 @@ export const E2E_TESTING_ALFAJORES_CONFIG: HardeningConfig = {
     blockSize: 8,
     parallelization: 1,
   },
-}
+};
 
-export const NO_QUOTA_ALFAJORES_CONFIG: HardeningConfig = {
+export const NO_QUOTA_ATLAS_CONFIG: HardeningConfig = {
   odis: {
     rateLimit: NO_QUOTA_RATE_LIMIT,
-    environment: ODIS_ALFAJORES_CONTEXT_DOMAINS,
+    environment: ODIS_ATLAS_CONTEXT_DOMAINS,
   },
   computational: {
     function: ComputationalHardeningFunction.SCRYPT,
@@ -377,4 +380,4 @@ export const NO_QUOTA_ALFAJORES_CONFIG: HardeningConfig = {
     blockSize: 8,
     parallelization: 1,
   },
-}
+};

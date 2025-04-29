@@ -21,8 +21,8 @@ OPTIONS
 
   --identifier=identifier    On-chain identifier
 
-  --network=network          The ODIS service to hit: mainnet, alfajores,
-                             alfajoresstaging
+  --network=network          The ODIS service to hit: mainnet, atlas,
+                             atlasstaging
 
   --pepper=pepper            ODIS phone number pepper
 
@@ -51,8 +51,8 @@ USAGE
   $ planqcli identity:identifier
 
 OPTIONS
-  --context=context                                  mainnet (default), alfajores, or
-                                                     alfajoresstaging
+  --context=context                                  mainnet (default), atlas, or
+                                                     atlasstaging
 
   --from=0xc1912fEE45d61C87Cc5EA59DaE31190FFFFf232d  (required) The address from which
                                                      to perform the query
@@ -66,7 +66,7 @@ OPTIONS
 
 EXAMPLE
   identifier --phoneNumber +14151231234 --from
-  0x5409ed021d9299bf6814279a6a1411a7e866a631 --context alfajores
+  0x5409ed021d9299bf6814279a6a1411a7e866a631 --context atlas
 ```
 
 _See code: [src/commands/identity/identifier.ts](https://github.com/planq-network/planq-sdk/tree/master/packages/cli/src/commands/identity/identifier.ts)_

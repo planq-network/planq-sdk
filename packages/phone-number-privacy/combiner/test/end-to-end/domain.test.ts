@@ -1,13 +1,13 @@
 import {
   BackupErrorTypes,
   buildOdisDomain,
-  E2E_TESTING_ALFAJORES_CONFIG,
-  NO_QUOTA_ALFAJORES_CONFIG,
+  E2E_TESTING_ATLAS_CONFIG,
+  NO_QUOTA_ATLAS_CONFIG,
   odisHardenKey,
   odisQueryAuthorizer,
   requestOdisDomainQuotaStatus,
-} from '@planq-network/encrypted-backup'
-import { OdisUtils } from '@planq-network/identity'
+} from "@planq-network/encrypted-backup";
+import {OdisUtils} from "@planq-network/identity";
 import {
   CombinerEndpoint,
   DisableDomainRequest,
@@ -27,38 +27,47 @@ import {
   SequentialDelayDomain,
   SequentialDelayDomainStateSchema,
   TestUtils,
-} from '@planq-network/phone-number-privacy-common'
-import { defined, noNumber, noString } from '@planq-network/utils/lib/sign-typed-data-utils'
-import * as crypto from 'crypto'
-import 'isomorphic-fetch'
-import { getCombinerVersion } from '../../src'
-import { getTestContextName } from './resources'
+} from "@planq-network/phone-number-privacy-common";
+import {
+  defined,
+  noNumber,
+  noString,
+} from "@planq-network/utils/lib/sign-typed-data-utils";
+import * as crypto from "crypto";
+import "isomorphic-fetch";
+import {getCombinerVersion} from "../../src";
+import {getTestContextName} from "./resources";
 
-require('dotenv').config()
+require("dotenv").config();
 
-jest.setTimeout(60000)
+jest.setTimeout(60000);
 
-const { ErrorMessages, getServiceContext, OdisAPI } = OdisUtils.Query
+const {ErrorMessages, getServiceContext, OdisAPI} = OdisUtils.Query;
 
-const SERVICE_CONTEXT = getServiceContext(getTestContextName(), OdisAPI.DOMAIN)
-const combinerUrl = SERVICE_CONTEXT.odisUrl
-const fullNodeUrl = process.env.ODIS_BLOCKCHAIN_PROVIDER
+const SERVICE_CONTEXT = getServiceContext(getTestContextName(), OdisAPI.DOMAIN);
+const combinerUrl = SERVICE_CONTEXT.odisUrl;
+const fullNodeUrl = process.env.ODIS_BLOCKCHAIN_PROVIDER;
 
-const authorizer = odisQueryAuthorizer(Buffer.from('combiner e2e authorizer test seed'))
+const authorizer = odisQueryAuthorizer(
+  Buffer.from("combiner e2e authorizer test seed")
+);
 
-const domain = buildOdisDomain(E2E_TESTING_ALFAJORES_CONFIG.odis!, authorizer.address)
+const domain = buildOdisDomain(
+  E2E_TESTING_ATLAS_CONFIG.odis!,
+  authorizer.address
+);
 
-const expectedVersion = getCombinerVersion()
+const expectedVersion = getCombinerVersion();
 
 describe(`Running against service deployed at ${combinerUrl} w/ blockchain provider ${fullNodeUrl}`, () => {
-  it('Service is deployed at correct version', async () => {
+  it("Service is deployed at correct version", async () => {
     const response = await fetch(combinerUrl + CombinerEndpoint.STATUS, {
-      method: 'GET',
-    })
-    const body = await response.json()
+      method: "GET",
+    });
+    const body = await response.json();
     // This checks against local package.json version, change if necessary
-    expect(body.version).toBe(expectedVersion)
-  })
+    expect(body.version).toBe(expectedVersion);
+  });
 
   describe(`${CombinerEndpoint.DOMAIN_QUOTA_STATUS}`, () => {
     const testThatValidRequestSucceeds = async () => {
@@ -67,9 +76,9 @@ describe(`Running against service deployed at ${combinerUrl} w/ blockchain provi
         SERVICE_CONTEXT,
         genSessionID(),
         authorizer.wallet
-      )
+      );
 
-      expect(res.ok).toBe(true)
+      expect(res.ok).toBe(true);
       if (res.ok) {
         expect(res.result).toStrictEqual<DomainQuotaStatusResponseSuccess>({
           success: true,
@@ -80,51 +89,56 @@ describe(`Running against service deployed at ${combinerUrl} w/ blockchain provi
             now: res.result.status.now,
             disabled: false,
           },
-        })
+        });
       }
-    }
+    };
 
-    it('Should succeed on valid request', async () => {
-      await testThatValidRequestSucceeds()
-    })
+    it("Should succeed on valid request", async () => {
+      await testThatValidRequestSucceeds();
+    });
 
-    it('Should succeed on repeated valid requests', async () => {
-      await testThatValidRequestSucceeds()
-      await testThatValidRequestSucceeds()
-    })
-  })
+    it("Should succeed on repeated valid requests", async () => {
+      await testThatValidRequestSucceeds();
+      await testThatValidRequestSucceeds();
+    });
+  });
 
   describe(`${CombinerEndpoint.DOMAIN_SIGN}`, () => {
     const testThatValidRequestSucceeds = async () => {
       const res = await odisHardenKey(
-        Buffer.from('password'),
+        Buffer.from("password"),
         domain,
         SERVICE_CONTEXT,
         authorizer.wallet
-      )
+      );
       // odisHardenKey verifies the signature against the service public key
-      expect(res.ok).toBe(true)
-    }
+      expect(res.ok).toBe(true);
+    };
 
-    it('Should succeed on valid request', async () => {
-      await testThatValidRequestSucceeds()
-    })
+    it("Should succeed on valid request", async () => {
+      await testThatValidRequestSucceeds();
+    });
 
-    it('Should succeed on repeated valid request', async () => {
-      await testThatValidRequestSucceeds()
-      await testThatValidRequestSucceeds()
-    })
+    it("Should succeed on repeated valid request", async () => {
+      await testThatValidRequestSucceeds();
+      await testThatValidRequestSucceeds();
+    });
 
     const signatureRequest = async (
       keyVersion: number,
       nonce: number,
       _domain: SequentialDelayDomain = domain
-    ): Promise<[DomainRestrictedSignatureRequest<SequentialDelayDomain>, PoprfClient]> => {
+    ): Promise<
+      [DomainRestrictedSignatureRequest<SequentialDelayDomain>, PoprfClient]
+    > => {
       const poprfClient = new PoprfClient(
-        Buffer.from(TestUtils.Values.DOMAINS_THRESHOLD_DEV_PUBKEYS[keyVersion - 1], 'base64'),
+        Buffer.from(
+          TestUtils.Values.DOMAINS_THRESHOLD_DEV_PUBKEYS[keyVersion - 1],
+          "base64"
+        ),
         domainHash(_domain),
-        Buffer.from('test message', 'utf8')
-      )
+        Buffer.from("test message", "utf8")
+      );
 
       const req: DomainRestrictedSignatureRequest<SequentialDelayDomain> = {
         type: DomainRequestTypeTag.SIGN,
@@ -133,17 +147,17 @@ describe(`Running against service deployed at ${combinerUrl} w/ blockchain provi
           signature: noString,
           nonce: defined(nonce),
         },
-        blindedMessage: poprfClient.blindedMessage.toString('base64'),
+        blindedMessage: poprfClient.blindedMessage.toString("base64"),
         sessionID: defined(genSessionID()),
-      }
+      };
       req.options.signature = defined(
         await authorizer.wallet.signTypedData(
           authorizer.address,
           domainRestrictedSignatureRequestEIP712(req)
         )
-      )
-      return [req, poprfClient]
-    }
+      );
+      return [req, poprfClient];
+    };
 
     for (let i = 1; i <= 2; i++) {
       it(`Should succeed on valid request with key version header ${i}`, async () => {
@@ -152,13 +166,15 @@ describe(`Running against service deployed at ${combinerUrl} w/ blockchain provi
           SERVICE_CONTEXT,
           genSessionID(),
           authorizer.wallet
-        )
+        );
 
-        let nonce = 0
+        let nonce = 0;
 
-        expect(quotaRes.ok).toBe(true)
+        expect(quotaRes.ok).toBe(true);
         if (quotaRes.ok) {
-          expect(quotaRes.result).toStrictEqual<DomainQuotaStatusResponseSuccess>({
+          expect(
+            quotaRes.result
+          ).toStrictEqual<DomainQuotaStatusResponseSuccess>({
             success: true,
             version: expectedVersion,
             status: {
@@ -167,23 +183,25 @@ describe(`Running against service deployed at ${combinerUrl} w/ blockchain provi
               now: quotaRes.result.status.now,
               disabled: false,
             },
-          })
-          nonce = quotaRes.result.status.counter
+          });
+          nonce = quotaRes.result.status.counter;
         }
 
-        const keyVersion = 1
-        const [req, _] = await signatureRequest(keyVersion, nonce)
+        const keyVersion = 1;
+        const [req, _] = await signatureRequest(keyVersion, nonce);
         const res = await OdisUtils.Query.sendOdisDomainRequest(
           req,
           SERVICE_CONTEXT,
           CombinerEndpoint.DOMAIN_SIGN,
-          domainRestrictedSignatureResponseSchema(SequentialDelayDomainStateSchema),
+          domainRestrictedSignatureResponseSchema(
+            SequentialDelayDomainStateSchema
+          ),
           {
             [KEY_VERSION_HEADER]: keyVersion.toString(),
           }
-        )
+        );
 
-        expect(res.success).toBe(true)
+        expect(res.success).toBe(true);
         if (res.success) {
           expect(res).toStrictEqual<DomainRestrictedSignatureResponseSuccess>({
             success: true,
@@ -195,76 +213,88 @@ describe(`Running against service deployed at ${combinerUrl} w/ blockchain provi
               now: res.status.now,
               disabled: false,
             },
-          })
+          });
         }
-      })
+      });
     }
 
-    it('Should throw on invalid authentication', async () => {
+    it("Should throw on invalid authentication", async () => {
       const quotaRes = await requestOdisDomainQuotaStatus(
         domain,
         SERVICE_CONTEXT,
         genSessionID(),
         authorizer.wallet
-      )
+      );
 
-      let nonce = 0
+      let nonce = 0;
 
-      expect(quotaRes.ok).toBe(true)
+      expect(quotaRes.ok).toBe(true);
       if (quotaRes.ok) {
-        expect(quotaRes.result).toStrictEqual<DomainQuotaStatusResponseSuccess>({
-          success: true,
-          version: expectedVersion,
-          status: {
-            timer: quotaRes.result.status.timer,
-            counter: quotaRes.result.status.counter,
-            now: quotaRes.result.status.now,
-            disabled: false,
-          },
-        })
-        nonce = quotaRes.result.status.counter
+        expect(quotaRes.result).toStrictEqual<DomainQuotaStatusResponseSuccess>(
+          {
+            success: true,
+            version: expectedVersion,
+            status: {
+              timer: quotaRes.result.status.timer,
+              counter: quotaRes.result.status.counter,
+              now: quotaRes.result.status.now,
+              disabled: false,
+            },
+          }
+        );
+        nonce = quotaRes.result.status.counter;
       }
 
-      const keyVersion = 1
-      const [req, _] = await signatureRequest(keyVersion, nonce)
+      const keyVersion = 1;
+      const [req, _] = await signatureRequest(keyVersion, nonce);
 
-      req.domain.salt = defined('badSalt')
+      req.domain.salt = defined("badSalt");
 
       await expect(
         OdisUtils.Query.sendOdisDomainRequest(
           req,
           SERVICE_CONTEXT,
           CombinerEndpoint.DOMAIN_SIGN,
-          domainRestrictedSignatureResponseSchema(SequentialDelayDomainStateSchema),
+          domainRestrictedSignatureResponseSchema(
+            SequentialDelayDomainStateSchema
+          ),
           {
             [KEY_VERSION_HEADER]: keyVersion.toString(),
           }
         )
-      ).rejects.toThrow(ErrorMessages.ODIS_AUTH_ERROR)
-    })
+      ).rejects.toThrow(ErrorMessages.ODIS_AUTH_ERROR);
+    });
 
-    it('Should return error on out of quota', async () => {
-      const noQuotaDomain = buildOdisDomain(NO_QUOTA_ALFAJORES_CONFIG.odis!, authorizer.address)
+    it("Should return error on out of quota", async () => {
+      const noQuotaDomain = buildOdisDomain(
+        NO_QUOTA_ATLAS_CONFIG.odis!,
+        authorizer.address
+      );
       const res = await odisHardenKey(
-        Buffer.from('password'),
+        Buffer.from("password"),
         noQuotaDomain,
         SERVICE_CONTEXT,
         authorizer.wallet
-      )
-      expect(res.ok).toBe(false)
+      );
+      expect(res.ok).toBe(false);
       if (!res.ok) {
-        expect(res.error.errorType).toEqual(BackupErrorTypes.ODIS_RATE_LIMITING_ERROR)
+        expect(res.error.errorType).toEqual(
+          BackupErrorTypes.ODIS_RATE_LIMITING_ERROR
+        );
       }
-    })
-  })
+    });
+  });
 
   describe(`${CombinerEndpoint.DISABLE_DOMAIN}`, () => {
     const domainForDisabling = buildOdisDomain(
-      E2E_TESTING_ALFAJORES_CONFIG.odis!,
+      E2E_TESTING_ATLAS_CONFIG.odis!,
       authorizer.address,
-      'e2e testing, okay to disable ' + crypto.randomBytes(16).toString('base64')
-    )
-    const disableRequest = async (): Promise<DisableDomainRequest<SequentialDelayDomain>> => {
+      "e2e testing, okay to disable " +
+        crypto.randomBytes(16).toString("base64")
+    );
+    const disableRequest = async (): Promise<
+      DisableDomainRequest<SequentialDelayDomain>
+    > => {
       const req: DisableDomainRequest<SequentialDelayDomain> = {
         type: DomainRequestTypeTag.DISABLE,
         domain: domainForDisabling,
@@ -273,12 +303,15 @@ describe(`Running against service deployed at ${combinerUrl} w/ blockchain provi
           nonce: noNumber,
         },
         sessionID: defined(genSessionID()),
-      }
+      };
       req.options.signature = defined(
-        await authorizer.wallet.signTypedData(authorizer.address, disableDomainRequestEIP712(req))
-      )
-      return req
-    }
+        await authorizer.wallet.signTypedData(
+          authorizer.address,
+          disableDomainRequestEIP712(req)
+        )
+      );
+      return req;
+    };
 
     const testThatDomainIsNotAlreadyDisabled = async () => {
       const quotaRes = await requestOdisDomainQuotaStatus(
@@ -286,21 +319,23 @@ describe(`Running against service deployed at ${combinerUrl} w/ blockchain provi
         SERVICE_CONTEXT,
         genSessionID(),
         authorizer.wallet
-      )
-      expect(quotaRes.ok).toBe(true)
+      );
+      expect(quotaRes.ok).toBe(true);
       if (quotaRes.ok) {
-        expect(quotaRes.result).toStrictEqual<DomainQuotaStatusResponseSuccess>({
-          success: true,
-          version: expectedVersion,
-          status: {
-            timer: quotaRes.result.status.timer,
-            counter: quotaRes.result.status.counter,
-            now: quotaRes.result.status.now,
-            disabled: false, // checking that domain is not already disabled
-          },
-        })
+        expect(quotaRes.result).toStrictEqual<DomainQuotaStatusResponseSuccess>(
+          {
+            success: true,
+            version: expectedVersion,
+            status: {
+              timer: quotaRes.result.status.timer,
+              counter: quotaRes.result.status.counter,
+              now: quotaRes.result.status.now,
+              disabled: false, // checking that domain is not already disabled
+            },
+          }
+        );
       }
-    }
+    };
 
     const testThatValidRequestSucceeds = async () => {
       const res = await OdisUtils.Query.sendOdisDomainRequest(
@@ -308,9 +343,9 @@ describe(`Running against service deployed at ${combinerUrl} w/ blockchain provi
         SERVICE_CONTEXT,
         CombinerEndpoint.DISABLE_DOMAIN,
         disableDomainResponseSchema(SequentialDelayDomainStateSchema)
-      )
+      );
 
-      expect(res.success).toBe(true)
+      expect(res.success).toBe(true);
       if (res.success) {
         expect(res).toStrictEqual<DisableDomainResponseSuccess>({
           success: true,
@@ -321,18 +356,18 @@ describe(`Running against service deployed at ${combinerUrl} w/ blockchain provi
             disabled: true, // checking that domain is now disabled
             counter: res.status.counter,
           },
-        })
+        });
       }
-    }
+    };
 
-    it('Should succeed on valid request', async () => {
-      await testThatDomainIsNotAlreadyDisabled()
-      await testThatValidRequestSucceeds()
-    })
+    it("Should succeed on valid request", async () => {
+      await testThatDomainIsNotAlreadyDisabled();
+      await testThatValidRequestSucceeds();
+    });
 
-    it('Should succeed on repeated valid request', async () => {
-      await testThatValidRequestSucceeds()
-      await testThatValidRequestSucceeds()
-    })
-  })
-})
+    it("Should succeed on repeated valid request", async () => {
+      await testThatValidRequestSucceeds();
+      await testThatValidRequestSucceeds();
+    });
+  });
+});

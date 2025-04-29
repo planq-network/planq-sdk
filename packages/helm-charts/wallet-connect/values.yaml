@@ -1,6 +1,6 @@
 environment:
   name: test
-  network: alfajores
+  network: atlas
   cluster:
     name: test-cluster
     location: location

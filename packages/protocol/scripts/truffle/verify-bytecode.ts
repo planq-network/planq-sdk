@@ -1,9 +1,12 @@
-import { verifyBytecodes } from '@planq-network/protocol/lib/compatibility/verify-bytecode'
-import { PlanqContractName, planqRegistryAddress } from '@planq-network/protocol/lib/registry-utils'
-import { getBuildArtifacts } from '@openzeppelin/upgrades'
-import { readJsonSync, writeJsonSync } from 'fs-extra'
-import { ProxyInstance, RegistryInstance } from 'types'
-import { getReleaseVersion } from '../../lib/compatibility/ignored-contracts-v9'
+import {verifyBytecodes} from "@planq-network/protocol/lib/compatibility/verify-bytecode";
+import {
+  PlanqContractName,
+  planqRegistryAddress,
+} from "@planq-network/protocol/lib/registry-utils";
+import {getBuildArtifacts} from "@openzeppelin/upgrades";
+import {readJsonSync, writeJsonSync} from "fs-extra";
+import {ProxyInstance, RegistryInstance} from "types";
+import {getReleaseVersion} from "../../lib/compatibility/ignored-contracts-v9";
 
 /*
  * This script verifies that a given set of smart contract bytecodes corresponds
@@ -25,29 +28,41 @@ import { getReleaseVersion } from '../../lib/compatibility/ignored-contracts-v9'
  *
  * Run using truffle exec, e.g.:
  * truffle exec scripts/truffle/verify-bytecode \
- *   --network alfajores --build_artifacts build/alfajores/contracts --proposal proposal.json
+ *   --network atlas --build_artifacts build/atlas/contracts --proposal proposal.json
  */
 
-const Registry: Truffle.Contract<RegistryInstance> = artifacts.require('Registry')
-const Proxy: Truffle.Contract<ProxyInstance> = artifacts.require('Proxy')
+const Registry: Truffle.Contract<RegistryInstance> =
+  artifacts.require("Registry");
+const Proxy: Truffle.Contract<ProxyInstance> = artifacts.require("Proxy");
 
-const argv = require('minimist')(process.argv.slice(2), {
-  string: ['build_artifacts', 'proposal', 'initialize_data', 'network', 'librariesFile', 'branch'],
-})
+const argv = require("minimist")(process.argv.slice(2), {
+  string: [
+    "build_artifacts",
+    "proposal",
+    "initialize_data",
+    "network",
+    "librariesFile",
+    "branch",
+  ],
+});
 
-const artifactsDirectory = argv.build_artifacts ? argv.build_artifacts : './build/contracts'
-const branch = (argv.branch ? argv.branch : '') as string
-const network = argv.network ?? 'development'
-const proposal = argv.proposal ? readJsonSync(argv.proposal) : []
-const initializationData = argv.initialize_data ? readJsonSync(argv.initialize_data) : {}
-const librariesFile = argv.librariesFile ?? 'libraries.json'
+const artifactsDirectory = argv.build_artifacts
+  ? argv.build_artifacts
+  : "./build/contracts";
+const branch = (argv.branch ? argv.branch : "") as string;
+const network = argv.network ?? "development";
+const proposal = argv.proposal ? readJsonSync(argv.proposal) : [];
+const initializationData = argv.initialize_data
+  ? readJsonSync(argv.initialize_data)
+  : {};
+const librariesFile = argv.librariesFile ?? "libraries.json";
 
 module.exports = async (callback: (error?: any) => number) => {
   try {
-    const version = getReleaseVersion(branch)
+    const version = getReleaseVersion(branch);
 
-    const registry = await Registry.at(planqRegistryAddress)
-    const buildArtifacts = getBuildArtifacts(artifactsDirectory)
+    const registry = await Registry.at(planqRegistryAddress);
+    const buildArtifacts = getBuildArtifacts(artifactsDirectory);
     const libraryAddresses = await verifyBytecodes(
       Object.keys(PlanqContractName),
       buildArtifacts,
@@ -58,15 +73,15 @@ module.exports = async (callback: (error?: any) => number) => {
       initializationData,
       version,
       network
-    )
+    );
 
     // tslint:disable-next-line: no-console
-    console.log('Success, no bytecode mismatches found!')
+    console.log("Success, no bytecode mismatches found!");
 
     // tslint:disable-next-line: no-console
-    console.log(`Writing linked library addresses to ${librariesFile}`)
-    writeJsonSync(librariesFile, libraryAddresses.addresses, { spaces: 2 })
+    console.log(`Writing linked library addresses to ${librariesFile}`);
+    writeJsonSync(librariesFile, libraryAddresses.addresses, {spaces: 2});
   } catch (error) {
-    callback(error)
+    callback(error);
   }
-}
+};

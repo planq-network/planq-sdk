@@ -1,17 +1,19 @@
-import { Err, Ok, Result, RootError } from '@planq-network/base/lib/result'
-import fetch from 'cross-fetch'
-import * as crypto from 'crypto'
+import {Err, Ok, Result, RootError} from "@planq-network/base/lib/result";
+import fetch from "cross-fetch";
+import * as crypto from "crypto";
 
-export const BASE64_REGEXP = /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/
+export const BASE64_REGEXP =
+  /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/;
 
 export interface CircuitBreakerServiceContext {
-  url: string
-  publicKey: string
+  url: string;
+  publicKey: string;
 }
 
-export const VALORA_ALFAJORES_CIRCUIT_BREAKER_ENVIRONMENT: CircuitBreakerServiceContext = {
-  url: 'https://us-central1-celo-mobile-alfajores.cloudfunctions.net/circuitBreaker/',
-  publicKey: `-----BEGIN PUBLIC KEY-----
+export const VALORA_ATLAS_CIRCUIT_BREAKER_ENVIRONMENT: CircuitBreakerServiceContext =
+  {
+    url: "https://us-central1-celo-mobile-atlas.cloudfunctions.net/circuitBreaker/",
+    publicKey: `-----BEGIN PUBLIC KEY-----
 MIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAsYkNg3iY1ha4KGCGvHLl
 mOMKV63lq+WsHIgUGfEuyfOWEBetVux9gvQEEPYpKbHgVQrfcegp28LoZYehWZHC
 dIHSACcW0SGZagSOFEgxVSY6MgZZjmbTdlUtLac2cvxIDx8qhkoBjWRWu4g5LfdW
@@ -22,11 +24,12 @@ H2i5uiKnWW2a3a873ShG2Qphl9mw1Kcrdxug4qk9y7RoKlMnG3Wdr4HMQb9S8KYf
 07ZyVEbFip26ANWGo8dCA8fWvVtU5DByoWPI+PuglOB22z2noXov98imSFJfz9vu
 yGAQt3CUOwUQvt+RObDXiHHIxJjU+6/81X3Jdnt3dFEfAgMBAAE=
 -----END PUBLIC KEY-----`,
-}
+  };
 
-export const VALORA_MAINNET_CIRCUIT_BREAKER_ENVIRONMENT: CircuitBreakerServiceContext = {
-  url: 'https://us-central1-celo-mobile-mainnet.cloudfunctions.net/circuitBreaker/',
-  publicKey: `-----BEGIN PUBLIC KEY-----
+export const VALORA_MAINNET_CIRCUIT_BREAKER_ENVIRONMENT: CircuitBreakerServiceContext =
+  {
+    url: "https://us-central1-celo-mobile-mainnet.cloudfunctions.net/circuitBreaker/",
+    publicKey: `-----BEGIN PUBLIC KEY-----
 MIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEArQ89m/HIGECXR7ceZZRS
 b6MZEw1S1o5qgi6sLEejBMUQhM/wgySoo5ydiW7S4iyiqEksQNAlOs5Mrv1aE9Ul
 bG+rpglOA1xYLyjY7xUZE2tyPksPXcSKgu6d+G9gVtbmFld1Kr0jVx4qOLejtH3S
@@ -37,70 +40,70 @@ OT5jj2SIwXf5eKtyFMUqRNnqgs+IHHcWgh0CH7mfhPlFBMivKlwHgQqCJH3rHlgu
 CMi3ENv4+p7+svshngntxGkEzZcLV3YVW7BG6xSOAqC1tjkM1PkmXENQOq+bxAL6
 bg3W6cTRQAQxoicu6+1c5Tdb/K36TXx0mHan7/Z8JCqfAgMBAAE=
 -----END PUBLIC KEY-----`,
-}
+  };
 
 export enum CircuitBreakerKeyStatus {
-  ENABLED = 'ENABLED',
-  DISABLED = 'DISABLED',
-  DESTROYED = 'DESTROYED',
-  UNKNOWN = 'UNKNOWN',
+  ENABLED = "ENABLED",
+  DISABLED = "DISABLED",
+  DESTROYED = "DESTROYED",
+  UNKNOWN = "UNKNOWN",
 }
 
 export enum CircuitBreakerEndpoints {
-  HEALTH = 'health',
-  STATUS = 'status',
-  UNWRAP_KEY = 'unwrap-key',
+  HEALTH = "health",
+  STATUS = "status",
+  UNWRAP_KEY = "unwrap-key",
 }
 
 export interface CircuitBreakerStatusResponse {
   /** Status of the circuit breaker service */
-  status: CircuitBreakerKeyStatus
+  status: CircuitBreakerKeyStatus;
 }
 
 export interface CircuitBreakerUnwrapKeyRequest {
   /** RSA-OAEP-256 encrypted data to be unwrapped by the circuit breaker. Encoded as base64 */
-  ciphertext: string
+  ciphertext: string;
 }
 
 export interface CircuitBreakerUnwrapKeyResponse {
   /** Decryption of the ciphertext provided to the circuit breaker service */
-  plaintext?: string
+  plaintext?: string;
 
   /** Error message indicating what went wrong if the ciphertext could not be decrypted */
-  error?: string
+  error?: string;
 
   /** Status of the circuit breaker service. Included if the service is not enabled. */
-  status?: CircuitBreakerKeyStatus
+  status?: CircuitBreakerKeyStatus;
 }
 
 export enum CircuitBreakerErrorTypes {
-  FETCH_ERROR = 'FETCH_ERROR',
-  SERVICE_ERROR = 'CIRCUIT_BREAKER_SERVICE_ERROR',
-  UNAVAILABLE_ERROR = 'CIRCUIT_BREAKER_UNAVAILABLE_ERROR',
-  ENCRYPTION_ERROR = 'ENCRYPTION_ERROR',
+  FETCH_ERROR = "FETCH_ERROR",
+  SERVICE_ERROR = "CIRCUIT_BREAKER_SERVICE_ERROR",
+  UNAVAILABLE_ERROR = "CIRCUIT_BREAKER_UNAVAILABLE_ERROR",
+  ENCRYPTION_ERROR = "ENCRYPTION_ERROR",
 }
 
 export class CircuitBreakerServiceError extends RootError<CircuitBreakerErrorTypes.SERVICE_ERROR> {
   constructor(readonly status: number, readonly error?: Error) {
-    super(CircuitBreakerErrorTypes.SERVICE_ERROR)
+    super(CircuitBreakerErrorTypes.SERVICE_ERROR);
   }
 }
 
 export class CircuitBreakerUnavailableError extends RootError<CircuitBreakerErrorTypes.UNAVAILABLE_ERROR> {
   constructor(readonly status: CircuitBreakerKeyStatus) {
-    super(CircuitBreakerErrorTypes.UNAVAILABLE_ERROR)
+    super(CircuitBreakerErrorTypes.UNAVAILABLE_ERROR);
   }
 }
 
 export class EncryptionError extends RootError<CircuitBreakerErrorTypes.ENCRYPTION_ERROR> {
   constructor(readonly error?: Error) {
-    super(CircuitBreakerErrorTypes.ENCRYPTION_ERROR)
+    super(CircuitBreakerErrorTypes.ENCRYPTION_ERROR);
   }
 }
 
 export class FetchError extends RootError<CircuitBreakerErrorTypes.FETCH_ERROR> {
   constructor(readonly error?: Error) {
-    super(CircuitBreakerErrorTypes.FETCH_ERROR)
+    super(CircuitBreakerErrorTypes.FETCH_ERROR);
   }
 }
 
@@ -108,7 +111,7 @@ export type CircuitBreakerError =
   | CircuitBreakerServiceError
   | CircuitBreakerUnavailableError
   | EncryptionError
-  | FetchError
+  | FetchError;
 
 /**
  * Client for interacting with a circuit breaker service for encrypted cloud backups.
@@ -138,49 +141,55 @@ export class CircuitBreakerClient {
   protected url(endpoint: CircuitBreakerEndpoints): string {
     // Note that if the result of this is an invalid URL, the URL constructor will throw. This is
     // caught and reported as a fetch error, as a request could not be made.
-    return new URL(endpoint, this.environment.url).href
+    return new URL(endpoint, this.environment.url).href;
   }
 
   /**
    * Check the current status of the circuit breaker service. Result will reflect whether or not
    * the circuit breaker keys are currently available.
    */
-  async status(): Promise<Result<CircuitBreakerKeyStatus, CircuitBreakerError>> {
-    let response: Response
+  async status(): Promise<
+    Result<CircuitBreakerKeyStatus, CircuitBreakerError>
+  > {
+    let response: Response;
     try {
       response = await fetch(this.url(CircuitBreakerEndpoints.STATUS), {
-        method: 'GET',
+        method: "GET",
         headers: {
-          Accept: 'application/json',
+          Accept: "application/json",
         },
-      })
+      });
     } catch (error) {
-      return Err(new FetchError(error as Error))
+      return Err(new FetchError(error as Error));
     }
 
-    let obj: any
+    let obj: any;
     try {
-      obj = await response.json()
+      obj = await response.json();
     } catch (error) {
-      return Err(new CircuitBreakerServiceError(response.status, error as Error))
+      return Err(
+        new CircuitBreakerServiceError(response.status, error as Error)
+      );
     }
 
     // If the response was an error code, return an error to the user.
     // We do not expect an error message to be included with the response from the status endpoint.
     if (!response.ok) {
-      return Err(new CircuitBreakerServiceError(response.status))
+      return Err(new CircuitBreakerServiceError(response.status));
     }
 
     if (!Object.values(CircuitBreakerKeyStatus).includes(obj.status)) {
       return Err(
         new CircuitBreakerServiceError(
           response.status,
-          new Error(`circuit breaker service returned unexpected response: ${obj.status}`)
+          new Error(
+            `circuit breaker service returned unexpected response: ${obj.status}`
+          )
         )
-      )
+      );
     }
 
-    return Ok(obj.status as CircuitBreakerKeyStatus)
+    return Ok(obj.status as CircuitBreakerKeyStatus);
   }
 
   /**
@@ -190,65 +199,71 @@ export class CircuitBreakerClient {
    * the circuit breaker service. Encryption occurs only against the service public key.
    */
   wrapKey(plaintext: Buffer): Result<Buffer, EncryptionError> {
-    let ciphertext: Buffer
+    let ciphertext: Buffer;
     try {
       ciphertext = crypto.publicEncrypt(
         {
           key: this.environment.publicKey,
-          oaepHash: 'sha256',
+          oaepHash: "sha256",
         },
         plaintext
-      )
+      );
     } catch (error) {
-      return Err(new EncryptionError(error as Error))
+      return Err(new EncryptionError(error as Error));
     }
-    return Ok(ciphertext)
+    return Ok(ciphertext);
   }
 
   /** Request the circuit breaker service to decrypt the provided encrypted key value */
-  async unwrapKey(ciphertext: Buffer): Promise<Result<Buffer, CircuitBreakerError>> {
+  async unwrapKey(
+    ciphertext: Buffer
+  ): Promise<Result<Buffer, CircuitBreakerError>> {
     const request: CircuitBreakerUnwrapKeyRequest = {
-      ciphertext: ciphertext.toString('base64'),
-    }
+      ciphertext: ciphertext.toString("base64"),
+    };
 
-    let response: Response
+    let response: Response;
     try {
       response = await fetch(this.url(CircuitBreakerEndpoints.UNWRAP_KEY), {
-        method: 'POST',
+        method: "POST",
         headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(request),
-      })
+      });
     } catch (error) {
-      return Err(new FetchError(error as Error))
+      return Err(new FetchError(error as Error));
     }
 
-    let obj: any
+    let obj: any;
     try {
-      obj = await response.json()
+      obj = await response.json();
     } catch (error) {
-      return Err(new CircuitBreakerServiceError(response.status, error as Error))
+      return Err(
+        new CircuitBreakerServiceError(response.status, error as Error)
+      );
     }
 
     // If the response was an error code, return an error to the user after trying to parse the
     // error from the service response. Either an error message or a status value may be returned.
     if (!response.ok) {
       if (obj.error !== undefined || obj.status === undefined) {
-        return Err(new CircuitBreakerServiceError(response.status, obj.error))
+        return Err(new CircuitBreakerServiceError(response.status, obj.error));
       } else {
-        return Err(new CircuitBreakerUnavailableError(obj.status))
+        return Err(new CircuitBreakerUnavailableError(obj.status));
       }
     }
 
-    const plaintext = obj.plaintext
+    const plaintext = obj.plaintext;
     if (plaintext === undefined || !BASE64_REGEXP.test(plaintext)) {
       // Plaintext value is not returned in the error as it may has sensitive information.
-      const error = new Error('circuit breaker returned invalid plaintext response')
-      return Err(new CircuitBreakerServiceError(response.status, error))
+      const error = new Error(
+        "circuit breaker returned invalid plaintext response"
+      );
+      return Err(new CircuitBreakerServiceError(response.status, error));
     }
 
-    return Ok(Buffer.from(plaintext, 'base64'))
+    return Ok(Buffer.from(plaintext, "base64"));
   }
 }

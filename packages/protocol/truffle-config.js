@@ -14,7 +14,7 @@ const argv = require("minimist")(process.argv.slice(2), {
 });
 
 const SOLC_VERSION = "0.5.13";
-const ALFAJORES_NETWORKID = 7070;
+const ATLAS_NETWORKID = 7070;
 const BAKLAVA_NETWORKID = 62320;
 const BAKLAVASTAGING_NETWORKID = 31420;
 
@@ -28,8 +28,8 @@ const OG_FROM = "0xfeE1a22F43BeeCB912B5a4912ba87527682ef0fC";
 const DEVELOPMENT_FROM = "0x5409ed021d9299bf6814279a6a1411a7e866a631";
 const INTEGRATION_FROM = "0x47e172F6CfB6c7D01C1574fa3E2Be7CC73269D95";
 const INTEGRATION_TESTING_FROM = "0x47e172F6CfB6c7D01C1574fa3E2Be7CC73269D95";
-const ALFAJORESSTAGING_FROM = "0xf4314cb9046bece6aa54bb9533155434d0c76909";
-const ALFAJORES_FROM = "0xe7aB5A40b8Ef85Fa3ff91EEc6444f4472F616887";
+const ATLASSTAGING_FROM = "0xf4314cb9046bece6aa54bb9533155434d0c76909";
+const ATLAS_FROM = "0xe7aB5A40b8Ef85Fa3ff91EEc6444f4472F616887";
 const PILOT_FROM = "0x387bCb16Bfcd37AccEcF5c9eB2938E30d3aB8BF2";
 const PILOTSTAGING_FROM = "0x545DEBe3030B570731EDab192640804AC8Cf65CA";
 const RC0_FROM = "0x469be98FE71AFf8F6e7f64F9b732e28A03596B5C";
@@ -57,7 +57,7 @@ const freeGasConfig = {...defaultConfig, ...{gasPrice: 0}};
 let coverageProvider = null;
 
 const fornoUrls = {
-  alfajores: "https://evm-rpc.planq.network",
+  atlas: "https://evm-rpc.planq.network",
   baklava: "https://evm-rpc-atlas.planq.network",
   rc1: "",
   mainnet: "https://evm-rpc.planq.network",
@@ -162,22 +162,22 @@ const networks = {
   argentinastaging: freeGasConfig,
   argentinaproduction: freeGasConfig,
 
-  alfajoresstaging: {
+  atlasstaging: {
     ...defaultConfig,
-    from: ALFAJORESSTAGING_FROM,
+    from: ATLASSTAGING_FROM,
   },
 
-  alfajores: {
+  atlas: {
     ...defaultConfig,
-    network_id: ALFAJORES_NETWORKID,
-    from: ALFAJORES_FROM,
+    network_id: ATLAS_NETWORKID,
+    from: ATLAS_FROM,
     provider: new HDWalletProvider({
       privateKeys: [
         process.env.SECRET
           ? process.env.SECRET
           : "0000000000000000000000000000000000000000000000000000000000000001",
       ],
-      providerOrUrl: fornoUrls.alfajores,
+      providerOrUrl: fornoUrls.atlas,
     }),
     gasPrice: 22500000000,
   },
@@ -222,7 +222,7 @@ if (argv.truffle_override || !(argv.network in networks)) {
 }
 
 if (process.argv.includes("--forno")) {
-  argv.network = "alfajores";
+  argv.network = "atlas";
   if (!fornoUrls[argv.network]) {
     console.log(`Forno URL for network ${argv.network} not known!`);
     process.exit(1);

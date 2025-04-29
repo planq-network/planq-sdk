@@ -3,17 +3,17 @@ import {
   getPrefixedIdentifier,
   IdentifierPrefix,
   isE164Number,
-} from '@planq-network/base'
+} from "@planq-network/base";
 import {
   CombinerEndpointPNP,
   KEY_VERSION_HEADER,
   SignMessageRequest,
   SignMessageResponseSchema,
-} from '@planq-network/phone-number-privacy-common'
-import { soliditySha3 } from '@planq-network/utils/lib/solidity'
-import { createHash } from 'crypto'
-import debugFactory from 'debug'
-import { BlsBlindingClient, WasmBlsBlindingClient } from './bls-blinding-client'
+} from "@planq-network/phone-number-privacy-common";
+import {soliditySha3} from "@planq-network/utils/lib/solidity";
+import {createHash} from "crypto";
+import debugFactory from "debug";
+import {BlsBlindingClient, WasmBlsBlindingClient} from "./bls-blinding-client";
 import {
   AuthenticationMethod,
   AuthSigner,
@@ -21,12 +21,12 @@ import {
   getOdisPnpRequestAuth,
   queryOdis,
   ServiceContext,
-} from './query'
+} from "./query";
 
-const debug = debugFactory('kit:odis:identifier')
-const sha3 = (v: string) => soliditySha3({ type: 'string', value: v })
+const debug = debugFactory("kit:odis:identifier");
+const sha3 = (v: string) => soliditySha3({type: "string", value: v});
 
-const PEPPER_CHAR_LENGTH = 13
+const PEPPER_CHAR_LENGTH = 13;
 
 // Docstring is duplicated in @planq-network/base; make sure to update in both places.
 /**
@@ -50,7 +50,7 @@ const PEPPER_CHAR_LENGTH = 13
  * discouraged since identifiers will not be interoperable with other projects.
  * Please think carefully before using the NULL prefix.
  */
-export { IdentifierPrefix }
+export {IdentifierPrefix};
 // Docstring is duplicated in @planq-network/base; make sure to update in both places.
 /**
  * Concatenates the identifierPrefix and plaintextIdentifier with the separator '://'
@@ -58,7 +58,7 @@ export { IdentifierPrefix }
  * @param plaintextIdentifier Off-chain identifier, ex: phone number, twitter handle, email, etc.
  * @param identifierPrefix Standardized prefix used to prevent collisions between identifiers
  */
-export { getPrefixedIdentifier }
+export {getPrefixedIdentifier};
 
 /**
  * Steps from the private plaintext identifier to the obfuscated identifier, which can be made public.
@@ -73,13 +73,13 @@ export { getPrefixedIdentifier }
 
 export interface IdentifierHashDetails {
   // plaintext off-chain phone number, twitter handle, email, etc.
-  plaintextIdentifier: string
+  plaintextIdentifier: string;
   // identifier obtained after hashing, used for on-chain attestations
-  obfuscatedIdentifier: string
+  obfuscatedIdentifier: string;
   // unique pepper obtained through ODIS
-  pepper: string
+  pepper: string;
   // raw signature from ODIS
-  unblindedSignature?: string
+  unblindedSignature?: string;
 }
 
 /**
@@ -94,7 +94,7 @@ export interface IdentifierHashDetails {
  * @param identifierPrefix Standardized prefix used to prevent collisions between identifiers
  * @param account The address making the request to ODIS, from which quota will be charged
  * @param signer Object containing the private key used to authenticate the ODIS request
- * @param context Specifies which ODIS combiner url should be queried (i.e. mainnet or alfajores)
+ * @param context Specifies which ODIS combiner url should be queried (i.e. mainnet or atlas)
  * @param blindingFactor Optional Private seed used to blind identifers before they are sent to ODIS
  * @param clientVersion Optional Specifies the client software version
  * @param blsBlindingClient Optional Performs blinding and unblinding, defaults to WasmBlsBlindingClient
@@ -115,19 +115,21 @@ export async function getObfuscatedIdentifier(
   keyVersion?: number,
   abortController?: AbortController
 ): Promise<IdentifierHashDetails> {
-  debug('Getting identifier pepper')
+  debug("Getting identifier pepper");
 
-  let seed: Buffer | undefined
+  let seed: Buffer | undefined;
   if (blindingFactor) {
-    seed = Buffer.from(blindingFactor)
-  } else if (signer.authenticationMethod === AuthenticationMethod.ENCRYPTION_KEY) {
-    seed = Buffer.from((signer as EncryptionKeySigner).rawKey)
+    seed = Buffer.from(blindingFactor);
+  } else if (
+    signer.authenticationMethod === AuthenticationMethod.ENCRYPTION_KEY
+  ) {
+    seed = Buffer.from((signer as EncryptionKeySigner).rawKey);
   }
 
   // Fallback to using Wasm version if not specified
   if (!blsBlindingClient) {
-    debug('No BLSBlindingClient found, using WasmBlsBlindingClient')
-    blsBlindingClient = new WasmBlsBlindingClient(context.odisPubKey)
+    debug("No BLSBlindingClient found, using WasmBlsBlindingClient");
+    blsBlindingClient = new WasmBlsBlindingClient(context.odisPubKey);
   }
 
   const base64BlindedMessage = await getBlindedIdentifier(
@@ -135,7 +137,7 @@ export async function getObfuscatedIdentifier(
     identifierPrefix,
     blsBlindingClient,
     seed
-  )
+  );
 
   const base64BlindSig = await getBlindedIdentifierSignature(
     account,
@@ -146,14 +148,14 @@ export async function getObfuscatedIdentifier(
     sessionID,
     keyVersion,
     abortController
-  )
+  );
 
   return getObfuscatedIdentifierFromSignature(
     plaintextIdentifier,
     identifierPrefix,
     base64BlindSig,
     blsBlindingClient
-  )
+  );
 }
 
 /**
@@ -172,17 +174,20 @@ export async function getBlindedIdentifier(
   blsBlindingClient: BlsBlindingClient,
   seed?: Buffer
 ): Promise<string> {
-  debug('Retrieving blinded message')
+  debug("Retrieving blinded message");
   // phone number identifiers don't have prefixes in the blinding stage
   // to maintain backwards compatibility wih ASv1
-  let identifier = getPrefixedIdentifier(plaintextIdentifier, identifierPrefix)
+  let identifier = getPrefixedIdentifier(plaintextIdentifier, identifierPrefix);
   if (identifierPrefix === IdentifierPrefix.PHONE_NUMBER) {
     if (!isE164Number(plaintextIdentifier)) {
-      throw new Error(`Invalid phone number: ${plaintextIdentifier}`)
+      throw new Error(`Invalid phone number: ${plaintextIdentifier}`);
     }
-    identifier = plaintextIdentifier
+    identifier = plaintextIdentifier;
   }
-  return blsBlindingClient.blindMessage(Buffer.from(identifier).toString('base64'), seed)
+  return blsBlindingClient.blindMessage(
+    Buffer.from(identifier).toString("base64"),
+    seed
+  );
 }
 
 /**
@@ -194,7 +199,7 @@ export async function getBlindedIdentifier(
  *
  * @param account The address making the request to ODIS, from which quota will be charged
  * @param signer Object containing the private key used to authenticate the ODIS request
- * @param context Specifies which ODIS combiner url should be queried (i.e. mainnet or alfajores)
+ * @param context Specifies which ODIS combiner url should be queried (i.e. mainnet or atlas)
  * @param base64BlindedMessage The blinded prefixed identifier to be sent to ODIS
  * @param clientVersion Optional Specifies the client software version
  * @param sessionID Optional Used to track user sessions across the client and ODIS
@@ -217,7 +222,7 @@ export async function getBlindedIdentifierSignature(
     version: clientVersion,
     authenticationMethod: signer.authenticationMethod,
     sessionID,
-  }
+  };
 
   const response = await queryOdis(
     body,
@@ -229,13 +234,13 @@ export async function getBlindedIdentifierSignature(
       Authorization: await getOdisPnpRequestAuth(body, signer),
     },
     abortControlller
-  )
+  );
 
   if (!response.success) {
-    throw new Error(response.error)
+    throw new Error(response.error);
   }
 
-  return response.signature
+  return response.signature;
 }
 
 /**
@@ -252,19 +257,25 @@ export async function getObfuscatedIdentifierFromSignature(
   base64BlindedSignature: string,
   blsBlindingClient: BlsBlindingClient
 ): Promise<IdentifierHashDetails> {
-  debug('Retrieving unblinded signature')
-  const base64UnblindedSig = await blsBlindingClient.unblindAndVerifyMessage(base64BlindedSignature)
-  const sigBuf = Buffer.from(base64UnblindedSig, 'base64')
+  debug("Retrieving unblinded signature");
+  const base64UnblindedSig = await blsBlindingClient.unblindAndVerifyMessage(
+    base64BlindedSignature
+  );
+  const sigBuf = Buffer.from(base64UnblindedSig, "base64");
 
-  debug('Converting sig to pepper')
-  const pepper = getPepperFromThresholdSignature(sigBuf)
-  const obfuscatedIdentifier = getIdentifierHash(plaintextIdentifier, identifierPrefix, pepper)
+  debug("Converting sig to pepper");
+  const pepper = getPepperFromThresholdSignature(sigBuf);
+  const obfuscatedIdentifier = getIdentifierHash(
+    plaintextIdentifier,
+    identifierPrefix,
+    pepper
+  );
   return {
     plaintextIdentifier,
     obfuscatedIdentifier,
     pepper,
     unblindedSignature: base64UnblindedSig,
-  }
+  };
 }
 
 /**
@@ -283,8 +294,13 @@ export const getIdentifierHash = (
   identifierPrefix: IdentifierPrefix,
   pepper: string
 ): string => {
-  return baseGetIdentifierHash(sha3, plaintextIdentifier, identifierPrefix, pepper)
-}
+  return baseGetIdentifierHash(
+    sha3,
+    plaintextIdentifier,
+    identifierPrefix,
+    pepper
+  );
+};
 
 /**
  * This is the algorithm that creates a pepper from the unblinded message signatures
@@ -295,5 +311,8 @@ export const getIdentifierHash = (
  * @param sigBuf Unblinded signature returned by ODIS
  */
 export function getPepperFromThresholdSignature(sigBuf: Buffer) {
-  return createHash('sha256').update(sigBuf).digest('base64').slice(0, PEPPER_CHAR_LENGTH)
+  return createHash("sha256")
+    .update(sigBuf)
+    .digest("base64")
+    .slice(0, PEPPER_CHAR_LENGTH);
 }

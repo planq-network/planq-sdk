@@ -36,7 +36,7 @@ To start working with contractkit you need a `kit` instance:
 ```ts
 import { newKit } from '@planq-network/contractkit' // or import { newKit } from '@planq-network/contractkit/lib/mini-kit'
 
-// Remotely connect to the Alfajores testnet
+// Remotely connect to the Atlas testnet
 const kit = newKit('https://evm-atlas.planq.network')
 ```
 

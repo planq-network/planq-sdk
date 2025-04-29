@@ -33,8 +33,8 @@
 
 ### Object literals
 
-* [ODIS_ALFAJORESSTAGING_CONTEXT](_odis_query_.md#const-odis_alfajoresstaging_context)
-* [ODIS_ALFAJORES_CONTEXT](_odis_query_.md#const-odis_alfajores_context)
+* [ODIS_ATLASSTAGING_CONTEXT](_odis_query_.md#const-odis_atlasstaging_context)
+* [ODIS_ATLAS_CONTEXT](_odis_query_.md#const-odis_atlas_context)
 * [ODIS_MAINNET_CONTEXT](_odis_query_.md#const-odis_mainnet_context)
 
 ## Type aliases
@@ -181,9 +181,9 @@ Name | Type |
 
 ## Object literals
 
-### `Const` ODIS_ALFAJORESSTAGING_CONTEXT
+### `Const` ODIS_ATLASSTAGING_CONTEXT
 
-### ▪ **ODIS_ALFAJORESSTAGING_CONTEXT**: *object*
+### ▪ **ODIS_ATLASSTAGING_CONTEXT**: *object*
 
 *Defined in [packages/sdk/identity/src/odis/query.ts:74](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/identity/src/odis/query.ts#L74)*
 
@@ -201,9 +201,9 @@ Name | Type |
 
 ___
 
-### `Const` ODIS_ALFAJORES_CONTEXT
+### `Const` ODIS_ATLAS_CONTEXT
 
-### ▪ **ODIS_ALFAJORES_CONTEXT**: *object*
+### ▪ **ODIS_ATLAS_CONTEXT**: *object*
 
 *Defined in [packages/sdk/identity/src/odis/query.ts:68](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/identity/src/odis/query.ts#L68)*
 

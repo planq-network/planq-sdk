@@ -9,7 +9,7 @@ set -euo pipefail
 
 TRUFFLE_OVERRIDE=""
 MIGRATION_OVERRIDE=""
-NETWORK="alfajores"
+NETWORK="atlas"
 RESET=""
 FROM="5"
 TO="5"

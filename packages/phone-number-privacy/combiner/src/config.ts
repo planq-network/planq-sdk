@@ -6,72 +6,83 @@ import {
   rootLogger,
   TestUtils,
   toBool,
-} from '@planq-network/phone-number-privacy-common'
-import * as functions from 'firebase-functions'
+} from "@planq-network/phone-number-privacy-common";
+import * as functions from "firebase-functions";
 export function getCombinerVersion(): string {
-  return process.env.npm_package_version ?? require('../package.json').version ?? '0.0.0'
+  return (
+    process.env.npm_package_version ??
+    require("../package.json").version ??
+    "0.0.0"
+  );
 }
 export const DEV_MODE =
-  process.env.NODE_ENV !== 'production' || process.env.FUNCTIONS_EMULATOR === 'true'
+  process.env.NODE_ENV !== "production" ||
+  process.env.FUNCTIONS_EMULATOR === "true";
 
-export const FORNO_ALFAJORES = 'https://evm-atlas.planq.network'
+export const FORNO_ATLAS = "https://evm-atlas.planq.network";
 
 // combiner always thinks these accounts/phoneNumbersa are verified to enable e2e testing
-export const E2E_TEST_PHONE_NUMBERS_RAW: string[] = ['+14155550123', '+15555555555', '+14444444444']
+export const E2E_TEST_PHONE_NUMBERS_RAW: string[] = [
+  "+14155550123",
+  "+15555555555",
+  "+14444444444",
+];
 
-export const E2E_TEST_ACCOUNTS: string[] = ['0x1be31a94361a391bbafb2a4ccd704f57dc04d4bb']
+export const E2E_TEST_ACCOUNTS: string[] = [
+  "0x1be31a94361a391bbafb2a4ccd704f57dc04d4bb",
+];
 
-export const MAX_BLOCK_DISCREPANCY_THRESHOLD = 3
-export const MAX_TOTAL_QUOTA_DISCREPANCY_THRESHOLD = 5
-export const MAX_QUERY_COUNT_DISCREPANCY_THRESHOLD = 5
+export const MAX_BLOCK_DISCREPANCY_THRESHOLD = 3;
+export const MAX_TOTAL_QUOTA_DISCREPANCY_THRESHOLD = 5;
+export const MAX_QUERY_COUNT_DISCREPANCY_THRESHOLD = 5;
 
 export interface OdisConfig {
-  serviceName: string
-  enabled: boolean
+  serviceName: string;
+  enabled: boolean;
   odisServices: {
-    signers: string
-    timeoutMilliSeconds: number
-  }
+    signers: string;
+    timeoutMilliSeconds: number;
+  };
   keys: {
-    currentVersion: number
-    versions: string // parse as KeyVersionInfo[]
-  }
-  fullNodeTimeoutMs: number
-  fullNodeRetryCount: number
-  fullNodeRetryDelayMs: number
+    currentVersion: number;
+    versions: string; // parse as KeyVersionInfo[]
+  };
+  fullNodeTimeoutMs: number;
+  fullNodeRetryCount: number;
+  fullNodeRetryDelayMs: number;
 }
 
 export interface CombinerConfig {
-  serviceName: string
-  blockchain: BlockchainConfig
-  phoneNumberPrivacy: OdisConfig
-  domains: OdisConfig
+  serviceName: string;
+  blockchain: BlockchainConfig;
+  phoneNumberPrivacy: OdisConfig;
+  domains: OdisConfig;
 }
 
-let config: CombinerConfig
+let config: CombinerConfig;
 
-const defaultServiceName = 'odis-combiner'
+const defaultServiceName = "odis-combiner";
 
 if (DEV_MODE) {
-  rootLogger(defaultServiceName).debug('Running in dev mode')
+  rootLogger(defaultServiceName).debug("Running in dev mode");
   const devSignersString = JSON.stringify([
     {
-      url: 'http://localhost:3001',
-      fallbackUrl: 'http://localhost:3001/fallback',
+      url: "http://localhost:3001",
+      fallbackUrl: "http://localhost:3001/fallback",
     },
     {
-      url: 'http://localhost:3002',
-      fallbackUrl: 'http://localhost:3002/fallback',
+      url: "http://localhost:3002",
+      fallbackUrl: "http://localhost:3002/fallback",
     },
     {
-      url: 'http://localhost:3003',
-      fallbackUrl: 'http://localhost:3003/fallback',
+      url: "http://localhost:3003",
+      fallbackUrl: "http://localhost:3003/fallback",
     },
-  ])
+  ]);
   config = {
     serviceName: defaultServiceName,
     blockchain: {
-      provider: FORNO_ALFAJORES,
+      provider: FORNO_ATLAS,
     },
     phoneNumberPrivacy: {
       serviceName: defaultServiceName,
@@ -141,9 +152,9 @@ if (DEV_MODE) {
       fullNodeRetryCount: RETRY_COUNT,
       fullNodeRetryDelayMs: RETRY_DELAY_IN_MS,
     },
-  }
+  };
 } else {
-  const functionConfig = functions.config()
+  const functionConfig = functions.config();
   config = {
     serviceName: functionConfig.service.name ?? defaultServiceName,
     blockchain: {
@@ -163,8 +174,12 @@ if (DEV_MODE) {
         currentVersion: Number(functionConfig.pnp_keys.current_version),
         versions: functionConfig.pnp_keys.versions,
       },
-      fullNodeTimeoutMs: Number(functionConfig.pnp.full_node_timeout_ms ?? FULL_NODE_TIMEOUT_IN_MS),
-      fullNodeRetryCount: Number(functionConfig.pnp.full_node_retry_count ?? RETRY_COUNT),
+      fullNodeTimeoutMs: Number(
+        functionConfig.pnp.full_node_timeout_ms ?? FULL_NODE_TIMEOUT_IN_MS
+      ),
+      fullNodeRetryCount: Number(
+        functionConfig.pnp.full_node_retry_count ?? RETRY_COUNT
+      ),
       fullNodeRetryDelayMs: Number(
         functionConfig.pnp.full_node_retry_delay_ms ?? RETRY_DELAY_IN_MS
       ),
@@ -182,12 +197,16 @@ if (DEV_MODE) {
         currentVersion: Number(functionConfig.domains_keys.current_version),
         versions: functionConfig.domains_keys.versions,
       },
-      fullNodeTimeoutMs: Number(functionConfig.pnp.full_node_timeout_ms ?? FULL_NODE_TIMEOUT_IN_MS),
-      fullNodeRetryCount: Number(functionConfig.pnp.full_node_retry_count ?? RETRY_COUNT),
+      fullNodeTimeoutMs: Number(
+        functionConfig.pnp.full_node_timeout_ms ?? FULL_NODE_TIMEOUT_IN_MS
+      ),
+      fullNodeRetryCount: Number(
+        functionConfig.pnp.full_node_retry_count ?? RETRY_COUNT
+      ),
       fullNodeRetryDelayMs: Number(
         functionConfig.pnp.full_node_retry_delay_ms ?? RETRY_DELAY_IN_MS
       ),
     },
-  }
+  };
 }
-export default config
+export default config;

@@ -12,7 +12,7 @@ kube:
 
 environment:
   name: test
-  network: alfajores
+  network: atlas
   cluster:
     name: test-cluster
     location: location
@@ -77,7 +77,7 @@ onboarding:
     requestSubsidisedAttestation: 10
     submitMetaTransaction: 20
   relayer:
-    host: alfajores-relayer
+    host: atlas-relayer
     port: 3000
     rpcTimeoutMs: 12000
   db:

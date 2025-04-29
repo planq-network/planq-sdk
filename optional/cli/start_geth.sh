@@ -7,8 +7,8 @@ ls /usr/local/bin
 # Usage: start_geth.sh [geth binary location] [network name] [sync mode] [data_dir_path] [genesis_filepath] [static_nodes_filepath]
 # Delete this
 GETH_BINARY=${1:-"/usr/local/bin/geth"}
-# Default to testing the alfajores network
-NETWORK_NAME=${2:-"alfajores"}
+# Default to testing the atlas network
+NETWORK_NAME=${2:-"atlas"}
 # Default to testing the ultralight sync mode
 SYNCMODE=${3:-"ultralight"}
 # Default to 44787

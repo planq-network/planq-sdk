@@ -5,7 +5,7 @@ echo "Processing encrypted files v2"
 # Set list of secret files to encrypt and decrypt.
 files=(
   ".env.mnemonic:celo-testnet"
-  ".env.mnemonic.alfajores:celo-testnet"
+  ".env.mnemonic.atlas:celo-testnet"
   ".env.mnemonic.baklava:celo-testnet"
   ".env.mnemonic.rc1:celo-testnet-production"
 )

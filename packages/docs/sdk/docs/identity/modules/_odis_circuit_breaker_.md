@@ -35,7 +35,7 @@
 
 ### Object literals
 
-* [VALORA_ALFAJORES_CIRCUIT_BREAKER_ENVIRONMENT](_odis_circuit_breaker_.md#const-valora_alfajores_circuit_breaker_environment)
+* [VALORA_ATLAS_CIRCUIT_BREAKER_ENVIRONMENT](_odis_circuit_breaker_.md#const-valora_atlas_circuit_breaker_environment)
 * [VALORA_MAINNET_CIRCUIT_BREAKER_ENVIRONMENT](_odis_circuit_breaker_.md#const-valora_mainnet_circuit_breaker_environment)
 
 ## Type aliases
@@ -56,9 +56,9 @@
 
 ## Object literals
 
-### `Const` VALORA_ALFAJORES_CIRCUIT_BREAKER_ENVIRONMENT
+### `Const` VALORA_ATLAS_CIRCUIT_BREAKER_ENVIRONMENT
 
-### ▪ **VALORA_ALFAJORES_CIRCUIT_BREAKER_ENVIRONMENT**: *object*
+### ▪ **VALORA_ATLAS_CIRCUIT_BREAKER_ENVIRONMENT**: *object*
 
 *Defined in [packages/sdk/identity/src/odis/circuit-breaker.ts:12](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/identity/src/odis/circuit-breaker.ts#L12)*
 
@@ -80,7 +80,7 @@ yGAQt3CUOwUQvt+RObDXiHHIxJjU+6/81X3Jdnt3dFEfAgMBAAE=
 
 ###  url
 
-• **url**: *string* = "https://us-central1-celo-mobile-alfajores.cloudfunctions.net/circuitBreaker/"
+• **url**: *string* = "https://us-central1-celo-mobile-atlas.cloudfunctions.net/circuitBreaker/"
 
 *Defined in [packages/sdk/identity/src/odis/circuit-breaker.ts:13](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/identity/src/odis/circuit-breaker.ts#L13)*
 

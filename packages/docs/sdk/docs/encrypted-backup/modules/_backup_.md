@@ -83,7 +83,7 @@ with IETF recommended parameters [IETF recommended scrypt parameters](https://to
 Name | Type | Description |
 ------ | ------ | ------ |
 `data` | Buffer‹› | The secret data (e.g. BIP-39 mnemonic phrase) to be included in the encrypted backup. |
-`environment` | undefined &#124; [MAINNET](../enums/_config_.environmentidentifier.md#mainnet) &#124; [ALFAJORES](../enums/_config_.environmentidentifier.md#alfajores) | - |
+`environment` | undefined &#124; [MAINNET](../enums/_config_.environmentidentifier.md#mainnet) &#124; [ATLAS](../enums/_config_.environmentidentifier.md#atlas) | - |
 `metadata` | undefined &#124; object | Arbitrary key-value data to include in the backup to identify it.  |
 `password` | string | Password to use in deriving the encryption key. |
 
@@ -128,7 +128,7 @@ forcibly open backups created with this function.
 Name | Type | Description |
 ------ | ------ | ------ |
 `data` | Buffer‹› | The secret data (e.g. BIP-39 mnemonic phrase) to be included in the encrypted backup. |
-`environment` | undefined &#124; [MAINNET](../enums/_config_.environmentidentifier.md#mainnet) &#124; [ALFAJORES](../enums/_config_.environmentidentifier.md#alfajores) | - |
+`environment` | undefined &#124; [MAINNET](../enums/_config_.environmentidentifier.md#mainnet) &#124; [ATLAS](../enums/_config_.environmentidentifier.md#atlas) | - |
 `metadata` | undefined &#124; object | Arbitrary key-value data to include in the backup to identify it.  |
 `pin` | string | PIN to use in deriving the encryption key. |
 

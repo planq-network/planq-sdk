@@ -6,14 +6,14 @@
 
 ### Enumeration members
 
-* [ALFAJORES](_config_.environmentidentifier.md#alfajores)
+* [ATLAS](_config_.environmentidentifier.md#atlas)
 * [MAINNET](_config_.environmentidentifier.md#mainnet)
 
 ## Enumeration members
 
-###  ALFAJORES
+###  ATLAS
 
-• **ALFAJORES**: = "ALFAJORES"
+• **ATLAS**: = "ATLAS"
 
 *Defined in [packages/sdk/encrypted-backup/src/config.ts:253](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/encrypted-backup/src/config.ts#L253)*
 

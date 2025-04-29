@@ -11,7 +11,7 @@ steps:
     "--cache=true",
     "--destination=gcr.io/$PROJECT_ID/planqcli:$COMMIT_SHA",
     "--build-arg",
-    "planq_env=alfajores"
+    "planq_env=atlas"
   ]
   id: Build CLI docker image
   waitFor: ['-']

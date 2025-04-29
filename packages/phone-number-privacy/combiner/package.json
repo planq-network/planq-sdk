@@ -9,13 +9,13 @@
     "dev": "yarn build && firebase serve --only functions",
     "deploy": "yarn build && firebase deploy --only functions:combiner",
     "deploy:staging": "yarn deploy --project planq-phone-number-privacy-stg",
-    "deploy:alfajores": "yarn deploy --project planq-phone-number-privacy",
+    "deploy:atlas": "yarn deploy --project planq-phone-number-privacy",
     "deploy:mainnet": "yarn deploy --project planq-pgpnp-mainnet",
     "config:get:staging": "firebase functions:config:get --project planq-phone-number-privacy-stg",
-    "config:get:alfajores": "firebase functions:config:get --project planq-phone-number-privacy",
+    "config:get:atlas": "firebase functions:config:get --project planq-phone-number-privacy",
     "config:get:mainnet": "firebase functions:config:get --project planq-pgpnp-mainnet",
     "config:set:staging": "firebase functions:config:set --project planq-phone-number-privacy-stg",
-    "config:set:alfajores": "firebase functions:config:set --project planq-phone-number-privacy",
+    "config:set:atlas": "firebase functions:config:set --project planq-phone-number-privacy",
     "config:set:mainnet": "firebase functions:config:set --project planq-pgpnp-mainnet",
     "clean": "tsc -b  --clean",
     "build": "tsc -b ",
@@ -25,7 +25,7 @@
     "test:integration": "jest --runInBand test/integration",
     "test:e2e": "jest test/end-to-end --verbose",
     "test:e2e:staging": "CONTEXT_NAME=staging yarn test:e2e",
-    "test:e2e:alfajores": "CONTEXT_NAME=alfajores yarn test:e2e"
+    "test:e2e:atlas": "CONTEXT_NAME=atlas yarn test:e2e"
   },
   "dependencies": {
     "@planq-network/contractkit": "^4.1.0",

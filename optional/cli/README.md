@@ -50,12 +50,12 @@ If all works well, navigate to `packages/cli`.
 > I've got the cli built successfully but the running the `cli` yields: `Error: Returned values aren't valid, did it run Out of Gas?`.
 
 When running the `cli` against a full node, this can mean that the contract artifacts are out of date.
-Solution: switch to the `alfajores` branch and build the `planq-sdk`.
+Solution: switch to the `atlas` branch and build the `planq-sdk`.
 
 Go to the `planq-sdk` root directory and
 
 ```bash
-> git checkout alfajores
+> git checkout atlas
 > yarn
 > yarn build
 > cd packages/cli

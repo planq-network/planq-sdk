@@ -1,5 +1,5 @@
-import { selectiveRetryAsyncWithBackOff } from '@planq-network/base/lib/async'
-import { ContractKit } from '@planq-network/contractkit'
+import {selectiveRetryAsyncWithBackOff} from "@planq-network/base/lib/async";
+import {ContractKit} from "@planq-network/contractkit";
 import {
   AuthenticationMethod,
   CombinerEndpoint,
@@ -12,84 +12,89 @@ import {
   OdisResponse,
   PhoneNumberPrivacyRequest,
   signWithRawKey,
-} from '@planq-network/phone-number-privacy-common'
-import fetch from 'cross-fetch'
-import debugFactory from 'debug'
-import { isLeft } from 'fp-ts/lib/Either'
-import * as t from 'io-ts'
+} from "@planq-network/phone-number-privacy-common";
+import fetch from "cross-fetch";
+import debugFactory from "debug";
+import {isLeft} from "fp-ts/lib/Either";
+import * as t from "io-ts";
 
-const debug = debugFactory('kit:odis:query')
+const debug = debugFactory("kit:odis:query");
 
 export interface WalletKeySigner {
-  authenticationMethod: AuthenticationMethod.WALLET_KEY
-  contractKit: ContractKit
+  authenticationMethod: AuthenticationMethod.WALLET_KEY;
+  contractKit: ContractKit;
 }
 
 export interface EncryptionKeySigner {
-  authenticationMethod: AuthenticationMethod.ENCRYPTION_KEY
-  rawKey: string
+  authenticationMethod: AuthenticationMethod.ENCRYPTION_KEY;
+  rawKey: string;
 }
 
 // Support signing with the DEK or with the
-export type AuthSigner = WalletKeySigner | EncryptionKeySigner
+export type AuthSigner = WalletKeySigner | EncryptionKeySigner;
 
 // Re-export types and aliases to maintain backwards compatibility.
-export { AuthenticationMethod, PhoneNumberPrivacyRequest, signWithRawKey }
+export {AuthenticationMethod, PhoneNumberPrivacyRequest, signWithRawKey};
 
 export enum ErrorMessages {
-  ODIS_QUOTA_ERROR = 'odisQuotaError',
-  ODIS_RATE_LIMIT_ERROR = 'odisRateLimitError',
-  ODIS_INPUT_ERROR = 'odisBadInputError',
-  ODIS_AUTH_ERROR = 'odisAuthError',
-  ODIS_CLIENT_ERROR = 'Unknown Client Error',
-  ODIS_FETCH_ERROR = 'odisFetchError',
-  ODIS_RESPONSE_ERROR = 'odisResponseError',
+  ODIS_QUOTA_ERROR = "odisQuotaError",
+  ODIS_RATE_LIMIT_ERROR = "odisRateLimitError",
+  ODIS_INPUT_ERROR = "odisBadInputError",
+  ODIS_AUTH_ERROR = "odisAuthError",
+  ODIS_CLIENT_ERROR = "Unknown Client Error",
+  ODIS_FETCH_ERROR = "odisFetchError",
+  ODIS_RESPONSE_ERROR = "odisResponseError",
 }
 
 export interface ServiceContext {
-  odisUrl: string // combiner url
-  odisPubKey: string
+  odisUrl: string; // combiner url
+  odisPubKey: string;
 }
 
 export const ODIS_STAGING_CONTEXT: ServiceContext = {
-  odisUrl: 'https://us-central1-planq-phone-number-privacy-stg.cloudfunctions.net/combiner',
+  odisUrl:
+    "https://us-central1-planq-phone-number-privacy-stg.cloudfunctions.net/combiner",
   odisPubKey:
-    '7FsWGsFnmVvRfMDpzz95Np76wf/1sPaK0Og9yiB+P8QbjiC8FV67NBans9hzZEkBaQMhiapzgMR6CkZIZPvgwQboAxl65JWRZecGe5V3XO4sdKeNemdAZ2TzQuWkuZoA',
-}
+    "7FsWGsFnmVvRfMDpzz95Np76wf/1sPaK0Og9yiB+P8QbjiC8FV67NBans9hzZEkBaQMhiapzgMR6CkZIZPvgwQboAxl65JWRZecGe5V3XO4sdKeNemdAZ2TzQuWkuZoA",
+};
 
-export const ODIS_ALFAJORES_CONTEXT_PNP: ServiceContext = {
-  odisUrl: 'https://us-central1-planq-phone-number-privacy.cloudfunctions.net/combiner',
+export const ODIS_ATLAS_CONTEXT_PNP: ServiceContext = {
+  odisUrl:
+    "https://us-central1-planq-phone-number-privacy.cloudfunctions.net/combiner",
   odisPubKey:
-    'kPoRxWdEdZ/Nd3uQnp3FJFs54zuiS+ksqvOm9x8vY6KHPG8jrfqysvIRU0wtqYsBKA7SoAsICMBv8C/Fb2ZpDOqhSqvr/sZbZoHmQfvbqrzbtDIPvUIrHgRS0ydJCMsA',
-}
+    "kPoRxWdEdZ/Nd3uQnp3FJFs54zuiS+ksqvOm9x8vY6KHPG8jrfqysvIRU0wtqYsBKA7SoAsICMBv8C/Fb2ZpDOqhSqvr/sZbZoHmQfvbqrzbtDIPvUIrHgRS0ydJCMsA",
+};
 
-export const ODIS_ALFAJORES_CONTEXT_DOMAINS: ServiceContext = {
-  odisUrl: 'https://us-central1-planq-phone-number-privacy.cloudfunctions.net/combiner',
+export const ODIS_ATLAS_CONTEXT_DOMAINS: ServiceContext = {
+  odisUrl:
+    "https://us-central1-planq-phone-number-privacy.cloudfunctions.net/combiner",
   odisPubKey:
-    '+ZrxyPvLChWUX/DyPw6TuGwQH0glDJEbSrSxUARyP5PuqYyP/U4WZTV1e0bAUioBZ6QCJMiLpDwTaFvy8VnmM5RBbLQUMrMg5p4+CBCqj6HhsMfcyUj8V0LyuNdStlCB',
-}
+    "+ZrxyPvLChWUX/DyPw6TuGwQH0glDJEbSrSxUARyP5PuqYyP/U4WZTV1e0bAUioBZ6QCJMiLpDwTaFvy8VnmM5RBbLQUMrMg5p4+CBCqj6HhsMfcyUj8V0LyuNdStlCB",
+};
 
 export const ODIS_MAINNET_CONTEXT_PNP: ServiceContext = {
-  odisUrl: 'https://us-central1-planq-pgpnp-mainnet.cloudfunctions.net/combiner',
+  odisUrl:
+    "https://us-central1-planq-pgpnp-mainnet.cloudfunctions.net/combiner",
   odisPubKey:
-    'FvreHfLmhBjwxHxsxeyrcOLtSonC9j7K3WrS4QapYsQH6LdaDTaNGmnlQMfFY04Bp/K4wAvqQwO9/bqPVCKf8Ze8OZo8Frmog4JY4xAiwrsqOXxug11+htjEe1pj4uMA',
-}
+    "FvreHfLmhBjwxHxsxeyrcOLtSonC9j7K3WrS4QapYsQH6LdaDTaNGmnlQMfFY04Bp/K4wAvqQwO9/bqPVCKf8Ze8OZo8Frmog4JY4xAiwrsqOXxug11+htjEe1pj4uMA",
+};
 
 export const ODIS_MAINNET_CONTEXT_DOMAINS: ServiceContext = {
-  odisUrl: 'https://us-central1-planq-pgpnp-mainnet.cloudfunctions.net/combiner',
+  odisUrl:
+    "https://us-central1-planq-pgpnp-mainnet.cloudfunctions.net/combiner",
   odisPubKey:
-    'LX4tLiuYm8geZ3ztmH7oIWz4ohXt3ePRTd9BbG9RO86NMrApflioiOzKYtIsyjEA0uarnX8Emo+luTY4bwEWpgZDyPYE6UMWAoBaZBdy6NDMgAxSbdNtaQEq51fBjCUA',
-}
+    "LX4tLiuYm8geZ3ztmH7oIWz4ohXt3ePRTd9BbG9RO86NMrApflioiOzKYtIsyjEA0uarnX8Emo+luTY4bwEWpgZDyPYE6UMWAoBaZBdy6NDMgAxSbdNtaQEq51fBjCUA",
+};
 
 export enum OdisAPI {
-  PNP = 'pnp',
-  DOMAIN = 'domain',
+  PNP = "pnp",
+  DOMAIN = "domain",
 }
 
 export enum OdisContextName {
-  STAGING = 'alfajoresstaging',
-  ALFAJORES = 'alfajores',
-  MAINNET = 'mainnet',
+  STAGING = "atlasstaging",
+  ATLAS = "atlas",
+  MAINNET = "mainnet",
 }
 
 export function getServiceContext(
@@ -97,29 +102,29 @@ export function getServiceContext(
   api: OdisAPI = OdisAPI.PNP
 ) {
   switch (contextName) {
-    case OdisContextName.ALFAJORES:
+    case OdisContextName.ATLAS:
       return {
-        [OdisAPI.PNP]: ODIS_ALFAJORES_CONTEXT_PNP,
-        [OdisAPI.DOMAIN]: ODIS_ALFAJORES_CONTEXT_DOMAINS,
-      }[api]
+        [OdisAPI.PNP]: ODIS_ATLAS_CONTEXT_PNP,
+        [OdisAPI.DOMAIN]: ODIS_ATLAS_CONTEXT_DOMAINS,
+      }[api];
     case OdisContextName.STAGING:
       return {
         // Intentionally the same on staging
         [OdisAPI.PNP]: ODIS_STAGING_CONTEXT,
         [OdisAPI.DOMAIN]: ODIS_STAGING_CONTEXT,
-      }[api]
+      }[api];
     case OdisContextName.MAINNET:
       return {
         [OdisAPI.PNP]: ODIS_MAINNET_CONTEXT_PNP,
         [OdisAPI.DOMAIN]: ODIS_MAINNET_CONTEXT_DOMAINS,
-      }[api]
+      }[api];
     default:
-      return ODIS_MAINNET_CONTEXT_PNP
+      return ODIS_MAINNET_CONTEXT_PNP;
   }
 }
 
 export function signWithDEK(msg: string, signer: EncryptionKeySigner) {
-  return signWithRawKey(msg, signer.rawKey)
+  return signWithRawKey(msg, signer.rawKey);
 }
 
 export async function getOdisPnpRequestAuth(
@@ -127,14 +132,14 @@ export async function getOdisPnpRequestAuth(
   signer: AuthSigner
 ): Promise<string> {
   // Sign payload using provided account and authentication method.
-  const bodyString = JSON.stringify(body)
+  const bodyString = JSON.stringify(body);
   if (signer.authenticationMethod === AuthenticationMethod.ENCRYPTION_KEY) {
-    return signWithDEK(bodyString, signer as EncryptionKeySigner)
+    return signWithDEK(bodyString, signer as EncryptionKeySigner);
   }
   if (signer.authenticationMethod === AuthenticationMethod.WALLET_KEY) {
-    return signer.contractKit.connection.sign(bodyString, body.account)
+    return signer.contractKit.connection.sign(bodyString, body.account);
   }
-  throw new Error('AuthenticationMethod not supported')
+  throw new Error("AuthenticationMethod not supported");
 }
 
 /**
@@ -154,7 +159,7 @@ export async function queryOdis<R extends OdisRequest>(
   headers: OdisRequestHeader<R>,
   abortController?: AbortController
 ): Promise<OdisResponse<R>> {
-  debug(`Posting to ${endpoint}`)
+  debug(`Posting to ${endpoint}`);
 
   const dontRetry = [
     ErrorMessages.ODIS_QUOTA_ERROR,
@@ -162,61 +167,61 @@ export async function queryOdis<R extends OdisRequest>(
     ErrorMessages.ODIS_AUTH_ERROR,
     ErrorMessages.ODIS_INPUT_ERROR,
     ErrorMessages.ODIS_CLIENT_ERROR,
-  ]
+  ];
 
   return selectiveRetryAsyncWithBackOff(
     async () => {
-      let res: Response
+      let res: Response;
       try {
         res = await fetch(context.odisUrl + endpoint, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
+            Accept: "application/json",
+            "Content-Type": "application/json",
             ...headers,
           },
           body: JSON.stringify(body),
           signal: abortController?.signal,
-        })
+        });
       } catch (error) {
-        throw new Error(`${ErrorMessages.ODIS_FETCH_ERROR}: ${error}`)
+        throw new Error(`${ErrorMessages.ODIS_FETCH_ERROR}: ${error}`);
       }
 
       if (res.ok) {
-        debug('Response ok. Parsing.')
-        const response = await res.json()
+        debug("Response ok. Parsing.");
+        const response = await res.json();
 
         // Verify that the response is the type we expected, then return it.
-        const decoding = responseSchema.decode(response)
+        const decoding = responseSchema.decode(response);
         if (isLeft(decoding)) {
-          throw new Error(ErrorMessages.ODIS_RESPONSE_ERROR)
+          throw new Error(ErrorMessages.ODIS_RESPONSE_ERROR);
         }
-        return decoding.right
+        return decoding.right;
       }
 
-      debug(`Response not okay. Status ${res.status}`)
+      debug(`Response not okay. Status ${res.status}`);
 
       switch (res.status) {
         case 403:
-          throw new Error(ErrorMessages.ODIS_QUOTA_ERROR)
+          throw new Error(ErrorMessages.ODIS_QUOTA_ERROR);
         case 429:
-          throw new Error(ErrorMessages.ODIS_RATE_LIMIT_ERROR)
+          throw new Error(ErrorMessages.ODIS_RATE_LIMIT_ERROR);
         case 400:
-          throw new Error(ErrorMessages.ODIS_INPUT_ERROR)
+          throw new Error(ErrorMessages.ODIS_INPUT_ERROR);
         case 401:
-          throw new Error(ErrorMessages.ODIS_AUTH_ERROR)
+          throw new Error(ErrorMessages.ODIS_AUTH_ERROR);
         default:
           if (res.status >= 400 && res.status < 500) {
             // Don't retry error codes in 400s
-            throw new Error(`${ErrorMessages.ODIS_CLIENT_ERROR} ${res.status}`)
+            throw new Error(`${ErrorMessages.ODIS_CLIENT_ERROR} ${res.status}`);
           }
-          throw new Error(`Unknown failure ${res.status}`)
+          throw new Error(`Unknown failure ${res.status}`);
       }
     },
     3,
     dontRetry,
     []
-  )
+  );
 }
 
 /**
@@ -241,5 +246,5 @@ export async function sendOdisDomainRequest<R extends DomainRequest>(
     endpoint,
     responseSchema,
     headers as OdisRequestHeader<R>
-  ) as Promise<DomainResponse<R>>
+  ) as Promise<DomainResponse<R>>;
 }

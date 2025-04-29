@@ -23,9 +23,9 @@
 
 ### Object literals
 
-* [PASSWORD_HARDENING_ALFAJORES_CONFIG](_config_.md#const-password_hardening_alfajores_config)
+* [PASSWORD_HARDENING_ATLAS_CONFIG](_config_.md#const-password_hardening_atlas_config)
 * [PASSWORD_HARDENING_MAINNET_CONFIG](_config_.md#const-password_hardening_mainnet_config)
-* [PIN_HARDENING_ALFAJORES_CONFIG](_config_.md#const-pin_hardening_alfajores_config)
+* [PIN_HARDENING_ATLAS_CONFIG](_config_.md#const-pin_hardening_atlas_config)
 * [PIN_HARDENING_MAINNET_CONFIG](_config_.md#const-pin_hardening_mainnet_config)
 
 ## Type aliases
@@ -38,9 +38,9 @@
 
 ## Object literals
 
-### `Const` PASSWORD_HARDENING_ALFAJORES_CONFIG
+### `Const` PASSWORD_HARDENING_ATLAS_CONFIG
 
-### ▪ **PASSWORD_HARDENING_ALFAJORES_CONFIG**: *object*
+### ▪ **PASSWORD_HARDENING_ATLAS_CONFIG**: *object*
 
 *Defined in [packages/sdk/encrypted-backup/src/config.ts:289](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/encrypted-backup/src/config.ts#L289)*
 
@@ -60,7 +60,7 @@
 
 *Defined in [packages/sdk/encrypted-backup/src/config.ts:290](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/encrypted-backup/src/config.ts#L290)*
 
-* **environment**: *ServiceContext* = ODIS_ALFAJORES_CONTEXT
+* **environment**: *ServiceContext* = ODIS_ATLAS_CONTEXT
 
 * **rateLimit**: *SequentialDelayStage[]* = PASSWORD_HARDENING_RATE_LIMIT
 
@@ -94,9 +94,9 @@ ___
 
 ___
 
-### `Const` PIN_HARDENING_ALFAJORES_CONFIG
+### `Const` PIN_HARDENING_ATLAS_CONFIG
 
-### ▪ **PIN_HARDENING_ALFAJORES_CONFIG**: *object*
+### ▪ **PIN_HARDENING_ATLAS_CONFIG**: *object*
 
 *Defined in [packages/sdk/encrypted-backup/src/config.ts:266](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/encrypted-backup/src/config.ts#L266)*
 
@@ -104,13 +104,13 @@ ___
 
 *Defined in [packages/sdk/encrypted-backup/src/config.ts:271](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/encrypted-backup/src/config.ts#L271)*
 
-* **environment**: *CircuitBreakerServiceContext* = VALORA_ALFAJORES_CIRCUIT_BREAKER_ENVIRONMENT
+* **environment**: *CircuitBreakerServiceContext* = VALORA_ATLAS_CIRCUIT_BREAKER_ENVIRONMENT
 
 ▪ **odis**: *object*
 
 *Defined in [packages/sdk/encrypted-backup/src/config.ts:267](https://github.com/planq-network/planq-sdk/blob/master/packages/sdk/encrypted-backup/src/config.ts#L267)*
 
-* **environment**: *ServiceContext* = ODIS_ALFAJORES_CONTEXT
+* **environment**: *ServiceContext* = ODIS_ATLAS_CONTEXT
 
 * **rateLimit**: *SequentialDelayStage[]* = PIN_HARDENING_RATE_LIMIT
 

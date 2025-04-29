@@ -1,18 +1,23 @@
-import { Address } from '@planq-network/base'
+import {Address} from "@planq-network/base";
 import {
   CombinerEndpoint,
   PnpQuotaRequest,
   PnpQuotaResponseSchema,
-} from '@planq-network/phone-number-privacy-common'
-import { AuthSigner, getOdisPnpRequestAuth, queryOdis, ServiceContext } from './query'
+} from "@planq-network/phone-number-privacy-common";
+import {
+  AuthSigner,
+  getOdisPnpRequestAuth,
+  queryOdis,
+  ServiceContext,
+} from "./query";
 
 export interface PnpClientQuotaStatus {
-  version: string
-  performedQueryCount: number
-  totalQuota: number
-  remainingQuota: number
-  blockNumber?: number // TODO fully remove blockNumber from identity sdk
-  warnings?: string[]
+  version: string;
+  performedQueryCount: number;
+  totalQuota: number;
+  remainingQuota: number;
+  blockNumber?: number; // TODO fully remove blockNumber from identity sdk
+  warnings?: string[];
 }
 
 /**
@@ -20,7 +25,7 @@ export interface PnpClientQuotaStatus {
  *
  * @param account The address whose ODIS quota we are querying
  * @param signer Object containing the private key used to authenticate the ODIS request
- * @param context Specifies which ODIS combiner url should be queried (i.e. mainnet or alfajores)
+ * @param context Specifies which ODIS combiner url should be queried (i.e. mainnet or atlas)
  * @param clientVersion Optional Specifies the client software version
  * @param sessionID Optional Used to track user sessions across the client and ODIS
  * @param abortController Optional Allows client to specify a timeout for the ODIS request
@@ -38,7 +43,7 @@ export async function getPnpQuotaStatus(
     version: clientVersion,
     authenticationMethod: signer.authenticationMethod,
     sessionID,
-  }
+  };
 
   const response = await queryOdis(
     body,
@@ -49,7 +54,7 @@ export async function getPnpQuotaStatus(
       Authorization: await getOdisPnpRequestAuth(body, signer),
     },
     abortController
-  )
+  );
 
   if (response.success) {
     return {
@@ -58,8 +63,8 @@ export async function getPnpQuotaStatus(
       totalQuota: response.totalQuota,
       remainingQuota: response.totalQuota - response.performedQueryCount,
       warnings: response.warnings,
-    }
+    };
   }
 
-  throw new Error(response.error)
+  throw new Error(response.error);
 }

@@ -76,7 +76,7 @@ yarn console -f -n rc1
 
 Options:
 - "-f" for Forno mode, otherwise there needs to be a node running at localhost:8585
-- "-n <network>" possible values are: "rc1", "alfajores", "baklava"
+- "-n <network>" possible values are: "rc1", "atlas", "baklava"
 
 All compiled assets from `build/contracts` are injected in scope so for example you can do:
 
