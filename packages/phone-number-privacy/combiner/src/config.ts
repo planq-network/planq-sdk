@@ -19,6 +19,8 @@ export const DEV_MODE =
   process.env.NODE_ENV !== "production" ||
   process.env.FUNCTIONS_EMULATOR === "true";
 
+export const USE_FIREBASE = process.env.USE_FIREBASE === "true";
+
 export const FORNO_ATLAS = "https://evm-atlas.planq.network";
 
 // combiner always thinks these accounts/phoneNumbersa are verified to enable e2e testing
@@ -154,59 +156,115 @@ if (DEV_MODE) {
     },
   };
 } else {
-  const functionConfig = functions.config();
-  config = {
-    serviceName: functionConfig.service.name ?? defaultServiceName,
-    blockchain: {
-      provider: functionConfig.blockchain.provider,
-      apiKey: functionConfig.blockchain.api_key,
-    },
-    phoneNumberPrivacy: {
-      serviceName: functionConfig.pnp.service_name ?? defaultServiceName,
-      enabled: toBool(functionConfig.pnp.enabled, false),
-      odisServices: {
-        signers: functionConfig.pnp.odisservices,
-        timeoutMilliSeconds: functionConfig.pnp.timeout_ms
-          ? Number(functionConfig.pnp.timeout_ms)
-          : 5 * 1000,
+  if (!USE_FIREBASE) {
+    config = {
+      serviceName: defaultServiceName,
+      blockchain: {
+        provider: process.env.BLOCKCHAIN_PROVIDER,
+        apiKey: process.env.BLOCKCHAIN_PROVIDER_API_KEY,
       },
-      keys: {
-        currentVersion: Number(functionConfig.pnp_keys.current_version),
-        versions: functionConfig.pnp_keys.versions,
+      phoneNumberPrivacy: {
+        serviceName: defaultServiceName,
+        enabled: toBool(process.env.PNP_ENABLED, false),
+        odisServices: {
+          signers: process.env.PNP_ODIS_SIGNERS!,
+          timeoutMilliSeconds: process.env.PNP_TIMEOUT_MS
+            ? Number(process.env.PNP_TIMEOUT_MS)
+            : 5 * 1000,
+        },
+        keys: {
+          currentVersion: Number(process.env.PNP_KEYS_CURRENT_VERSION),
+          versions: process.env.PNP_KEYS_VERSIONS!,
+        },
+        fullNodeTimeoutMs: Number(
+          process.env.FULL_NODE_TIMEOUT_IN_MS ?? FULL_NODE_TIMEOUT_IN_MS
+        ),
+        fullNodeRetryCount: Number(
+          process.env.FULL_NODE_RETRY_COUNT ?? RETRY_COUNT
+        ),
+        fullNodeRetryDelayMs: Number(
+          process.env.FULL_NODE_RETRY_DELAY_MS ?? RETRY_DELAY_IN_MS
+        ),
       },
-      fullNodeTimeoutMs: Number(
-        functionConfig.pnp.full_node_timeout_ms ?? FULL_NODE_TIMEOUT_IN_MS
-      ),
-      fullNodeRetryCount: Number(
-        functionConfig.pnp.full_node_retry_count ?? RETRY_COUNT
-      ),
-      fullNodeRetryDelayMs: Number(
-        functionConfig.pnp.full_node_retry_delay_ms ?? RETRY_DELAY_IN_MS
-      ),
-    },
-    domains: {
-      serviceName: functionConfig.domains.service_name ?? defaultServiceName,
-      enabled: toBool(functionConfig.domains.enabled, false),
-      odisServices: {
-        signers: functionConfig.domains.odisservices,
-        timeoutMilliSeconds: functionConfig.domains.timeout_ms
-          ? Number(functionConfig.domains.timeout_ms)
-          : 5 * 1000,
+      domains: {
+        serviceName: defaultServiceName,
+        enabled: toBool(process.env.DOMAINS_ENABLED, false),
+        odisServices: {
+          signers: process.env.DOMAINS_ODIS_SIGNERS!,
+          timeoutMilliSeconds: process.env.DOMAINS_TIMEOUT_MS
+            ? Number(process.env.DOMAINS_TIMEOUT_MS)
+            : 5 * 1000,
+        },
+        keys: {
+          currentVersion: Number(process.env.DOMAINS_KEYS_CURRENT_VERSION),
+          versions: process.env.DOMAINS_KEYS_VERSIONS!,
+        },
+        fullNodeTimeoutMs: Number(
+          process.env.FULL_NODE_TIMEOUT_IN_MS ?? FULL_NODE_TIMEOUT_IN_MS
+        ),
+        fullNodeRetryCount: Number(
+          process.env.FULL_NODE_RETRY_COUNT ?? RETRY_COUNT
+        ),
+        fullNodeRetryDelayMs: Number(
+          process.env.FULL_NODE_RETRY_DELAY_MS ?? RETRY_DELAY_IN_MS
+        ),
       },
-      keys: {
-        currentVersion: Number(functionConfig.domains_keys.current_version),
-        versions: functionConfig.domains_keys.versions,
+    };
+  } else {
+    const functionConfig = functions.config();
+    config = {
+      serviceName: functionConfig.service.name ?? defaultServiceName,
+      blockchain: {
+        provider: functionConfig.blockchain.provider,
+        apiKey: functionConfig.blockchain.api_key,
       },
-      fullNodeTimeoutMs: Number(
-        functionConfig.pnp.full_node_timeout_ms ?? FULL_NODE_TIMEOUT_IN_MS
-      ),
-      fullNodeRetryCount: Number(
-        functionConfig.pnp.full_node_retry_count ?? RETRY_COUNT
-      ),
-      fullNodeRetryDelayMs: Number(
-        functionConfig.pnp.full_node_retry_delay_ms ?? RETRY_DELAY_IN_MS
-      ),
-    },
-  };
+      phoneNumberPrivacy: {
+        serviceName: functionConfig.pnp.service_name ?? defaultServiceName,
+        enabled: toBool(functionConfig.pnp.enabled, false),
+        odisServices: {
+          signers: functionConfig.pnp.odisservices,
+          timeoutMilliSeconds: functionConfig.pnp.timeout_ms
+            ? Number(functionConfig.pnp.timeout_ms)
+            : 5 * 1000,
+        },
+        keys: {
+          currentVersion: Number(functionConfig.pnp_keys.current_version),
+          versions: functionConfig.pnp_keys.versions,
+        },
+        fullNodeTimeoutMs: Number(
+          functionConfig.pnp.full_node_timeout_ms ?? FULL_NODE_TIMEOUT_IN_MS
+        ),
+        fullNodeRetryCount: Number(
+          functionConfig.pnp.full_node_retry_count ?? RETRY_COUNT
+        ),
+        fullNodeRetryDelayMs: Number(
+          functionConfig.pnp.full_node_retry_delay_ms ?? RETRY_DELAY_IN_MS
+        ),
+      },
+      domains: {
+        serviceName: functionConfig.domains.service_name ?? defaultServiceName,
+        enabled: toBool(functionConfig.domains.enabled, false),
+        odisServices: {
+          signers: functionConfig.domains.odisservices,
+          timeoutMilliSeconds: functionConfig.domains.timeout_ms
+            ? Number(functionConfig.domains.timeout_ms)
+            : 5 * 1000,
+        },
+        keys: {
+          currentVersion: Number(functionConfig.domains_keys.current_version),
+          versions: functionConfig.domains_keys.versions,
+        },
+        fullNodeTimeoutMs: Number(
+          functionConfig.pnp.full_node_timeout_ms ?? FULL_NODE_TIMEOUT_IN_MS
+        ),
+        fullNodeRetryCount: Number(
+          functionConfig.pnp.full_node_retry_count ?? RETRY_COUNT
+        ),
+        fullNodeRetryDelayMs: Number(
+          functionConfig.pnp.full_node_retry_delay_ms ?? RETRY_DELAY_IN_MS
+        ),
+      },
+    };
+  }
 }
 export default config;
