@@ -73,17 +73,15 @@ export const ODIS_ATLAS_CONTEXT_DOMAINS: ServiceContext = {
 };
 
 export const ODIS_MAINNET_CONTEXT_PNP: ServiceContext = {
-  odisUrl:
-    "https://us-central1-planq-pgpnp-mainnet.cloudfunctions.net/combiner",
+  odisUrl: "https://combiner.planq.network",
   odisPubKey:
-    "FvreHfLmhBjwxHxsxeyrcOLtSonC9j7K3WrS4QapYsQH6LdaDTaNGmnlQMfFY04Bp/K4wAvqQwO9/bqPVCKf8Ze8OZo8Frmog4JY4xAiwrsqOXxug11+htjEe1pj4uMA",
+    "L1FG63v1Li5VuA6/oIJVCqNWVH1DtCfOOzjMGrk04HQLxgkwdPeuQjdrhSBugMsAPtxVRWd4SKL0doXBbl+yzOGVXG7/vVsiXaasMh7j9GX+xvo/p/ztH4y3HL4GpWwB",
 };
 
 export const ODIS_MAINNET_CONTEXT_DOMAINS: ServiceContext = {
-  odisUrl:
-    "https://us-central1-planq-pgpnp-mainnet.cloudfunctions.net/combiner",
+  odisUrl: "https://combiner.planq.network",
   odisPubKey:
-    "LX4tLiuYm8geZ3ztmH7oIWz4ohXt3ePRTd9BbG9RO86NMrApflioiOzKYtIsyjEA0uarnX8Emo+luTY4bwEWpgZDyPYE6UMWAoBaZBdy6NDMgAxSbdNtaQEq51fBjCUA",
+    "PIuUl/AgMHvLQeM4wfDQ4ikywwXaYTTPOq5X9dhKaCPPSkzutwYwd3/prZXxL5IApAUYJaL1RtmvTDUcsyQWh7/qHbJg2MQMPiDAMebk68NCfh//G3bVw3JWfC/ZazOA",
 };
 
 export enum OdisAPI {
