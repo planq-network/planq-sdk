@@ -11,8 +11,8 @@ TRUFFLE_OVERRIDE=""
 MIGRATION_OVERRIDE=""
 NETWORK="atlas"
 RESET=""
-FROM="5"
-TO="5"
+FROM="15"
+TO="15"
 # https://github.com/trufflesuite/truffle-migrate/blob/develop/index.js#L161
 # Default to larger than the number of contracts we will ever have
 
